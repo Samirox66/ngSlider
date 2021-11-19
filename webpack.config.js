@@ -1,6 +1,8 @@
 const path = require('path');
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
     entry: './index.ts',
@@ -11,7 +13,14 @@ module.exports = {
             'filename': 'index.html',
             'template': './index.pug'
         }),
-        new CleanWebpackPlugin
+        new CleanWebpackPlugin,
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css'
+        })
     ],
     module: {
             rules: [
@@ -44,12 +53,14 @@ module.exports = {
                 },
             ],
     },
+    devServer: {
+        port: 4200
+    },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
-    },
-
+    }
 };
