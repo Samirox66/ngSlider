@@ -3,10 +3,22 @@ interface JQuery {
 }
 
 (function( $ ) {
-    $.fn.slider = function(options: { name: string, age?: number }) {
-        if ('age' in options) {
-            console.log(options.age);
+
+    let methods = {
+        init: function(options: { range: boolean, id: string, min: number, max: number, step?: number}) {
+            methods.createView(options);
+        },
+        createView: function(options: { range: boolean, id: string, min: number, max: number, step?: number }) {
+            let slider = document.getElementById(options.id)?.parentElement;
+            let sliderTrack = document.createElement('div');
+            let values = document.createElement('div');
+            sliderTrack.classList.add('ng-slider__slider-track');
+            values.classList.add('ng-slider__values');
+            slider?.prepend(sliderTrack);
+            slider?.append(values);
         }
-        console.log(options.name);
+    }
+    $.fn.slider = function(options: { range: boolean, id: string, min: number, max: number, step?: number }) {
+        methods.init(options);
     };
 })(jQuery);

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import './styles.scss';
 import './plugin/slider';
+import './plugin/slider.scss'
 
-$('div').slider({'name': 'Samir', 'age': 23});
+$('#slider-1').slider({'range': true, 'id': 'slider-1'});

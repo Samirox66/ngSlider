@@ -35,23 +35,21 @@ module.exports = {
                 },
                 {
                     test: /\.css$/,
-                    use:  [{
-                        loader: MiniCssExtractPlugin.loader,
-                        options: { publicPath: '' }
-                    },
+                    use:  [
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: { publicPath: '' }
+                        },
                     'css-loader']
                 },
                 {
                     test: /\.s[ac]ss$/,
                     use: [
-                        {
-                            loader: MiniCssExtractPlugin.loader,
-                            options: { publicPath: '' }
-                        },
+                        'style-loader',
                         'css-loader',
                         'sass-loader']
-                },
-            ],
+                }
+            ]
     },
     devServer: {
         port: 4200
