@@ -69,4 +69,11 @@
     height: 10px;
     margin-top: 15px;
     display: flex;
+    justify-content: space-between;
+}
+
+.ng-slider__value {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
 }
