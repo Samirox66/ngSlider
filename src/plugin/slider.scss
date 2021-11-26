@@ -60,11 +60,14 @@
 .ng-slider__slider-wrapper {
     position: relative;
     width: 100%;
+    height: 3px;
 }
 
 .ng-slider {
     width: 100%;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .ng-slider__values {
@@ -76,7 +79,10 @@
 }
 
 .ng-slider__value {
-    margin: 0;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    padding: 0;
     font-family: 'Courier New', Courier, monospace;
     font-size: 12px;
 }
@@ -84,9 +90,32 @@
 .ng-slider__current-value {
     width: 15%;
     height: max-content;
-    margin: 0 auto;
+    margin-bottom: 5px;
     border: 1px solid black;
-    border-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     font-size: 12px;
     text-align: center;
+    position: relative;
+    border-bottom: none;
+    &::before {
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 25%;
+        transform: rotate(10deg);
+        border-bottom: 1px solid black;
+        top: 11px;
+        right: 15px;
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 25%;
+        transform: rotate(-10deg);
+        border-bottom: 1px solid black;
+        top: 11px;
+        left: 15px;
+    }
 }

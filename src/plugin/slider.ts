@@ -15,22 +15,28 @@ interface Options {
     max: number,
     step?: number,
     value?: number,
-    isValueVisible?: boolean
+    isValueVisible?: boolean,
+    isVertical?: boolean,
 }
 
 (function( $ ) {
 
-    let methods = {
+    const methods = {
         init: function(options: Options) {
             let slider = <HTMLInputElement>document.getElementById(options.id);
             let sliderTrack = document.createElement('div');
             let currentValue = document.createElement('div');
+            if (options.range) {
+                
+            }
             methods.createView(slider, sliderTrack, currentValue, options);
             slider?.addEventListener('input', () => {
                 if (parseInt(slider.value) % (options.step ?? 0) !== 0) {
                     slider.value = (parseInt(slider.value) - (options.step ?? 0)).toString(); 
                 }
-                let percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100;
+                const percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100;
+                const marginLeft = percent - 15 * percent / 100;
+                currentValue.style.marginLeft = `${marginLeft}%`;
                 sliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
                 currentValue.textContent = slider.value;
             });
@@ -43,7 +49,10 @@ interface Options {
             sliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
             let values = document.createElement('div');
             if (options.isValueVisible) {
+                const percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100
                 currentValue.classList.add('ng-slider__current-value');
+                const marginLeft = percent - 15 * percent / 100;
+                currentValue.style.marginLeft = `${marginLeft}%`;
                 let currentValueText = document.createTextNode(slider.value);
                 currentValue.appendChild(currentValueText);
             }
@@ -52,11 +61,20 @@ interface Options {
             slider?.parentElement?.prepend(sliderTrack);
             slider?.parentElement?.parentElement?.prepend(currentValue);
             for (let i = options.min; i <= options.max; i += (options.max - options.min) / 5) {
-                const value = document.createElement('p');
-                const valueText = document.createTextNode(i.toString());
-                value.appendChild(valueText);
+                const value = document.createElement('input');
+                value.value = i.toString();
+                value.setAttribute('type', 'button');
                 value.classList.add('ng-slider__value');
                 values.append(value);
+                value.addEventListener('input', () => {
+                    console.log(slider.value);
+                })
+            }
+            if (options.isVertical) {
+                //slider.parentElement?.style.transform = 'rotate(90deg)';
+                slider.style.transform = 'rotate(90deg)';
+                sliderTrack.style.transform = 'rotate(90deg)';
+                values.style.flexDirection = 'column';
             }
             slider?.parentElement?.parentElement?.append(values);
         }
