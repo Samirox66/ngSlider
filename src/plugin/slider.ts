@@ -15,6 +15,7 @@ interface Options {
     max: number,
     step?: number,
     value?: number,
+    value2?: number,
     isValueVisible?: boolean,
     isVertical?: boolean,
 }
@@ -23,38 +24,24 @@ interface Options {
 
     const methods = {
         init: function(options: Options) {
-            let slider = <HTMLInputElement>document.getElementById(options.id);
-            let sliderTrack = document.createElement('div');
-            let currentValue = document.createElement('div');
-            if (options.range) {
-                
-            }
-            methods.createView(slider, sliderTrack, currentValue, options);
-            slider?.addEventListener('input', () => {
-                if (parseInt(slider.value) % (options.step ?? 0) !== 0) {
-                    slider.value = (parseInt(slider.value) - (options.step ?? 0)).toString(); 
-                }
-                const percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100;
-                const marginLeft = percent - 15 * percent / 100;
-                currentValue.style.marginLeft = `${marginLeft}%`;
-                sliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
-                currentValue.textContent = slider.value;
-            });
+            const slider = <HTMLInputElement>document.getElementById(options.id);
+            const sliderTrack = document.createElement('div');
+            const currentValue = document.createElement('div');
+            this.createView(slider, sliderTrack, options, currentValue);
+            slider?.addEventListener('input',  e => this.valueChanged(slider, sliderTrack, options, currentValue));
         },
-        createView: function(slider: HTMLInputElement, sliderTrack: HTMLDivElement, currentValue: HTMLDivElement, options: Options) {
+        createView: function(slider: HTMLInputElement, sliderTrack: HTMLDivElement, options: Options, currentValue: HTMLDivElement) {
             slider?.setAttribute('max', options.max.toString());
             slider?.setAttribute('min', options.min.toString());
             slider.setAttribute('value', options.value?.toString() ?? ((options.max + options.min) / 2).toString());
-            let percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100;
+            const percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100;
             sliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
-            let values = document.createElement('div');
+            const values = document.createElement('div');
             if (options.isValueVisible) {
-                const percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100
-                currentValue.classList.add('ng-slider__current-value');
-                const marginLeft = percent - 15 * percent / 100;
-                currentValue.style.marginLeft = `${marginLeft}%`;
-                let currentValueText = document.createTextNode(slider.value);
-                currentValue.appendChild(currentValueText);
+                this.createCurrentValue(slider, options, currentValue);
+            }
+            if (options.range) {
+                this.createRangeSlider(slider, options);
             }
             sliderTrack.classList.add('ng-slider__slider-track');
             values.classList.add('ng-slider__values');
@@ -66,8 +53,9 @@ interface Options {
                 value.setAttribute('type', 'button');
                 value.classList.add('ng-slider__value');
                 values.append(value);
-                value.addEventListener('input', () => {
-                    console.log(slider.value);
+                value.addEventListener('click', () => {
+                    slider.value = value.value;
+                    this.valueChanged(slider, sliderTrack, options, currentValue);
                 })
             }
             if (options.isVertical) {
@@ -77,6 +65,42 @@ interface Options {
                 values.style.flexDirection = 'column';
             }
             slider?.parentElement?.parentElement?.append(values);
+        },
+        valueChanged: function(slider: HTMLInputElement, sliderTrack: HTMLDivElement, options: Options, currentValue:HTMLDivElement) {
+            if (options.range) {
+                
+            } else {
+                if (parseInt(slider.value) % (options.step ?? 0) !== 0) {
+                    slider.value = (parseInt(slider.value) - (options.step ?? 0)).toString(); 
+                }
+            }  
+            const percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100;
+            const marginLeft = percent - 15 * percent / 100;
+            if (options.isValueVisible) {
+                currentValue.style.marginLeft = `${marginLeft}%`;
+                currentValue.textContent = slider.value;
+            }
+            sliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
+        },
+        createRangeSlider: function(slider: HTMLInputElement, options: Options) {
+            const slider2 = document.createElement('input');
+            slider2.setAttribute('type', 'range');
+            slider2.setAttribute('id', `${options.id}-2`);
+            slider2.classList.add('ng-slider__slider')
+            slider.parentElement?.prepend(slider2);
+            slider2.addEventListener('input', e => this.slider2Changed());
+        },
+        createCurrentValue: function(slider: HTMLInputElement, options: Options, currentValue: HTMLDivElement) {
+            const percent: number = ((parseInt(slider.value) - options.min) / (options.max - options.min)) * 100
+            currentValue.classList.add('ng-slider__current-value');
+            const marginLeft = percent - 15 * percent / 100;
+            currentValue.style.marginLeft = `${marginLeft}%`;
+            const currentValueText = document.createTextNode(slider.value);
+            currentValue.appendChild(currentValueText);
+            slider.parentElement?.parentElement?.prepend(currentValue);
+        },
+        slider2Changed: function() {
+
         }
     }
     $.fn.ngSlider = function(options: Options) {
