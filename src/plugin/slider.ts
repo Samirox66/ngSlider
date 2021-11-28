@@ -1,6 +1,7 @@
-import './components/model/model'
-import './components/presenter/presenter'
-import './components/view/view'
+import Presenter, {Options} from './components/presenter/presenter'
+import Model from './components/model/model'
+import View from './components/view/view'
+import SliderTrack from './components/view/sliderTrack';
 
 declare global {
     interface JQuery {
@@ -8,19 +9,20 @@ declare global {
     }
 }
 
-interface Options {
-    range: boolean,
-    id: string,
-    min: number,
-    max: number,
-    step?: number,
-    value?: number,
-    value2?: number,
-    isValueVisible?: boolean,
-    isVertical?: boolean,
-}
-
 (function( $ ) {
+
+    const methods = {
+        init: function(options: Options) {
+            const slider = new Presenter(new View(new SliderTrack()), new Model());
+            slider.setOptions(options);
+        }
+    }
+    $.fn.ngSlider = function(options: Options) {
+        methods.init(options);
+    };
+})(jQuery);
+
+/*(function( $ ) {
 
     const methods = {
         init: function(options: Options) {
@@ -106,4 +108,4 @@ interface Options {
     $.fn.ngSlider = function(options: Options) {
         methods.init(options);
     };
-})(jQuery);
+})(jQuery);*/
