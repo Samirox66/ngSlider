@@ -1,17 +1,7 @@
 import Model from './../model/model'
 import View from './../view/view'
 
-export interface Options {
-    range: boolean,
-    id: string,
-    min: number,
-    max: number,
-    step?: number,
-    value?: number,
-    value2?: number,
-    isValueVisible?: boolean,
-    isVertical?: boolean,
-}
+
 
 class Presenter {
     private view: View;
@@ -21,16 +11,12 @@ class Presenter {
         this.model = model;
     }
 
-    get getModel() {
+    getModel() {
         return this.model;
     }
 
-    get getView() {
+    getView() {
         return this.view;
-    }
-
-    setOptions(options: Options) {
-
     }
 }
 

@@ -1,7 +1,10 @@
-import Presenter, {Options} from './components/presenter/presenter'
-import Model from './components/model/model'
-import View from './components/view/view'
+import Presenter from './components/presenter/presenter'
+import Model, {Options} from './components/model/model'
+import View, {ViewElements} from './components/view/view'
 import SliderTrack from './components/view/sliderTrack';
+import SliderInput from './components/view/sliderInput';
+import ProgressBar from './components/view/progressBar';
+import CurrentValue from './components/view/currentValue'
 
 declare global {
     interface JQuery {
@@ -10,15 +13,24 @@ declare global {
 }
 
 (function( $ ) {
-
     const methods = {
-        init: function(options: Options) {
-            const slider = new Presenter(new View(new SliderTrack()), new Model());
-            slider.setOptions(options);
+        createViewElements: function(): ViewElements {
+            const progressBarHtmlElement = document.createElement('div');
+            progressBarHtmlElement.classList.add('ng-slider__values');
+            return {
+                sliderTrack: new SliderTrack(),
+                progressBar: new ProgressBar(progressBarHtmlElement),
+                firstInput: new SliderInput(),
+                currentValue: new CurrentValue()
+            };
         }
     }
     $.fn.ngSlider = function(options: Options) {
-        methods.init(options);
+        const viewElements = methods.createViewElements();
+        const view = new View(viewElements);
+        const model = new Model(options);
+        const slider = new Presenter(view, model);
+        view.setPresenter(slider);
     };
 })(jQuery);
 
