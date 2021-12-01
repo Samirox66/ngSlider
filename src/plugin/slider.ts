@@ -1,10 +1,10 @@
-import Presenter from './components/presenter/presenter'
-import Model, {Options} from './components/model/model'
-import View, {ViewElements} from './components/view/view'
-import SliderTrack from './components/view/sliderTrack';
-import SliderInput from './components/view/sliderInput';
-import ProgressBar from './components/view/progressBar';
-import CurrentValue from './components/view/currentValue'
+import Presenter from './components/Presenter/Presenter'
+import Model, {Options} from './components/Model/Model'
+import View, {ViewElements} from './components/View/View'
+import SliderTrack from './components/View/SliderTrack';
+import SliderInput from './components/View/SliderInput';
+import ProgressBar from './components/View/ProgressBar';
+import CurrentValue from './components/View/СurrentValue'
 
 declare global {
     interface JQuery {
@@ -14,22 +14,13 @@ declare global {
 
 (function( $ ) {
     const methods = {
-        createViewElements: function(): ViewElements {
-            const progressBarHtmlElement = document.createElement('div');
-            progressBarHtmlElement.classList.add('ng-slider__values');
-            return {
-                sliderTrack: new SliderTrack(),
-                progressBar: new ProgressBar(progressBarHtmlElement),
-                firstInput: new SliderInput(),
-                currentValue: new CurrentValue()
-            };
-        }
+        
     }
     $.fn.ngSlider = function(options: Options) {
-        const viewElements = methods.createViewElements();
-        const view = new View(viewElements);
+        const viewElements = View.createViewElements(options);
+        const view = new View(options, viewElements);
         const model = new Model(options);
-        const slider = new Presenter(view, model);
+        const slider = new Presenter(view, model, options);
         view.setPresenter(slider);
     };
 })(jQuery);

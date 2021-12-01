@@ -1,22 +1,30 @@
-import Model from './../model/model'
-import View from './../view/view'
+import Model, { Options } from '../Model/Model'
+import View from '../View/View'
 
 
 
 class Presenter {
     private view: View;
     private model: Model;
-    constructor(view: View, model: Model) {
+    private options: Options;
+    constructor(view: View, model: Model, options: Options) {
         this.view = view;
         this.model = model;
+        this.options = options;
     }
 
-    getModel() {
+    get getModel() {
         return this.model;
     }
 
-    getView() {
+    get getView() {
         return this.view;
+    }
+
+    onInit() {
+        this.view.getViewElements.firstInput.addSliderInputListener();
+        this.view.getViewElements.currentValue.addCurrentValueInputListener();
+        this.view.getViewElements.progressBar.addProgressBarClickListener();
     }
 }
 
