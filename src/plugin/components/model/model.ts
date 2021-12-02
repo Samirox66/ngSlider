@@ -4,7 +4,7 @@ export interface Options {
     min: number,
     max: number,
     step?: number,
-    value?: number,
+    value: number,
     value2?: number,
     isValueVisible?: boolean,
     isVertical?: boolean,
@@ -12,9 +12,12 @@ export interface Options {
 
 class Model {
     options: Options;
+
     constructor(options: Options) {
         this.options = options;
     }
+
+    
 }
 
 export default Model;

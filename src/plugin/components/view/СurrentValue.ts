@@ -13,10 +13,6 @@ class CurrentValue {
         const textNode = document.createTextNode(value);
         this.currentValue.appendChild(textNode);
     }
-
-    addCurrentValueInputListener() {
-        
-    }
 }
 
 export default CurrentValue;

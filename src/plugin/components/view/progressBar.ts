@@ -20,10 +20,6 @@ class ProgressBar {
         }
     }
 
-    addProgressBarClickListener() {
-        
-    }
-
     get getProgressBar() {
         return this.progressBar;
     }

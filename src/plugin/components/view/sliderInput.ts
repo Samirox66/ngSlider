@@ -14,10 +14,6 @@ class SliderInput {
     get getSliderInput() {
         return this.sliderInput;
     }
-
-    addSliderInputListener() {
-
-    }
 }
 
 export default SliderInput;

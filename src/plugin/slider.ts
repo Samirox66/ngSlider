@@ -18,10 +18,11 @@ declare global {
     }
     $.fn.ngSlider = function(options: Options) {
         const viewElements = View.createViewElements(options);
-        const view = new View(options, viewElements);
+        const view = new View(viewElements);
         const model = new Model(options);
-        const slider = new Presenter(view, model, options);
+        const slider = new Presenter(view, model);
         view.setPresenter(slider);
+        slider.onInit();
     };
 })(jQuery);
 
