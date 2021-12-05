@@ -1,10 +1,6 @@
 import Presenter from './components/Presenter/Presenter'
 import Model, {Options} from './components/Model/Model'
 import View, {ViewElements} from './components/View/View'
-import SliderTrack from './components/View/SliderTrack';
-import SliderInput from './components/View/SliderInput';
-import ProgressBar from './components/View/ProgressBar';
-import CurrentValue from './components/View/СurrentValue'
 
 declare global {
     interface JQuery {
@@ -17,11 +13,11 @@ declare global {
         
     }
     $.fn.ngSlider = function(options: Options) {
-        const viewElements = View.createViewElements(options);
-        const view = new View(viewElements);
         const model = new Model(options);
+        const view = new View(options.id);
+        view.createViewElements(model.getOptions);
         const slider = new Presenter(view, model);
-        view.setPresenter(slider);
+        //view.setPresenter(slider);
         slider.onInit();
     };
 })(jQuery);

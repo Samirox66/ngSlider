@@ -21,19 +21,19 @@ class Presenter {
     }
 
     onInit() {
-        this.view.addSliderInputListener();
-        this.view.addProgressBarClickListener();
+        this.view.addObserver(this.sliderInputListener);
+        this.view.addObserver(this.progressBarElementClickListener);
     }
 
     sliderInputListener() {
-        this.model.options.value = parseInt(this.view.getViewElements.firstInput.getSliderInput.value);
-        this.view.valueChanged(this.model.options);
+        //this.model.getOptions.value = parseInt(this.view.getViewElements.firstHandle.getSliderHandle.value);
+        //this.view.valueChanged(this.model.getOptions);
     }
 
     progressBarElementClickListener(element: HTMLDivElement) {
-        this.model.options.value = parseInt(element.getAttribute('value') ?? '85');
-        this.view.getViewElements.firstInput.getSliderInput.value = this.model.options.value.toString();
-        this.view.valueChanged(this.model.options);
+        //this.model.getOptions.value = parseInt(element.getAttribute('value') ?? '85');
+        //this.view.getViewElements.firstHandle.getSliderHandle.value = this.model.getOptions.value.toString();
+        //this.view.valueChanged(this.model.getOptions);
     }
 }
 

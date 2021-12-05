@@ -1,3 +1,5 @@
+import Observer from "../Observer/Observer";
+
 export interface Options {
     range: boolean,
     id: string,
@@ -10,14 +12,20 @@ export interface Options {
     isVertical?: boolean,
 }
 
-class Model {
-    options: Options;
+class Model extends Observer{
+    private options: Options;
 
     constructor(options: Options) {
+        super();
         this.options = options;
+        if (!options.value) {
+            this.options.value = (options.max - options.min) / 2;
+        }
     }
 
-    
+    get getOptions() {
+        return this.options;
+    }
 }
 
 export default Model;

@@ -1,76 +1,88 @@
-import Presenter from '../Presenter/Presenter';
 import SliderTrack from './SliderTrack'
-import SliderInput from './SliderInput';
+import SliderHandle from './SliderHandle';
 import ProgressBar from './ProgressBar';
 import CurrentValue from './СurrentValue';
 import { Options } from '../Model/Model';
+import Observer from '../Observer/Observer';
 
 export interface ViewElements {
     sliderTrack: SliderTrack,
     progressBar: ProgressBar,
-    firstInput: SliderInput,
-    currentValue: CurrentValue,
-    secondInput?: SliderInput
+    firstHandle: SliderHandle,
+    firstValue: CurrentValue,
+    secondValue?: CurrentValue,
+    secondHandle?: SliderHandle
 }
 
-class View {
+class View extends Observer {
     private viewElements: ViewElements;
-    private presenter: Presenter | undefined;
+    private slider: HTMLElement;
 
-    constructor(viewElements: ViewElements) {
-        this.viewElements = viewElements;
-    }
-
-    static createViewElements(options: Options): ViewElements {
+    constructor(id: string) {
+        super();
         const progressBar = new ProgressBar();
         const sliderTrack = new SliderTrack();
-        const firstInput = new SliderInput(<HTMLInputElement>document.getElementById(options.id));
-        const currentValue = new CurrentValue();
-        progressBar.create(options.max, options.min);
-        sliderTrack.create();
-        firstInput.setAttributes(options.max, options.min, options.value ?? (options.max + options.min) / 2);
-        currentValue.getCurrentValue.classList.add('ng-slider__current-value');
-        firstInput.getSliderInput.parentElement?.parentElement?.append(progressBar.getProgressBar);
-        firstInput.getSliderInput.parentElement?.prepend(sliderTrack.getSliderTrack);
-        firstInput.getSliderInput.parentElement?.parentElement?.prepend(currentValue.getCurrentValue);
-        currentValue.setCurrentValue(firstInput.getSliderInput.value);
-        const percent: number = ((parseInt(firstInput.getSliderInput.value) - options.min) / (options.max - options.min)) * 100;
-        const marginLeft = percent - 15 * percent / 100;
-        currentValue.getCurrentValue.style.marginLeft = `${marginLeft}%`;
-        sliderTrack.getSliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
-        return {
-            sliderTrack,
-            progressBar,
-            firstInput,
-            currentValue           
+        const firstHandle = new SliderHandle();
+        const firstValue = new CurrentValue();
+        this.viewElements = {
+            progressBar: new ProgressBar(),
+            sliderTrack: new SliderTrack(),
+            firstHandle: new SliderHandle(),
+            firstValue: new CurrentValue(),
+        }
+        if (document.getElementById(id)) {
+            this.slider = document.getElementById(id) ?? document.createElement('div');
+        } else {
+            throw new Error("Wrong Id");
         }
     }
 
-    setPresenter(presenter: Presenter) {
-        this.presenter = presenter;
+    setViewElements(viewElements: ViewElements) {
+        this.viewElements = viewElements;
     }
 
-    get getPresenter() {
-        return this.presenter;
+    createViewElements(options: Options) {
+        this.viewElements.progressBar.create(options.max, options.min);
+        this.viewElements.sliderTrack.create();
+        this.viewElements.firstHandle.setAttributes(options.max, options.min, options.value ?? (options.max + options.min) / 2);
+        this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
+        this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
+        this.slider.append(this.viewElements.progressBar.getProgressBar);
+        this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
+        this.slider.append(this.viewElements.firstHandle.getSliderHandle);
+        this.viewElements.firstHandle.getSliderHandle.append(this.viewElements.firstValue.getCurrentValue);
+        this.viewElements.firstValue.setCurrentValue(options.value.toString());
+        const percent: number = ((options.value - options.min) / (options.max - options.min)) * 100;
+        const marginLeft = percent - 15 * percent / 100;
+        this.viewElements.firstValue.getCurrentValue.style.marginLeft = `${marginLeft}%`;
+        this.viewElements.sliderTrack.getSliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
     }
 
     get getViewElements() {
         return this.viewElements;
     }
 
-    addSliderInputListener() {
-        this.viewElements.firstInput.getSliderInput.addEventListener('input', (e) => this.presenter?.sliderInputListener());
+    /*setPresenter(presenter: Presenter) {
+        this.presenter = presenter;
     }
 
-    addProgressBarClickListener() {
-        this.viewElements.progressBar.getProgressBar.childNodes.forEach(element => element.addEventListener('click', (e) => this.presenter?.progressBarElementClickListener(<HTMLDivElement>element)));
+    get getPresenter() {
+        return this.presenter;
+    }*/
+
+    sliderInputListener() {
+        this.viewElements.firstHandle.getSliderHandle.addEventListener('input', (e) => this.notifyObservers);
+    }
+
+    progressBarClickListener() {
+        this.viewElements.progressBar.getProgressBar.childNodes.forEach(element => element.addEventListener('click', (e) => this.notifyObservers));
     }
 
     valueChanged(options: Options) {
-        const percent: number = ((parseInt(this.viewElements.firstInput.getSliderInput.value) - options.min) / (options.max - options.min)) * 100;
+        const percent: number = ((options.value - options.min) / (options.max - options.min)) * 100;
         const marginLeft = percent - 15 * percent / 100;
-        this.viewElements.currentValue.getCurrentValue.style.marginLeft = `${marginLeft}%`;
-        this.viewElements.currentValue.getCurrentValue.textContent = options.value.toString();
+        this.viewElements.firstValue.getCurrentValue.style.marginLeft = `${marginLeft}%`;
+        this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
         this.viewElements.sliderTrack.getSliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
     }
 }
