@@ -3,4 +3,4 @@ import './styles.scss';
 import './plugin/slider';
 import './plugin/slider.scss'
 
-($('#slider-1') as any).ngSlider({range: false, id: 'slider-1', max: 120, min: 50, isValueVisible: true, value: 50});
+($('#slider-1') as any).ngSlider({range: false, id: 'slider-1', max: 120, min: 50, isValueVisible: true, value: 70});

@@ -20,10 +20,6 @@ class View extends Observer {
 
     constructor(id: string) {
         super();
-        const progressBar = new ProgressBar();
-        const sliderTrack = new SliderTrack();
-        const firstHandle = new SliderHandle();
-        const firstValue = new CurrentValue();
         this.viewElements = {
             progressBar: new ProgressBar(),
             sliderTrack: new SliderTrack(),
@@ -42,11 +38,11 @@ class View extends Observer {
     }
 
     createViewElements(options: Options) {
-        this.viewElements.progressBar.create(options.max, options.min);
+        this.viewElements.progressBar.create(this.notifyObservers.bind(this), options);
         this.viewElements.sliderTrack.create();
-        this.viewElements.firstHandle.setAttributes(options.max, options.min, options.value ?? (options.max + options.min) / 2);
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
+        this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options);
         this.slider.append(this.viewElements.progressBar.getProgressBar);
         this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
         this.slider.append(this.viewElements.firstHandle.getSliderHandle);
@@ -62,23 +58,21 @@ class View extends Observer {
         return this.viewElements;
     }
 
-    /*setPresenter(presenter: Presenter) {
-        this.presenter = presenter;
+    test(options: Options) {
+        let newOptions = options;
+        newOptions.key = 'sliderHandle';
+        this.notifyObservers(newOptions);
     }
 
-    get getPresenter() {
-        return this.presenter;
-    }*/
-
-    sliderInputListener() {
-        this.viewElements.firstHandle.getSliderHandle.addEventListener('input', (e) => this.notifyObservers);
+    changeValue(options: Options) {
+        this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
     }
 
-    progressBarClickListener() {
-        this.viewElements.progressBar.getProgressBar.childNodes.forEach(element => element.addEventListener('click', (e) => this.notifyObservers));
+    moveHandler(options: Options) {
+        console.log(options.event?.clientX);
     }
 
-    valueChanged(options: Options) {
+    displayValueAfterChange(options: Options) {
         const percent: number = ((options.value - options.min) / (options.max - options.min)) * 100;
         const marginLeft = percent - 15 * percent / 100;
         this.viewElements.firstValue.getCurrentValue.style.marginLeft = `${marginLeft}%`;

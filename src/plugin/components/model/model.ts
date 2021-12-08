@@ -1,6 +1,7 @@
 import Observer from "../Observer/Observer";
 
 export interface Options {
+    key: string
     range: boolean,
     id: string,
     min: number,
@@ -10,6 +11,7 @@ export interface Options {
     value2?: number,
     isValueVisible?: boolean,
     isVertical?: boolean,
+    event?: MouseEvent
 }
 
 class Model extends Observer{
@@ -19,7 +21,7 @@ class Model extends Observer{
         super();
         this.options = options;
         if (!options.value) {
-            this.options.value = (options.max - options.min) / 2;
+            this.options.value = (options.max + options.min) / 2;
         }
     }
 

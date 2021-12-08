@@ -2,19 +2,26 @@ import { Options } from "../Model/Model";
 
 class ProgressBar {
     private progressBar: HTMLDivElement;
-    private values: HTMLInputElement[];
+    private values: HTMLDivElement[];
 
     constructor() {
         this.progressBar = document.createElement('div');
         this.values = new Array;
     }
-    create(max: number, min: number) {
+    create(notifyObservers: Function, options: Options) {
         this.progressBar.classList.add('ng-slider__values')
-        for (let i = min; i <= max; i += (max - min) / 5) {
-            const value = document.createElement('input');
-            value.value = i.toString();
+        for (let i = options.min; i <= options.max; i += (options.max - options.min) / 5) {
+            const progressBarClick = (): void => {
+                const newOptions = options;
+                newOptions.key = 'progressBar';
+                newOptions.value = parseInt(value?.textContent ?? options.value.toString());
+                notifyObservers(newOptions);
+            }
+            const value = document.createElement('div');
+            value.textContent = i.toString();
             value.setAttribute('type', 'button');
             value.classList.add('ng-slider__value');
+            value.addEventListener('click', progressBarClick);
             this.progressBar.append(value);
             this.values?.push(value);
         }

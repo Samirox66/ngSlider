@@ -10,8 +10,7 @@ class CurrentValue {
     }
 
     setCurrentValue(value: string) {
-        const textNode = document.createTextNode(value);
-        this.currentValue.appendChild(textNode);
+        this.currentValue.textContent = value;
     }
 }
 

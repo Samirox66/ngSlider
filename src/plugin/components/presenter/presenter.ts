@@ -21,19 +21,23 @@ class Presenter {
     }
 
     onInit() {
-        this.view.addObserver(this.sliderInputListener);
-        this.view.addObserver(this.progressBarElementClickListener);
+        this.view.addObserver(this.sliderHandleInputListener.bind(this));
+        this.view.addObserver(this.progressBarClickListener.bind(this));
+        this.view.createViewElements(this.model.getOptions);
     }
 
-    sliderInputListener() {
-        //this.model.getOptions.value = parseInt(this.view.getViewElements.firstHandle.getSliderHandle.value);
-        //this.view.valueChanged(this.model.getOptions);
+    sliderHandleInputListener(options: Options) {
+        if (options.key !== 'sliderHandle') {
+            return;
+        }
+        this.view.moveHandler(options);
     }
 
-    progressBarElementClickListener(element: HTMLDivElement) {
-        //this.model.getOptions.value = parseInt(element.getAttribute('value') ?? '85');
-        //this.view.getViewElements.firstHandle.getSliderHandle.value = this.model.getOptions.value.toString();
-        //this.view.valueChanged(this.model.getOptions);
+    progressBarClickListener(options: Options) {
+        if (options.key !== 'progressBar') {
+            return;
+        }
+        this.view.changeValue(options);
     }
 }
 
