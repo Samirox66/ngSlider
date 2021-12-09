@@ -69,7 +69,7 @@ class View extends Observer {
     }
 
     moveHandler(options: Options) {
-        console.log(options.event?.clientX);
+        console.log(5);
     }
 
     displayValueAfterChange(options: Options) {

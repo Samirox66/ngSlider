@@ -11,7 +11,6 @@ export interface Options {
     value2?: number,
     isValueVisible?: boolean,
     isVertical?: boolean,
-    event?: MouseEvent
 }
 
 class Model extends Observer{

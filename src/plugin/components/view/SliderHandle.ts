@@ -8,13 +8,27 @@ class SliderHandle {
     }
 
     setHandle(notifyObservers: Function, options: Options) {
-        const handleMouseDown = function(event: MouseEvent) {
+        const handleMouseDown = (event: MouseEvent) => {
             const newOptions = options;
             newOptions.key = 'sliderHandle';
-            newOptions.event = event;
             notifyObservers(newOptions);
+            let initialX = event.clientX;
+            const handleMouseMove = (event: MouseEvent) => {
+                console.log(event.clientX);
+                this.sliderHandle.style.left = event.pageX - initialX + 'px';
+            }
+            const handleMouseUp = (event: MouseEvent) => {
+                document.removeEventListener('mousemove', handleMouseMove);
+                this.sliderHandle.onmouseup = null;
+            }
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
         }
-        this.sliderHandle.onmousedown = handleMouseDown;
+
+        this.sliderHandle.addEventListener('mousedown', handleMouseDown);
+        this.sliderHandle.ondragstart = function() {
+            return false;
+        };
     }
 
     get getSliderHandle() {
