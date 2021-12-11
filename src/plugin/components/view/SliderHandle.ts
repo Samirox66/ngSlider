@@ -2,9 +2,13 @@ import { Options } from "../Model/Model";
 
 class SliderHandle {
     private sliderHandle: HTMLDivElement;
+    private initialCordX: number;
+    private initialCordY: number;
     
     constructor() {
         this.sliderHandle = document.createElement('div');
+        this.initialCordX = 0;
+        this.initialCordY = 0;
     }
 
     setHandle(notifyObservers: Function, options: Options) {
@@ -12,14 +16,12 @@ class SliderHandle {
             const newOptions = options;
             newOptions.key = 'sliderHandle';
             notifyObservers(newOptions);
-            let initialX = event.clientX;
             const handleMouseMove = (event: MouseEvent) => {
-                console.log(event.clientX);
-                this.sliderHandle.style.left = event.pageX - initialX + 'px';
+                this.sliderHandle.style.left = event.pageX - options.startCord + 'px';
             }
             const handleMouseUp = (event: MouseEvent) => {
                 document.removeEventListener('mousemove', handleMouseMove);
-                this.sliderHandle.onmouseup = null;
+                this.sliderHandle.removeEventListener('mouseup', handleMouseUp);
             }
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);

@@ -11,6 +11,8 @@ export interface Options {
     value2?: number,
     isValueVisible?: boolean,
     isVertical?: boolean,
+    startCord: number,
+    endCord: number
 }
 
 class Model extends Observer{
@@ -22,6 +24,11 @@ class Model extends Observer{
         if (!options.value) {
             this.options.value = (options.max + options.min) / 2;
         }
+    }
+
+    setCordsX(startCordX: number, endCordX: number) {
+        this.options.startCord = startCordX;
+        this.options.endCord = endCordX;
     }
 
     get getOptions() {

@@ -31,6 +31,10 @@ class View extends Observer {
         } else {
             throw new Error("Wrong Id");
         }
+        this.slider.append(this.viewElements.progressBar.getProgressBar);
+        this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
+        this.slider.append(this.viewElements.firstHandle.getSliderHandle);
+        this.viewElements.firstHandle.getSliderHandle.append(this.viewElements.firstValue.getCurrentValue);
     }
 
     setViewElements(viewElements: ViewElements) {
@@ -43,10 +47,6 @@ class View extends Observer {
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
         this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options);
-        this.slider.append(this.viewElements.progressBar.getProgressBar);
-        this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
-        this.slider.append(this.viewElements.firstHandle.getSliderHandle);
-        this.viewElements.firstHandle.getSliderHandle.append(this.viewElements.firstValue.getCurrentValue);
         this.viewElements.firstValue.setCurrentValue(options.value.toString());
         const percent: number = ((options.value - options.min) / (options.max - options.min)) * 100;
         const marginLeft = percent - 15 * percent / 100;
@@ -66,10 +66,11 @@ class View extends Observer {
 
     changeValue(options: Options) {
         this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
+        this.viewElements.firstHandle.getSliderHandle.style.left = (options.value - options.min) * (options.endCord - options.startCord) / 5 + 'px';
     }
 
     moveHandler(options: Options) {
-        console.log(5);
+        
     }
 
     displayValueAfterChange(options: Options) {

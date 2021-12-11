@@ -23,6 +23,7 @@ class Presenter {
     onInit() {
         this.view.addObserver(this.sliderHandleInputListener.bind(this));
         this.view.addObserver(this.progressBarClickListener.bind(this));
+        this.model.setCordsX(this.view.getViewElements.sliderTrack.getSliderTrack.getBoundingClientRect().left, this.view.getViewElements.sliderTrack.getSliderTrack.getBoundingClientRect().right);
         this.view.createViewElements(this.model.getOptions);
     }
 
