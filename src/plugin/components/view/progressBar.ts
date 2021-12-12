@@ -12,10 +12,9 @@ class ProgressBar {
         this.progressBar.classList.add('ng-slider__values')
         for (let i = options.min; i <= options.max; i += (options.max - options.min) / 5) {
             const progressBarClick = (): void => {
-                const newOptions = options;
-                newOptions.key = 'progressBar';
-                newOptions.value = parseInt(value?.textContent ?? options.value.toString());
-                notifyObservers(newOptions);
+                options.key = 'progressBar';
+                options.value = parseInt(value?.textContent ?? options.value.toString());
+                notifyObservers(options);
             }
             const value = document.createElement('div');
             value.textContent = i.toString();

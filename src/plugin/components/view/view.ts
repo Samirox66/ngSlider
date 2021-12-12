@@ -44,14 +44,12 @@ class View extends Observer {
     createViewElements(options: Options) {
         this.viewElements.progressBar.create(this.notifyObservers.bind(this), options);
         this.viewElements.sliderTrack.create();
+        this.viewElements.sliderTrack.fillWithColor(options);
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
         this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options);
-        this.viewElements.firstValue.setCurrentValue(options.value.toString());
+        this.changeValue(options);
         const percent: number = ((options.value - options.min) / (options.max - options.min)) * 100;
-        const marginLeft = percent - 15 * percent / 100;
-        this.viewElements.firstValue.getCurrentValue.style.marginLeft = `${marginLeft}%`;
-        this.viewElements.sliderTrack.getSliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
     }
 
     get getViewElements() {
@@ -65,20 +63,8 @@ class View extends Observer {
     }
 
     changeValue(options: Options) {
-        this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
-        this.viewElements.firstHandle.getSliderHandle.style.left = (options.value - options.min) * (options.endCord - options.startCord) / 5 + 'px';
-    }
-
-    moveHandler(options: Options) {
-        
-    }
-
-    displayValueAfterChange(options: Options) {
-        const percent: number = ((options.value - options.min) / (options.max - options.min)) * 100;
-        const marginLeft = percent - 15 * percent / 100;
-        this.viewElements.firstValue.getCurrentValue.style.marginLeft = `${marginLeft}%`;
-        this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
-        this.viewElements.sliderTrack.getSliderTrack.style.background = `linear-gradient(to right, #3264fe ${percent}%, #dadae5 ${percent}%)`;
+        this.viewElements.firstValue.setCurrentValue(options.value.toString());
+        this.viewElements.firstHandle.getSliderHandle.style.left = (options.value - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.firstHandle.getSliderHandle.offsetWidth / 2 + 'px';
     }
 }
 

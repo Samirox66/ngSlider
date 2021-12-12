@@ -31,7 +31,8 @@ class Presenter {
         if (options.key !== 'sliderHandle') {
             return;
         }
-        this.view.moveHandler(options);
+        this.view.changeValue(options);
+        this.view.getViewElements.sliderTrack.fillWithColor(options);
     }
 
     progressBarClickListener(options: Options) {
@@ -39,6 +40,7 @@ class Presenter {
             return;
         }
         this.view.changeValue(options);
+        this.view.getViewElements.sliderTrack.fillWithColor(options);
     }
 }
 
