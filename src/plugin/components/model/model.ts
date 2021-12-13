@@ -2,7 +2,7 @@ import Observer from "../Observer/Observer";
 
 export interface Options {
     key: string
-    range: boolean,
+    range: string,
     id: string,
     min: number,
     max: number,

@@ -18,7 +18,7 @@ class View extends Observer {
     private viewElements: ViewElements;
     private slider: HTMLElement;
 
-    constructor(id: string) {
+    constructor(id: string, range: string) {
         super();
         this.viewElements = {
             progressBar: new ProgressBar(),
@@ -35,6 +35,12 @@ class View extends Observer {
         this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
         this.slider.append(this.viewElements.firstHandle.getSliderHandle);
         this.viewElements.firstHandle.getSliderHandle.append(this.viewElements.firstValue.getCurrentValue);
+        if (range === 'true') {
+            this.viewElements.secondHandle = new SliderHandle();
+            this.viewElements.secondValue = new CurrentValue();
+            this.slider.append(this.viewElements.secondHandle.getSliderHandle);
+            this.viewElements.secondHandle.getSliderHandle.append(this.viewElements.secondValue.getCurrentValue);
+        }
     }
 
     setViewElements(viewElements: ViewElements) {
@@ -47,9 +53,13 @@ class View extends Observer {
         this.viewElements.sliderTrack.fillWithColor(options);
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
+        if (options.range === 'true') {
+            this.viewElements.secondValue?.getCurrentValue.classList.add('ng-slider__current-value');
+            this.viewElements.secondHandle?.getSliderHandle.classList.add('ng-slider__handle');
+            this.viewElements.secondValue!.getCurrentValue.textContent = options.value2!.toString();
+        }
         this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options);
         this.changeValue(options);
-        const percent: number = ((options.value - options.min) / (options.max - options.min)) * 100;
     }
 
     get getViewElements() {
