@@ -10,7 +10,7 @@ class ProgressBar {
     }
     create(notifyObservers: Function, options: Options) {
         this.progressBar.classList.add('ng-slider__values')
-        for (let i = options.min; i <= options.max; i += (options.max - options.min) / 5) {
+        for (let i = options.min; i <= options.max; i += (options.max - options.min) / 8) {
             const progressBarClick = (): void => {
                 options.key = 'progressBar';
                 options.value = parseInt(value?.textContent ?? options.value.toString());
@@ -32,6 +32,18 @@ class ProgressBar {
 
     get getValues() {
         return this.values;
+    }
+
+    makeVertical() {
+        for (let value of this.values) {
+            value.style.transform = 'rotate(-90deg)';
+        }
+    }
+
+    makeHorizontal() {
+        for (let value of this.values) {
+            value.style.transform = 'rotate(0deg)';
+        }
     }
 }
 

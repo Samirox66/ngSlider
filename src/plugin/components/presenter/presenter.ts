@@ -21,17 +21,26 @@ class Presenter {
     }
 
     onInit() {
-        this.view.addObserver(this.sliderHandleInputListener.bind(this));
+        this.view.addObserver(this.firstHandleInputListener.bind(this));
+        this.view.addObserver(this.secondHandleInputListener.bind(this));
         this.view.addObserver(this.progressBarClickListener.bind(this));
         this.model.setCordsX(this.view.getViewElements.sliderTrack.getSliderTrack.getBoundingClientRect().left, this.view.getViewElements.sliderTrack.getSliderTrack.getBoundingClientRect().right);
         this.view.createViewElements(this.model.getOptions);
     }
 
-    sliderHandleInputListener(options: Options) {
-        if (options.key !== 'sliderHandle') {
+    firstHandleInputListener(options: Options) {
+        if (options.key !== 'firstHandle') {
             return;
         }
-        this.view.changeValue(options);
+        this.view.changeFirstValue(options);
+        this.view.getViewElements.sliderTrack.fillWithColor(options);
+    }
+
+    secondHandleInputListener(options: Options) {
+        if (options.key !== 'secondHandle') {
+            return;
+        }
+        this.view.changeSecondValue(options);
         this.view.getViewElements.sliderTrack.fillWithColor(options);
     }
 
@@ -39,7 +48,7 @@ class Presenter {
         if (options.key !== 'progressBar') {
             return;
         }
-        this.view.changeValue(options);
+        this.view.changeFirstValue(options);
         this.view.getViewElements.sliderTrack.fillWithColor(options);
     }
 }

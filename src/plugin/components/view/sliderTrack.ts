@@ -24,7 +24,10 @@ class SliderTrack {
                 this.sliderTrack.style.width = percentToFill + '%';
             },
             true: (options: Options) => {
-
+                const percentToFill: number = (options.value - options.value2!) / (options.max - options.min) * 100;
+                const pixelsToMove: number = (options.endCord - options.startCord) / (options.max - options.min) * (options.value2! - options.min);
+                this.sliderTrack.style.left = pixelsToMove + 'px';
+                this.sliderTrack.style.width = percentToFill + '%';
             }
         }
         switch (options.range) {

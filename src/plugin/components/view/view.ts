@@ -57,9 +57,15 @@ class View extends Observer {
             this.viewElements.secondValue?.getCurrentValue.classList.add('ng-slider__current-value');
             this.viewElements.secondHandle?.getSliderHandle.classList.add('ng-slider__handle');
             this.viewElements.secondValue!.getCurrentValue.textContent = options.value2!.toString();
+            this.viewElements.secondHandle?.setHandle(this.notifyObservers.bind(this), options, true);
+            this.changeSecondValue(options);
         }
-        this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options);
-        this.changeValue(options);
+        if (options.isValueVisible === false) {
+            this.viewElements.firstValue.hide();
+            this.viewElements.secondValue?.hide();
+        }
+        this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options, false);
+        this.changeFirstValue(options);
     }
 
     get getViewElements() {
@@ -72,9 +78,24 @@ class View extends Observer {
         this.notifyObservers(newOptions);
     }
 
-    changeValue(options: Options) {
+    changeFirstValue(options: Options) {
         this.viewElements.firstValue.setCurrentValue(options.value.toString());
         this.viewElements.firstHandle.getSliderHandle.style.left = (options.value - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.firstHandle.getSliderHandle.offsetWidth / 2 + 'px';
+    }
+
+    changeSecondValue(options: Options) {
+        this.viewElements.secondValue?.setCurrentValue(options.value2!.toString());
+        this.viewElements.secondHandle!.getSliderHandle.style.left = (options.value2! - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.firstHandle.getSliderHandle.offsetWidth / 2 + 'px';
+    }
+
+    makeVertical() {
+        this.slider.style.transform = 'rotate(90deg)';
+        this.getViewElements.progressBar.makeVertical();
+    }
+
+    makeHorizontal() {
+        this.slider.style.transform = 'rotate(0deg)'
+        this.getViewElements.progressBar.makeHorizontal();
     }
 }
 

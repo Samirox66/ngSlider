@@ -12,6 +12,14 @@ class CurrentValue {
     setCurrentValue(value: string) {
         this.currentValue.textContent = value;
     }
+
+    hide() {
+        this.currentValue.style.display = 'none';
+    }
+
+    show() {
+        this.currentValue.style.display = 'block';
+    }
 }
 
 export default CurrentValue;

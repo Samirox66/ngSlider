@@ -17,6 +17,7 @@ declare global {
         const view = new View(options.id, options.range);
         const slider = new Presenter(view, model);
         slider.onInit();
+        slider.getView.makeVertical();
     };
 })(jQuery);
 
