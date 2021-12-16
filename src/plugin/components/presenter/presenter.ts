@@ -20,12 +20,18 @@ class Presenter {
         return this.view;
     }
 
-    onInit() {
+    onInit(options: Options) {
         this.view.addObserver(this.firstHandleInputListener.bind(this));
         this.view.addObserver(this.secondHandleInputListener.bind(this));
         this.view.addObserver(this.progressBarClickListener.bind(this));
-        this.model.setCordsX(this.view.getViewElements.sliderTrack.getSliderTrack.getBoundingClientRect().left, this.view.getViewElements.sliderTrack.getSliderTrack.getBoundingClientRect().right);
+        if (options.isVertical) {
+            this.view.makeVertical();
+            this.model.setCords(this.view.getSlider.getBoundingClientRect().top, this.view.getSlider.getBoundingClientRect().bottom)
+        } else {
+            this.model.setCords(this.view.getSlider.getBoundingClientRect().left, this.view.getSlider.getBoundingClientRect().right);
+        }
         this.view.createViewElements(this.model.getOptions);
+        this.view.setHandles(options);
     }
 
     firstHandleInputListener(options: Options) {

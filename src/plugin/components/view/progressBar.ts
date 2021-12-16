@@ -33,18 +33,6 @@ class ProgressBar {
     get getValues() {
         return this.values;
     }
-
-    makeVertical() {
-        for (let value of this.values) {
-            value.style.transform = 'rotate(-90deg)';
-        }
-    }
-
-    makeHorizontal() {
-        for (let value of this.values) {
-            value.style.transform = 'rotate(0deg)';
-        }
-    }
 }
 
 export default ProgressBar;

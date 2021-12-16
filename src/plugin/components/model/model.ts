@@ -26,9 +26,10 @@ class Model extends Observer{
         }
     }
 
-    setCordsX(startCordX: number, endCordX: number) {
-        this.options.startCord = startCordX;
-        this.options.endCord = endCordX;
+    setCords(startCord: number, endCord: number) {
+        this.options.startCord = startCord;
+        this.options.endCord = endCord;
+        console.log(startCord, endCord)
     }
 
     get getOptions() {

@@ -10,7 +10,12 @@ class SliderHandle {
     setHandle(notifyObservers: Function, options: Options, isSecondHandle: boolean) {
         const handleMouseDown = (event: MouseEvent) => {
             const handleMouseMove = (event: MouseEvent) => {
-                const value = Math.ceil((event.pageX - options.startCord) * (options.max - options.min) / (options.endCord - options.startCord) + options.min);
+                let value: number;
+                if (options.isVertical) { 
+                    value = Math.ceil((event.pageY - options.startCord) * (options.max - options.min) / (options.endCord - options.startCord) + options.min);
+                } else {
+                    value = Math.ceil((event.pageX - options.startCord) * (options.max - options.min) / (options.endCord - options.startCord) + options.min);
+                }
                 if (value >= options.min && value <= options.max) {
                     if(isSecondHandle) {
                         if (value >= options.value) {
