@@ -50,12 +50,11 @@ class View extends Observer {
     createViewElements(options: Options) {
         this.viewElements.progressBar.create(this.notifyObservers.bind(this), options);
         this.viewElements.sliderTrack.create();
-        this.viewElements.sliderTrack.fillWithColor(options);
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
         if (options.range === 'true') {
             if (!options.value2) {
-                options.value2 = options.min;
+                options.value2 = options.value - options.step;
             }
             this.viewElements.secondValue?.getCurrentValue.classList.add('ng-slider__current-value');
             this.viewElements.secondHandle?.getSliderHandle.classList.add('ng-slider__handle');
@@ -67,6 +66,7 @@ class View extends Observer {
             this.viewElements.secondValue?.hide();
         }
         this.changeFirstValue(options);
+        this.viewElements.sliderTrack.fillWithColor(options);
     }
 
     setHandles(options: Options) {

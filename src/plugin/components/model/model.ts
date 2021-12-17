@@ -6,7 +6,7 @@ export interface Options {
     id: string,
     min: number,
     max: number,
-    step?: number,
+    step: number,
     value: number,
     value2?: number,
     isValueVisible?: boolean,
@@ -23,6 +23,9 @@ class Model extends Observer{
         this.options = options;
         if (!options.value) {
             this.options.value = (options.max + options.min) / 2;
+        }
+        if (!options.step) {
+            options.step = (options.max - options.min) / 10;
         }
     }
 

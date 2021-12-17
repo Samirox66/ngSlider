@@ -12,17 +12,27 @@ class ProgressBar {
         this.progressBar.classList.add('ng-slider__values')
         for (let i = options.min; i <= options.max; i += (options.max - options.min) / 8) {
             const progressBarClick = (): void => {
+                const value: number = parseInt(elementOfProgressBar.textContent!);
+                const isValueFitForStep: boolean = Math.abs(value - options.value) % options.step === 0;
                 options.key = 'progressBar';
-                options.value = parseInt(value?.textContent ?? options.value.toString());
+                if (options.value2) {
+                    if (value > options.value2 && isValueFitForStep) {
+                        options.value = value;
+                    }
+                } else {
+                    if (isValueFitForStep) {
+                        options.value = value;
+                    }
+                }
                 notifyObservers(options);
             }
-            const value = document.createElement('div');
-            value.textContent = i.toString();
-            value.setAttribute('type', 'button');
-            value.classList.add('ng-slider__value');
-            value.addEventListener('click', progressBarClick);
-            this.progressBar.append(value);
-            this.values?.push(value);
+            const elementOfProgressBar = document.createElement('div');
+            elementOfProgressBar.textContent = i.toString();
+            elementOfProgressBar.setAttribute('type', 'button');
+            elementOfProgressBar.classList.add('ng-slider__value');
+            elementOfProgressBar.addEventListener('click', progressBarClick);
+            this.progressBar.append(elementOfProgressBar);
+            this.values?.push(elementOfProgressBar);
         }
     }
 

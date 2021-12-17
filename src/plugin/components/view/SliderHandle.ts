@@ -18,13 +18,13 @@ class SliderHandle {
                 }
                 if (value >= options.min && value <= options.max) {
                     if(isSecondHandle) {
-                        if (value >= options.value) {
+                        if (value >= options.value || Math.abs(options.value2! - value) % options.step !== 0 || options.value - value < options.step) {
                             return;
                         } 
                         options.value2 = value;
                         options.key = 'secondHandle';
                     } else {
-                        if (options.value2 && value <= options.value2) {
+                        if (options.value2 && value <= options.value2 || Math.abs(options.value - value) % options.step !== 0 || value - options.value2! < options.step) {
                             return;
                         }
                         options.value = value;
