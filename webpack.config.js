@@ -5,13 +5,13 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
-    entry: './index.ts',
+    entry: './demo-page/index.ts',
     devtool: 'inline-source-map',
     context: path.resolve(__dirname, 'src'),
     plugins: [
         new HtmlWebpackPlugin({
             'filename': 'index.html',
-            'template': './index.pug'
+            'template': './demo-page/index.pug'
         }),
         new CleanWebpackPlugin,
         new webpack.ProvidePlugin({

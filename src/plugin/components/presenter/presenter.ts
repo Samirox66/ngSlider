@@ -38,6 +38,7 @@ class Presenter {
         if (options.key !== 'firstHandle') {
             return;
         }
+        this.model.calcValue();
         this.view.changeFirstValue(options);
         this.view.getViewElements.sliderTrack.fillWithColor(options);
     }
@@ -46,6 +47,7 @@ class Presenter {
         if (options.key !== 'secondHandle') {
             return;
         }
+        this.model.calcValue();
         this.view.changeSecondValue(options);
         this.view.getViewElements.sliderTrack.fillWithColor(options);
     }

@@ -12,7 +12,7 @@ class ProgressBar {
         this.progressBar.classList.add('ng-slider__values')
         for (let i = options.min; i <= options.max; i += (options.max - options.min) / 8) {
             const progressBarClick = (): void => {
-                const value: number = parseInt(elementOfProgressBar.textContent!);
+                const value: number = parseFloat(elementOfProgressBar.textContent!);
                 const isValueFitForStep: boolean = Math.abs(value - options.value) % options.step === 0;
                 options.key = 'progressBar';
                 if (options.value2) {
