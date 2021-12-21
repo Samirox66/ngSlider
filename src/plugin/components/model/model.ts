@@ -36,25 +36,30 @@ class Model extends Observer{
     }
 
     calcValue() {
-        let value: number;
-        value = (this.options.currentCord - this.options.startCord) * (this.options.max - this.options.min) / (this.options.endCord - this.options.startCord) + this.options.min;
-        value -= value % this.options.step;
-        if (value % this.options.step > this.options.step / 2) {
-            value += this.options.step;
+        let value: number = (this.options.currentCord - this.options.startCord) * (this.options.max - this.options.min) / (this.options.endCord - this.options.startCord) + this.options.min;
+        let integerStep = this.options.step;
+        while (integerStep % 1 !== 0) {
+            integerStep *= 10;
         }
+        const pow: number = integerStep / this.options.step;
+        value = value * pow - value * pow % integerStep;
+        if (value % integerStep > integerStep / 2) {
+            value += integerStep;
+        }
+        value /= pow;
         if (value >= this.options.min && value <= this.options.max) {
-            if(this.options.key === 'secondHandle') {
-                if (value >= this.options.value || Math.abs(this.options.value2! - value) % this.options.step !== 0 || this.options.value - value < this.options.step) {
+            if (this.options.key === 'secondHandle') {
+                if (value >= this.options.value) {
                     return;
                 }
                 this.options.value2 = value;
             } else {
-                if (this.options.value2 && value <= this.options.value2 || Math.abs(this.options.value - value) % this.options.step !== 0 || value - this.options.value2! < this.options.step) {
+                if (this.options.value2 && value <= this.options.value2) {
                     return;
                 }
                 this.options.value = value;
-            }
-        }        
+            }        
+        }
     }
 
     get getOptions() {

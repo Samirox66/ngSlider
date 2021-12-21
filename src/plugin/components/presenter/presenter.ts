@@ -21,8 +21,7 @@ class Presenter {
     }
 
     onInit(options: Options) {
-        this.view.addObserver(this.firstHandleInputListener.bind(this));
-        this.view.addObserver(this.secondHandleInputListener.bind(this));
+        this.view.addObserver(this.handleInputListener.bind(this));
         this.view.addObserver(this.progressBarClickListener.bind(this));
         if (options.isVertical) {
             this.view.makeVertical();
@@ -34,21 +33,12 @@ class Presenter {
         this.view.setHandles(options);
     }
 
-    firstHandleInputListener(options: Options) {
-        if (options.key !== 'firstHandle') {
+    handleInputListener(options: Options) {
+        if (options.key !== 'firstHandle' && options.key !== 'secondHandle') {
             return;
         }
         this.model.calcValue();
-        this.view.changeFirstValue(options);
-        this.view.getViewElements.sliderTrack.fillWithColor(options);
-    }
-
-    secondHandleInputListener(options: Options) {
-        if (options.key !== 'secondHandle') {
-            return;
-        }
-        this.model.calcValue();
-        this.view.changeSecondValue(options);
+        this.view.changeValue(options);
         this.view.getViewElements.sliderTrack.fillWithColor(options);
     }
 
@@ -56,7 +46,7 @@ class Presenter {
         if (options.key !== 'progressBar') {
             return;
         }
-        this.view.changeFirstValue(options);
+        this.view.changeValue(options);
         this.view.getViewElements.sliderTrack.fillWithColor(options);
     }
 }

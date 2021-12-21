@@ -30,8 +30,10 @@ class ProgressBar {
             elementOfProgressBar.textContent = i.toString();
             elementOfProgressBar.setAttribute('type', 'button');
             elementOfProgressBar.classList.add('ng-slider__value');
-            elementOfProgressBar.addEventListener('click', progressBarClick);
             this.progressBar.append(elementOfProgressBar);
+            const pixelsToMove: number = (options.endCord - options.startCord) / (options.max - options.min) * (i - options.min) - elementOfProgressBar.offsetWidth / 2;
+            elementOfProgressBar.style.left = pixelsToMove + 'px';
+            elementOfProgressBar.addEventListener('click', progressBarClick);
             this.values?.push(elementOfProgressBar);
         }
     }
