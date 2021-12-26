@@ -37,16 +37,19 @@ class Model extends Observer{
 
     calcValue() {
         let value: number = (this.options.currentCord - this.options.startCord) * (this.options.max - this.options.min) / (this.options.endCord - this.options.startCord) + this.options.min;
-        let integerStep = this.options.step;
-        while (integerStep % 1 !== 0) {
-            integerStep *= 10;
+        const countDecimals = (value: number): number => {
+            if (value.toString().includes('.')) {
+                return value.toString().split('.')[1].length
+            }
+            return 0;
         }
-        const pow: number = integerStep / this.options.step;
-        value = value * pow - value * pow % integerStep;
-        if (value % integerStep > integerStep / 2) {
-            value += integerStep;
+        const decimals: number = countDecimals(this.options.step);
+        if ((value - this.options.min) % this.options.step > this.options.step / 2) {
+            value = value - (value - this.options.min) % this.options.step + this.options.step;
+        } else {
+            value = value - (value - this.options.min) % this.options.step;
         }
-        value /= pow;
+        value = parseFloat(value.toFixed(decimals));
         if (value >= this.options.min && value <= this.options.max) {
             if (this.options.key === 'secondHandle') {
                 if (value >= this.options.value) {
