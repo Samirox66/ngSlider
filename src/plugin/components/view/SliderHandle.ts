@@ -21,11 +21,13 @@ class SliderHandle {
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);
         }
-
-        this.sliderHandle.addEventListener('mousedown', handleMouseDown);
-        this.sliderHandle.ondragstart = function() {
+        document.ondragstart = function() {
             return false;
         };
+        document.body.onselectstart = function() {
+            return false;
+        };
+        this.sliderHandle.addEventListener('mousedown', handleMouseDown);
     }
 
     get getSliderHandle() {

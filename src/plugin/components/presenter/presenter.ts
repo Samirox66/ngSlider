@@ -25,7 +25,6 @@ class Presenter {
         this.view.addObserver(this.progressBarClickListener.bind(this));
         if (options.isVertical) {
             this.view.makeVertical();
-            //console.log(this.view.getSlider.getBoundingClientRect().top, this.view.getSlider.getBoundingClientRect().bottom);
             this.model.setCords(this.view.getSlider.getBoundingClientRect().top, this.view.getSlider.getBoundingClientRect().bottom)
         } else {
             this.model.setCords(this.view.getSlider.getBoundingClientRect().left, this.view.getSlider.getBoundingClientRect().right);
