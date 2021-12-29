@@ -1,3 +1,5 @@
+include blocks/slider-panel/slider-panel.pug
+
 doctype html 
 html(lang="en")
     head
@@ -6,5 +8,4 @@ html(lang="en")
         title Slider
     body
         .container
-            .slider-wrapper 
-                .ng-slider.js-ng-slider(id="slider-1")
+            +slider-panel

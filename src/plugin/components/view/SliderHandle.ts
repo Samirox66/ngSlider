@@ -20,7 +20,7 @@ class SliderHandle {
             }
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);
-        }
+        };
         document.ondragstart = function() {
             return false;
         };
