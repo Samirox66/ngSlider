@@ -1,2 +1,23 @@
 mixin config 
     section.config
+        .config__item
+            p.config__text Max
+            input.config__input(id="max" type="text")
+        .config__item
+            p.config__text Min 
+            input.config__input(id="min" type="text")
+        .config__item
+            p.config__text First value 
+            input.config__input(id="first-value" type="text")
+        .config__item
+            p.config__text Second value
+            input.config__input(id="second-value" type="text")
+        .config__item 
+            p.config__text Range
+            input.config__input(id="range" type="text") 
+        .config__item 
+            p.config__text Vertical mode
+            input.config__button(id="vertical-button" type="checkbox")
+        .config__item 
+            p.config__text Visible value 
+            input.config__button(id="current-value-visible-button" type="checkbox" checked)

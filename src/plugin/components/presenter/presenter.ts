@@ -49,6 +49,16 @@ class Presenter {
         this.view.changeValue(options);
         this.view.getViewElements.sliderTrack.fillWithColor(options);
     }
+
+    changeFirstValue(value: number | string) {
+        if (typeof(value) === 'string' && !isNaN(parseFloat(value))) {
+            this.getModel.changeFirstValue(parseFloat(value));
+        } else if (typeof(value) === 'number' && !isNaN(value)) {
+            this.getModel.changeFirstValue(value);
+        }
+        this.getModel.getOptions.key = 'progressBar';
+        this.getView.notifyObservers(this.getModel.getOptions);
+    }
 }
 
 export default Presenter;
