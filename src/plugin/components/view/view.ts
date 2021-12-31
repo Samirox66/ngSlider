@@ -133,6 +133,11 @@ class View extends Observer {
     }
 
     makeVertical() {
+        this.viewElements.firstHandle.getSliderHandle.style.left = '-5px';
+        this.viewElements.sliderTrack.getSliderTrack.style.width = '5px';
+        if (this.viewElements.secondHandle) {
+            this.viewElements.secondHandle.getSliderHandle.style.left = '-5px';
+        }
         this.slider.classList.add('ng-slider_vertical');
         this.viewElements.progressBar.getProgressBar.classList.add('ng-slider__values_vertical');
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
@@ -143,6 +148,11 @@ class View extends Observer {
     }
 
     makeHorizontal() {
+        this.viewElements.firstHandle.getSliderHandle.style.top = '-5px';
+        this.viewElements.sliderTrack.getSliderTrack.style.height = '5px';
+        if (this.viewElements.secondHandle) {
+            this.viewElements.secondHandle.getSliderHandle.style.top = '-5px';
+        }
         this.slider.classList.remove('ng-slider_vertical');
         this.viewElements.progressBar.getProgressBar.classList.remove('ng-slider__values_vertical');
         this.viewElements.firstValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');

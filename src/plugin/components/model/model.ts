@@ -113,11 +113,23 @@ class Model extends Observer{
     }
 
     setMaxValue(value: number) {
-        this.options.max = value;
+        if (value > this.options.min) {
+            this.options.max = value;
+            if (this.options.value > this.options.max) {
+                this.options.value = this.options.max;
+            }
+        }
     }
 
     setMinValue(value: number) {
-        this.options.min = value;
+        if (value < this.options.max) {
+            this.options.min = value;
+            if (this.options.value2 && this.options.value2 < this.options.min) {
+                this.options.value2 = this.options.min;
+            } else if (this.options.value < this.options.min) {
+                this.options.value = this.options.min;
+            }
+        }
     }
 
     setStep(step: number) {

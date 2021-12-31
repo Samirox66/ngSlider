@@ -54,6 +54,10 @@ class SliderTrack {
         }
     }
 
+    hide() {
+        this.sliderTrack.style.width = '0';
+    }
+
     get getSliderTrack() {
         return this.sliderTrack;
     }

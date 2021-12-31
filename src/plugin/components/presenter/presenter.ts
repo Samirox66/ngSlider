@@ -84,9 +84,9 @@ class Presenter {
 
     changeMinValue(value: number | string) {
         if (typeof(value) === 'string' && !isNaN(parseFloat(value))) {
-            this.getModel.setMaxValue(parseFloat(value));
+            this.getModel.setMinValue(parseFloat(value));
         } else if (typeof(value) === 'number' && !isNaN(value)) {
-            this.getModel.setMaxValue(value);
+            this.getModel.setMinValue(value);
         }
         this.view.destroySlider();
         this.view.displaySlider(this.model.getOptions);
@@ -104,11 +104,21 @@ class Presenter {
 
     changeRange(range: string) {
         this.model.setRange(range);
+        if (range !== 'true' && range !== 'max' && range !== 'min') {
+            this.view.getViewElements.sliderTrack.hide();
+        }
         this.view.destroySlider();
         this.view.displaySlider(this.model.getOptions);
     }
 
     changeMode(isVertical: boolean) {
+        if (isVertical) {
+            this.view.makeVertical();
+            this.model.setCords(this.view.getSlider.getBoundingClientRect().top, this.view.getSlider.getBoundingClientRect().bottom)
+        } else {
+            this.view.makeHorizontal();
+            this.model.setCords(this.view.getSlider.getBoundingClientRect().left, this.view.getSlider.getBoundingClientRect().right);
+        }
         this.model.setVerticalMode(isVertical);
         this.view.destroySlider();
         this.view.displaySlider(this.model.getOptions);
