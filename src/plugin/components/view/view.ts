@@ -31,15 +31,9 @@ class View extends Observer {
         } else {
             throw new Error("Wrong Id");
         }
-        this.slider.append(this.viewElements.progressBar.getProgressBar);
-        this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
-        this.slider.append(this.viewElements.firstHandle.getSliderHandle);
-        this.viewElements.firstHandle.getSliderHandle.append(this.viewElements.firstValue.getCurrentValue);
         if (range === 'true') {
             this.viewElements.secondHandle = new SliderHandle();
             this.viewElements.secondValue = new CurrentValue();
-            this.slider.append(this.viewElements.secondHandle.getSliderHandle);
-            this.viewElements.secondHandle.getSliderHandle.append(this.viewElements.secondValue.getCurrentValue);
         }
     }
 
@@ -47,12 +41,18 @@ class View extends Observer {
         this.viewElements = viewElements;
     }
 
-    createViewElements(options: Options) {
+    displaySlider(options: Options) {
+        this.slider.append(this.viewElements.progressBar.getProgressBar);
+        this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
+        this.slider.append(this.viewElements.firstHandle.getSliderHandle);
+        this.viewElements.firstHandle.getSliderHandle.append(this.viewElements.firstValue.getCurrentValue);
         this.viewElements.progressBar.create(this.notifyObservers.bind(this), options);
         this.viewElements.sliderTrack.create();
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
         if (options.range === 'true') {
+            this.slider.append(this.viewElements.secondHandle!.getSliderHandle);
+            this.viewElements.secondHandle!.getSliderHandle.append(this.viewElements.secondValue!.getCurrentValue);
             if (!options.value2) {
                 options.value2 = options.min;
             }
@@ -65,10 +65,20 @@ class View extends Observer {
         if (options.isValueVisible === false) {
             this.viewElements.firstValue.hide();
             this.viewElements.secondValue?.hide();
+        } else {
+            this.viewElements.firstValue.show();
+            this.viewElements.secondValue?.show();
         }
         options.key = 'firstHandle';
         this.changeValue(options);
         this.viewElements.sliderTrack.fillWithColor(options);
+    }
+
+    destroySlider() {
+        this.viewElements.progressBar.destroy();
+        while (this.slider.hasChildNodes()) {
+            this.slider.firstChild?.remove();
+        }
     }
 
     setHandles(options: Options) {
@@ -92,7 +102,7 @@ class View extends Observer {
 
     changeValue(options: Options) {
         let moveHandle: number;
-        if (options.key === 'secondHandle') {
+        if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
             this.viewElements.secondValue?.setCurrentValue(options.value2!.toString());
             moveHandle = (options.value2! - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.secondHandle!.getSliderHandle.offsetWidth / 2;
             if (options.isVertical) {

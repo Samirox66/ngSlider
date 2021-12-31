@@ -68,22 +68,76 @@ class Model extends Observer{
 
     changeFirstValue(value: number) {
         const decimals: number = this.countDecimals(this.options.step);
-        const isValueCloserToBiggerNumber: boolean = (value - this.options.value2!) % this.options.step > this.options.step / 2;
-        if (this.options.range === 'true') {
+        const isValueCloserToBiggerNumber: boolean = (value - this.options.min) % this.options.step > this.options.step / 2;
+        if (this.options.range === 'true' && this.options.value2) {
             if (value >= this.options.max) {
                 value = this.options.max;
+            } else if (value <= this.options.value2 + this.options.step) {
+                value = this.options.value2 + this.options.step;
+            } else if (isValueCloserToBiggerNumber) {
+                value = value - (value - this.options.min) % this.options.step + this.options.step;
+            } else {
+                value = value - (value -this.options.min) % this.options.step;
+            }
+        } else {
+            if (value >= this.options.max) {
+                value = this.options.max;
+            } else if (value <= this.options.min) {
+                value = this.options.min;
+            } else if (isValueCloserToBiggerNumber) {
+                value = value - (value - this.options.min) % this.options.step + this.options.step;
+            } else {
+                value = value - (value -this.options.min) % this.options.step;
+            }
+        }
+        this.options.value = parseFloat(value.toFixed(decimals));
+    }
+    
+    changeSecondValue(value: number) {
+        const decimals: number = this.countDecimals(this.options.step);
+        const isValueCloserToBiggerNumber: boolean = (value - this.options.min) % this.options.step > this.options.step / 2;
+        if (this.options.range === 'true') {
+            if (value <= this.options.min) {
+                value = this.options.min;
+            }
+            else if (value >= this.options.value - this.options.step) {
+                value = this.options.value - this.options.step;
             }
             else if (isValueCloserToBiggerNumber) {
                 value = value - (value - this.options.min) % this.options.step + this.options.step;
             } else {
                 value = value - (value -this.options.min) % this.options.step;
             }
-            this.options.value = parseFloat(value.toFixed(decimals));
+            this.options.value2 = parseFloat(value.toFixed(decimals));
         }
     }
-    
-    changeSecondValue(value: number): boolean {
-        return true;
+
+    setMaxValue(value: number) {
+        this.options.max = value;
+    }
+
+    setMinValue(value: number) {
+        this.options.min = value;
+    }
+
+    setStep(step: number) {
+        this.options.step = step;
+    }
+
+    setRange(range: string) {
+        if (range === 'min' || range === 'max' || range === 'true') {
+            this.options.range = range;
+        } else {
+            this.options.range = 'false';
+        }
+    }
+
+    setVisability(isVisible: boolean) {
+        this.options.isValueVisible = isVisible;
+    }
+
+    setVerticalMode(isVertical: boolean) {
+        this.options.isVertical = isVertical;
     }
 
     get getOptions() {

@@ -29,7 +29,7 @@ class Presenter {
         } else {
             this.model.setCords(this.view.getSlider.getBoundingClientRect().left, this.view.getSlider.getBoundingClientRect().right);
         }
-        this.view.createViewElements(this.model.getOptions);
+        this.view.displaySlider(this.model.getOptions);
         this.view.setHandles(options);
     }
 
@@ -43,7 +43,7 @@ class Presenter {
     }
 
     progressBarClickListener(options: Options) {
-        if (options.key !== 'progressBar') {
+        if (options.key !== 'progressBarFirst' && options.key !== 'progressBarSecond') {
             return;
         }
         this.view.changeValue(options);
@@ -52,12 +52,72 @@ class Presenter {
 
     changeFirstValue(value: number | string) {
         if (typeof(value) === 'string' && !isNaN(parseFloat(value))) {
-            this.getModel.changeFirstValue(parseFloat(value));
+            this.model.changeFirstValue(parseFloat(value));
         } else if (typeof(value) === 'number' && !isNaN(value)) {
-            this.getModel.changeFirstValue(value);
+            this.model.changeFirstValue(value);
         }
-        this.getModel.getOptions.key = 'progressBar';
-        this.getView.notifyObservers(this.getModel.getOptions);
+        this.model.getOptions.key = 'firstHandle';
+        this.view.changeValue(this.model.getOptions);
+        this.view.getViewElements.sliderTrack.fillWithColor(this.model.getOptions);
+    }
+
+    changeSecondValue(value: number | string) {
+        if (typeof(value) === 'string' && !isNaN(parseFloat(value))) {
+            this.getModel.changeSecondValue(parseFloat(value));
+        } else if (typeof(value) === 'number' && !isNaN(value)) {
+            this.getModel.changeSecondValue(value);
+        }
+        this.model.getOptions.key = 'secondHandle';
+        this.view.changeValue(this.model.getOptions);
+        this.view.getViewElements.sliderTrack.fillWithColor(this.model.getOptions);
+    }
+
+    changeMaxValue(value: number | string) {
+        if (typeof(value) === 'string' && !isNaN(parseFloat(value))) {
+            this.getModel.setMaxValue(parseFloat(value));
+        } else if (typeof(value) === 'number' && !isNaN(value)) {
+            this.getModel.setMaxValue(value);
+        }
+        this.view.destroySlider();
+        this.view.displaySlider(this.model.getOptions);
+    }
+
+    changeMinValue(value: number | string) {
+        if (typeof(value) === 'string' && !isNaN(parseFloat(value))) {
+            this.getModel.setMaxValue(parseFloat(value));
+        } else if (typeof(value) === 'number' && !isNaN(value)) {
+            this.getModel.setMaxValue(value);
+        }
+        this.view.destroySlider();
+        this.view.displaySlider(this.model.getOptions);
+    }
+
+    changeStep(step: number | string) {
+        if (typeof(step) === 'string' && !isNaN(parseFloat(step))) {
+            this.getModel.setStep(parseFloat(step));
+        } else if (typeof(step) === 'number' && !isNaN(step)) {
+            this.getModel.setStep(step);
+        }
+        this.view.destroySlider();
+        this.view.displaySlider(this.model.getOptions);
+    }
+
+    changeRange(range: string) {
+        this.model.setRange(range);
+        this.view.destroySlider();
+        this.view.displaySlider(this.model.getOptions);
+    }
+
+    changeMode(isVertical: boolean) {
+        this.model.setVerticalMode(isVertical);
+        this.view.destroySlider();
+        this.view.displaySlider(this.model.getOptions);
+    }
+
+    changeVisabilityOfValues(isVisible: boolean) {
+        this.model.setVisability(isVisible);
+        this.view.destroySlider();
+        this.view.displaySlider(this.model.getOptions);
     }
 }
 

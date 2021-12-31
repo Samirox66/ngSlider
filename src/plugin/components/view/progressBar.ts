@@ -8,6 +8,7 @@ class ProgressBar {
         this.progressBar = document.createElement('div');
         this.values = new Array;
     }
+
     create(notifyObservers: Function, options: Options) {
         this.progressBar.classList.add('ng-slider__values')
         const countDecimals = (value: number): number => {
@@ -25,16 +26,20 @@ class ProgressBar {
         for (let i = options.min; i <= options.max; i = parseFloat((i + barStep).toFixed(decimals))) {
             const progressBarClick = (): void => {
                 const value: number = parseFloat(elementOfProgressBar.textContent!);
-                options.key = 'progressBar';
+                options.key = 'progressBarFirst';
                 if (options.value2) {
                     if (value > options.value2) {
                         options.value = value;
+                    } else if (value < options.value2) {
+                        options.key = 'progressBarSecond';
+                        options.value2 = value;
                     }
                 } else {
                     options.value = value;
                 }
                 notifyObservers(options);
             }
+            console.log(i);
             const elementOfProgressBar = document.createElement('div');
             elementOfProgressBar.textContent = i.toString();
             elementOfProgressBar.setAttribute('type', 'button');
@@ -48,6 +53,12 @@ class ProgressBar {
             }
             elementOfProgressBar.addEventListener('click', progressBarClick);
             this.values?.push(elementOfProgressBar);
+        }
+    }
+
+    destroy() {
+        while (this.progressBar.hasChildNodes()) {
+            this.progressBar.firstChild?.remove();
         }
     }
 
