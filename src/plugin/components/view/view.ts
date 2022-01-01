@@ -135,6 +135,7 @@ class View extends Observer {
     makeVertical() {
         this.viewElements.firstHandle.getSliderHandle.style.left = '-5px';
         this.viewElements.sliderTrack.getSliderTrack.style.width = '5px';
+        this.viewElements.sliderTrack.getSliderTrack.style.left = '0';
         if (this.viewElements.secondHandle) {
             this.viewElements.secondHandle.getSliderHandle.style.left = '-5px';
         }
@@ -150,6 +151,7 @@ class View extends Observer {
     makeHorizontal() {
         this.viewElements.firstHandle.getSliderHandle.style.top = '-5px';
         this.viewElements.sliderTrack.getSliderTrack.style.height = '5px';
+        this.viewElements.sliderTrack.getSliderTrack.style.top = '0';
         if (this.viewElements.secondHandle) {
             this.viewElements.secondHandle.getSliderHandle.style.top = '-5px';
         }

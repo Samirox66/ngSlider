@@ -39,7 +39,6 @@ class ProgressBar {
                 }
                 notifyObservers(options);
             }
-            console.log(i);
             const elementOfProgressBar = document.createElement('div');
             elementOfProgressBar.textContent = i.toString();
             elementOfProgressBar.setAttribute('type', 'button');

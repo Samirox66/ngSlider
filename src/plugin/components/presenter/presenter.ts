@@ -98,6 +98,7 @@ class Presenter {
         } else if (typeof(step) === 'number' && !isNaN(step)) {
             this.getModel.setStep(step);
         }
+        console.log(step);
         this.view.destroySlider();
         this.view.displaySlider(this.model.getOptions);
     }

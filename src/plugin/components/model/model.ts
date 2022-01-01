@@ -37,7 +37,7 @@ class Model extends Observer{
 
     private countDecimals = (value: number): number => {
         if (value.toString().includes('.')) {
-            return value.toString().split('.')[1].length
+            return value.toString().split('.')[1].length;
         }
         return 0;
     }
@@ -133,7 +133,10 @@ class Model extends Observer{
     }
 
     setStep(step: number) {
-        this.options.step = step;
+        const decimals: number = this.countDecimals(step);
+        if (parseFloat(((this.options.max - this.options.min) % step).toFixed(decimals)) === 0) {
+            this.options.step = step;
+        }
     }
 
     setRange(range: string) {
