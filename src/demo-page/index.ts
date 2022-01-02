@@ -3,6 +3,7 @@ import './styles.scss';
 import '../plugin/slider';
 import '../plugin/slider.scss'
 import Presenter from '../plugin/components/Presenter/Presenter';
+import { Options } from './../plugin/components/Model/Model'
 
 
 interface PanelIds {
@@ -47,6 +48,27 @@ class ConfigPanel {
         this.step.addEventListener('change', () => slider.changeStep(this.step.value));
         this.verticalMode.addEventListener('change', () => slider.changeMode(this.verticalMode.checked));
         this.currentValueVisible.addEventListener('change', () => slider.changeVisabilityOfValues(this.currentValueVisible.checked));
+    }
+
+    setPanel(options: Options) {
+        this.range.value = options.range;
+        this.step.value = options.step.toString();
+        this.maxValue.value = options.max.toString();
+        this.minValue.value = options.min.toString();
+    }
+
+    addObservers(slider: Presenter) {
+        slider.getView.addObserver(this.valueChangedInputListener.bind(this));
+    }
+
+    valueChangedInputListener(options: Options) {
+        if (options.key === 'firstHandle' || options.key === 'progressBarFirst') {
+            this.firstValue.value = options.value.toString();
+            return;
+        }
+        if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
+            this.secondValue.value = options.value2.toString();
+        }
     }
 
     get getFirstValue() {
@@ -95,6 +117,8 @@ const slider =  {
             verticalMode: 'vertical-button',
             currentValueVisible: 'current-value-visible-button'});
         configPanel.addEventListeners(slider);
+        configPanel.setPanel(slider.getModel.getOptions);
+        configPanel.addObservers(slider);
     }
 }
 

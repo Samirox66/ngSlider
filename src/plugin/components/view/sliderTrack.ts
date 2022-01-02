@@ -16,8 +16,10 @@ class SliderTrack {
             min: (options: Options) => {
                 const percentToFill: number = ((options.value - options.min) / (options.max - options.min)) * 100;
                 if (options.isVertical) {
+                    this.sliderTrack.style.top = '0';
                     this.sliderTrack.style.height = percentToFill + '%';
                 } else {
+                    this.sliderTrack.style.left = '0';
                     this.sliderTrack.style.width = percentToFill + '%';
                 }
             },

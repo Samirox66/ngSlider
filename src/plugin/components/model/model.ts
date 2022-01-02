@@ -8,7 +8,7 @@ export interface Options {
     max: number,
     step: number,
     value: number,
-    value2?: number,
+    value2: number,
     isValueVisible?: boolean,
     isVertical?: boolean,
     startCord: number,
@@ -58,7 +58,7 @@ class Model extends Observer{
                 }
                 this.options.value2 = value;
             } else {
-                if (this.options.value2 && value <= this.options.value2) {
+                if (this.options.range === 'true' && value <= this.options.value2) {
                     return;
                 }
                 this.options.value = value;

@@ -58,7 +58,7 @@ class View extends Observer {
             }
             this.viewElements.secondValue?.getCurrentValue.classList.add('ng-slider__current-value');
             this.viewElements.secondHandle?.getSliderHandle.classList.add('ng-slider__handle');
-            this.viewElements.secondValue!.getCurrentValue.textContent = options.value2!.toString();
+            this.viewElements.secondValue!.getCurrentValue.textContent = options.value2.toString();
             options.key = 'secondHandle';
             this.changeValue(options);
         }
@@ -103,8 +103,8 @@ class View extends Observer {
     changeValue(options: Options) {
         let moveHandle: number;
         if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
-            this.viewElements.secondValue?.setCurrentValue(options.value2!.toString());
-            moveHandle = (options.value2! - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.secondHandle!.getSliderHandle.offsetWidth / 2;
+            this.viewElements.secondValue?.setCurrentValue(options.value2.toString());
+            moveHandle = (options.value2 - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.secondHandle!.getSliderHandle.offsetWidth / 2;
             if (options.isVertical) {
                 this.viewElements.secondHandle!.getSliderHandle.style.top = moveHandle + 'px';
             } else {
@@ -122,9 +122,8 @@ class View extends Observer {
     }
 
     changeSecondValue(options: Options) {
-        let value: number;
-        this.viewElements.secondValue?.setCurrentValue(options.value2!.toString());
-        const moveHandle: number = (options.value2! - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.firstHandle.getSliderHandle.offsetWidth / 2;
+        this.viewElements.secondValue?.setCurrentValue(options.value2.toString());
+        const moveHandle: number = (options.value2 - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.firstHandle.getSliderHandle.offsetWidth / 2;
         if (options.isVertical) {
             this.viewElements.secondHandle!.getSliderHandle.style.top = moveHandle + 'px';
         } else {
