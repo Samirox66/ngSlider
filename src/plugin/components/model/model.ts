@@ -124,7 +124,7 @@ class Model extends Observer{
     setMinValue(value: number) {
         if (value < this.options.max) {
             this.options.min = value;
-            if (this.options.value2 && this.options.value2 < this.options.min) {
+            if (this.options.range === 'true' && this.options.value2 < this.options.min) {
                 this.options.value2 = this.options.min;
             } else if (this.options.value < this.options.min) {
                 this.options.value = this.options.min;

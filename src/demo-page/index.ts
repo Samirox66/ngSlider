@@ -39,11 +39,45 @@ class ConfigPanel {
         this.currentValueVisible = <HTMLInputElement>document.getElementById(panelIds.currentValueVisible);
     }
 
+    changeFirstValue(slider: Presenter) {
+        slider.changeFirstValue(this.firstValue.value);
+        if (this.firstValue.value !== slider.getModel.getOptions.value.toString()) {
+            this.firstValue.value = slider.getModel.getOptions.value.toString();
+        }
+    }
+
+    changeSecondValue(slider: Presenter) {
+        slider.changeSecondValue(this.secondValue.value);
+        if (this.secondValue.value !== slider.getModel.getOptions.value2.toString()) {
+            this.secondValue.value = slider.getModel.getOptions.value2.toString();
+        }
+    }
+
+    changeMinValue(slider: Presenter) {
+        slider.changeMinValue(this.minValue.value);
+        if (slider.getModel.getOptions.range == 'true') {
+            if (slider.getModel.getOptions.min > parseFloat(this.secondValue.value)) {
+                this.secondValue.value = slider.getModel.getOptions.min.toString();
+            }
+        } else {
+            if (slider.getModel.getOptions.min > parseFloat(this.firstValue.value)) {
+                this.firstValue.value = slider.getModel.getOptions.min.toString();
+            }
+        }
+    }
+
+    changeMaxValue(slider: Presenter) {
+        slider.changeMaxValue(this.maxValue.value);
+        if (slider.getModel.getOptions.max < parseFloat(this.firstValue.value)) {
+            this.firstValue.value = slider.getModel.getOptions.max.toString();
+        }
+    }
+
     addEventListeners(slider: Presenter) {
-        this.firstValue.addEventListener('change', () => slider.changeFirstValue(this.firstValue.value));
-        this.secondValue.addEventListener('change', () => slider.changeSecondValue(this.secondValue.value));
-        this.maxValue.addEventListener('change', () => slider.changeMaxValue(this.maxValue.value));
-        this.minValue.addEventListener('change', () => slider.changeMinValue(this.minValue.value));
+        this.firstValue.addEventListener('change', () => this.changeFirstValue(slider));
+        this.secondValue.addEventListener('change', () => this.changeSecondValue(slider));
+        this.maxValue.addEventListener('change', () => this.changeMaxValue(slider));
+        this.minValue.addEventListener('change', () => this.changeMinValue(slider));
         this.range.addEventListener('change', () => slider.changeRange(this.range.value));
         this.step.addEventListener('change', () => slider.changeStep(this.step.value));
         this.verticalMode.addEventListener('change', () => slider.changeMode(this.verticalMode.checked));
@@ -55,6 +89,10 @@ class ConfigPanel {
         this.step.value = options.step.toString();
         this.maxValue.value = options.max.toString();
         this.minValue.value = options.min.toString();
+        this.firstValue.value = options.value.toString();
+        if (options.range === 'true') {
+            this.secondValue.value = options.value2.toString();
+        }
     }
 
     addObservers(slider: Presenter) {
@@ -106,7 +144,7 @@ class ConfigPanel {
 
 const slider =  {
     init: function() {
-        const slider: Presenter = ($('#slider-1') as any).ngSlider({range: 'true', id: 'slider-1', max: 9, min: 2, isValueVisible: true, value: 6.2, step: 1.4, isVertical: false});
+        const slider: Presenter = ($('#slider-1') as any).ngSlider({range: 'true', id: 'slider-1', max: 9, min: 2, isValueVisible: true, value: 6, step: 1, isVertical: false});
         const configPanel: ConfigPanel = new ConfigPanel({
             firstValue: 'first-value',
             secondValue: 'second-value',
