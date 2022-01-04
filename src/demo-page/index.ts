@@ -55,6 +55,7 @@ class ConfigPanel {
 
     changeMinValue(slider: Presenter) {
         slider.changeMinValue(this.minValue.value);
+        this.minValue.value = slider.getModel.getOptions.min.toString();
         if (slider.getModel.getOptions.range == 'true') {
             if (slider.getModel.getOptions.min > parseFloat(this.secondValue.value)) {
                 this.secondValue.value = slider.getModel.getOptions.min.toString();
@@ -66,8 +67,14 @@ class ConfigPanel {
         }
     }
 
+    changeStep(slider:Presenter) {
+        slider.changeStep(this.step.value);
+        this.step.value = slider.getModel.getOptions.step.toString();
+    }
+
     changeMaxValue(slider: Presenter) {
         slider.changeMaxValue(this.maxValue.value);
+        this.maxValue.value = slider.getModel.getOptions.max.toString();
         if (slider.getModel.getOptions.max < parseFloat(this.firstValue.value)) {
             this.firstValue.value = slider.getModel.getOptions.max.toString();
         }
@@ -79,7 +86,7 @@ class ConfigPanel {
         this.maxValue.addEventListener('change', () => this.changeMaxValue(slider));
         this.minValue.addEventListener('change', () => this.changeMinValue(slider));
         this.range.addEventListener('change', () => slider.changeRange(this.range.value));
-        this.step.addEventListener('change', () => slider.changeStep(this.step.value));
+        this.step.addEventListener('change', () => this.changeStep(slider));
         this.verticalMode.addEventListener('change', () => slider.changeMode(this.verticalMode.checked));
         this.currentValueVisible.addEventListener('change', () => slider.changeVisabilityOfValues(this.currentValueVisible.checked));
     }
@@ -144,7 +151,7 @@ class ConfigPanel {
 
 const slider =  {
     init: function() {
-        const slider: Presenter = ($('#slider-1') as any).ngSlider({range: 'true', id: 'slider-1', max: 9, min: 2, isValueVisible: true, value: 6, step: 1, isVertical: false});
+        const slider: Presenter = ($('#slider-1') as any).ngSlider({range: 'true', id: 'slider-1', max: 9, min: 2, isValueVisible: true, value: 6, step: 0.1, isVertical: false});
         const configPanel: ConfigPanel = new ConfigPanel({
             firstValue: 'first-value',
             secondValue: 'second-value',

@@ -45,10 +45,11 @@ class Model extends Observer{
     calcValue() {
         let value: number = (this.options.currentCord - this.options.startCord) * (this.options.max - this.options.min) / (this.options.endCord - this.options.startCord) + this.options.min;
         const decimals: number = this.countDecimals(this.options.step);
-        if ((value - this.options.min) % this.options.step > this.options.step / 2) {
-            value = value - (value - this.options.min) % this.options.step + this.options.step;
+        const isValueCloserToBiggerOne: boolean = ((value - this.options.min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) > this.options.step * Math.pow(10, decimals) / 2
+        if (isValueCloserToBiggerOne) {
+            value = value - ((value - this.options.min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) / Math.pow(10, decimals) + this.options.step;
         } else {
-            value = value - (value - this.options.min) % this.options.step;
+            value = value - ((value - this.options.min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) / Math.pow(10, decimals);
         }
         value = parseFloat(value.toFixed(decimals));
         if (value >= this.options.min && value <= this.options.max) {
@@ -112,31 +113,53 @@ class Model extends Observer{
         }
     }
 
-    setMaxValue(value: number) {
-        if (value > this.options.min) {
-            this.options.max = value;
-            if (this.options.value > this.options.max) {
-                this.options.value = this.options.max;
+    setMaxValue(max: number) {
+        if (max > this.options.min) {
+            const decimals: number = this.countDecimals(this.options.step);
+            const isStepMultiplier: boolean = ((max - this.options.min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) === 0;
+            if (isStepMultiplier) {
+                this.options.max = max;
+                if (this.options.value > this.options.max) {
+                    this.options.value = this.options.max;
+                }
+                if (this.options.range === 'true' && this.options.value2 > this.options.max) {
+                    this.options.value2 = this.options.min;
+                }
+                return;
             }
+            alert(`Step should a multiplier of the difference between max and min values`);
+            return;
         }
+        alert(`Max value can't be less than min value`);
     }
 
-    setMinValue(value: number) {
-        if (value < this.options.max) {
-            this.options.min = value;
-            if (this.options.range === 'true' && this.options.value2 < this.options.min) {
-                this.options.value2 = this.options.min;
-            } else if (this.options.value < this.options.min) {
-                this.options.value = this.options.min;
+    setMinValue(min: number) {
+        if (min < this.options.max) {
+            const decimals: number = this.countDecimals(this.options.step);
+            const isStepMultiplier: boolean = ((this.options.max - min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) === 0;
+            if (isStepMultiplier) {
+                this.options.min = min;
+                if (this.options.range === 'true' && this.options.value2 < this.options.min) {
+                    this.options.value2 = this.options.min;
+                } else if (this.options.value < this.options.min) {
+                    this.options.value = this.options.min;
+                }
+                return;
             }
+            alert(`Step should a multiplier of the difference between max and min values`);
+            return;
         }
+        alert(`Min value can't be bigger than max value`);
     }
 
     setStep(step: number) {
         const decimals: number = this.countDecimals(step);
-        if (parseFloat(((this.options.max - this.options.min) % step).toFixed(decimals)) === 0) {
+        const isStepMultiplier: boolean = ((this.options.max - this.options.min) * Math.pow(10, decimals)) % (step * Math.pow(10, decimals)) === 0;
+        if (isStepMultiplier) {
             this.options.step = step;
+            return;
         }
+        alert(`Step should a multiplier of the difference between max and min values`);
     }
 
     setRange(range: string) {
