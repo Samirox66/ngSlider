@@ -1,16 +1,16 @@
 import { Options } from "../Model/Model";
 
-class ProgressBar {
-    private progressBar: HTMLDivElement;
+class Labels {
+    private labels: HTMLDivElement;
     private values: HTMLDivElement[];
 
     constructor() {
-        this.progressBar = document.createElement('div');
+        this.labels = document.createElement('div');
         this.values = new Array;
     }
 
     create(notifyObservers: Function, options: Options) {
-        this.progressBar.classList.add('ng-slider__values')
+        this.labels.classList.add('ng-slider__values')
         const countDecimals = (value: number): number => {
             if (value.toString().includes('.')) {
                 return value.toString().split('.')[1].length
@@ -43,7 +43,7 @@ class ProgressBar {
             elementOfProgressBar.textContent = i.toString();
             elementOfProgressBar.setAttribute('type', 'button');
             elementOfProgressBar.classList.add('ng-slider__value');
-            this.progressBar.append(elementOfProgressBar);
+            this.labels.append(elementOfProgressBar);
             const pixelsToMove: number = (options.endCord - options.startCord) / (options.max - options.min) * (i - options.min) - elementOfProgressBar.offsetWidth / 2;
             if (options.isVertical) {
                 elementOfProgressBar.style.top = pixelsToMove + 'px';
@@ -56,13 +56,13 @@ class ProgressBar {
     }
 
     destroy() {
-        while (this.progressBar.hasChildNodes()) {
-            this.progressBar.firstChild?.remove();
+        while (this.labels.hasChildNodes()) {
+            this.labels.firstChild?.remove();
         }
     }
 
-    get getProgressBar() {
-        return this.progressBar;
+    get getLabels() {
+        return this.labels;
     }
 
     get getValues() {
@@ -70,4 +70,4 @@ class ProgressBar {
     }
 }
 
-export default ProgressBar;
+export default Labels;

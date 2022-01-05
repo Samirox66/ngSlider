@@ -125,12 +125,8 @@ class Model extends Observer{
                 if (this.options.range === 'true' && this.options.value2 > this.options.max) {
                     this.options.value2 = this.options.min;
                 }
-                return;
             }
-            alert(`Step should a multiplier of the difference between max and min values`);
-            return;
         }
-        alert(`Max value can't be less than min value`);
     }
 
     setMinValue(min: number) {
@@ -144,12 +140,9 @@ class Model extends Observer{
                 } else if (this.options.value < this.options.min) {
                     this.options.value = this.options.min;
                 }
-                return;
             }
-            alert(`Step should a multiplier of the difference between max and min values`);
-            return;
+            
         }
-        alert(`Min value can't be bigger than max value`);
     }
 
     setStep(step: number) {
@@ -157,9 +150,7 @@ class Model extends Observer{
         const isStepMultiplier: boolean = ((this.options.max - this.options.min) * Math.pow(10, decimals)) % (step * Math.pow(10, decimals)) === 0;
         if (isStepMultiplier) {
             this.options.step = step;
-            return;
         }
-        alert(`Step should a multiplier of the difference between max and min values`);
     }
 
     setRange(range: string) {

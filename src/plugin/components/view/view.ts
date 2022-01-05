@@ -1,13 +1,13 @@
 import SliderTrack from './SliderTrack'
 import SliderHandle from './SliderHandle';
-import ProgressBar from './ProgressBar';
+import Labels from './Labels';
 import CurrentValue from './СurrentValue';
 import { Options } from '../Model/Model';
 import Observer from '../Observer/Observer';
 
 export interface ViewElements {
     sliderTrack: SliderTrack,
-    progressBar: ProgressBar,
+    progressBar: Labels,
     firstHandle: SliderHandle,
     firstValue: CurrentValue,
     secondValue?: CurrentValue,
@@ -21,7 +21,7 @@ class View extends Observer {
     constructor(id: string, range: string) {
         super();
         this.viewElements = {
-            progressBar: new ProgressBar(),
+            progressBar: new Labels(),
             sliderTrack: new SliderTrack(),
             firstHandle: new SliderHandle(),
             firstValue: new CurrentValue(),
@@ -42,7 +42,7 @@ class View extends Observer {
     }
 
     displaySlider(options: Options) {
-        this.slider.append(this.viewElements.progressBar.getProgressBar);
+        this.slider.append(this.viewElements.progressBar.getLabels);
         this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
         this.slider.append(this.viewElements.firstHandle.getSliderHandle);
         this.viewElements.firstHandle.getSliderHandle.append(this.viewElements.firstValue.getCurrentValue);
@@ -119,6 +119,30 @@ class View extends Observer {
                 this.viewElements.firstHandle.getSliderHandle.style.left = moveHandle + 'px';
             }
         }
+        this.reuniteCurrentValues(options);
+        if (options.range === 'true' && this.checkIfCurrentValuesIntersect(options)) {
+            this.uniteCurrentValues(options);
+            return;
+        }
+    }
+
+    uniteCurrentValues(options: Options) {
+        this.viewElements.secondValue?.hide();
+        this.viewElements.firstValue.getCurrentValue.textContent = `${options.value2}-${options.value}`;
+    }
+
+    reuniteCurrentValues(options: Options) {
+        this.viewElements.secondValue?.show();
+        this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
+    }
+
+    checkIfCurrentValuesIntersect(options: Options): boolean {
+            const firstElement = this.viewElements.firstValue.getCurrentValue.getBoundingClientRect();
+            const secondElement = this.viewElements.secondValue?.getCurrentValue.getBoundingClientRect();
+            if (options.isVertical && firstElement.top < secondElement!.bottom || !options.isVertical && firstElement.left < secondElement!.right) {
+                return true;
+            }
+            return false;
     }
 
     changeSecondValue(options: Options) {
@@ -139,7 +163,7 @@ class View extends Observer {
             this.viewElements.secondHandle.getSliderHandle.style.left = '-5px';
         }
         this.slider.classList.add('ng-slider_vertical');
-        this.viewElements.progressBar.getProgressBar.classList.add('ng-slider__values_vertical');
+        this.viewElements.progressBar.getLabels.classList.add('ng-slider__values_vertical');
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
         this.viewElements.secondValue?.getCurrentValue.classList.add('ng-slider__current-value_vertical');
         this.viewElements.sliderTrack.getSliderTrack.classList.add('ng-slider__slider-track_vertical');
@@ -155,7 +179,7 @@ class View extends Observer {
             this.viewElements.secondHandle.getSliderHandle.style.top = '-5px';
         }
         this.slider.classList.remove('ng-slider_vertical');
-        this.viewElements.progressBar.getProgressBar.classList.remove('ng-slider__values_vertical');
+        this.viewElements.progressBar.getLabels.classList.remove('ng-slider__values_vertical');
         this.viewElements.firstValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
         this.viewElements.secondValue?.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
         this.viewElements.sliderTrack.getSliderTrack.classList.remove('ng-slider__slider-track_vertical');
