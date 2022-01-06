@@ -8,18 +8,18 @@ class SliderHandle {
     }
 
     setHandle(notifyObservers: Function, options: Options, isSecondHandle: boolean) {
-        const handleMouseDown = (event: MouseEvent) => {
-            const handleMouseMove = (event: MouseEvent) => {
+        const handleMouseDown = (event: PointerEvent) => {
+            const handleMouseMove = (event: PointerEvent) => {
                 isSecondHandle ? options.key = 'secondHandle' : options.key = 'firstHandle';
                 options.isVertical ? options.currentCord = event.pageY: options.currentCord = event.pageX;
                 notifyObservers(options);
             }
-            const handleMouseUp = (event: MouseEvent) => {
-                document.removeEventListener('mousemove', handleMouseMove);
-                this.sliderHandle.removeEventListener('mouseup', handleMouseUp);
+            const handleMouseUp = (event: PointerEvent) => {
+                document.removeEventListener('pointermove', handleMouseMove);
+                this.sliderHandle.removeEventListener('pointerup', handleMouseUp);
             }
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
+            document.addEventListener('pointermove', handleMouseMove);
+            document.addEventListener('pointerup', handleMouseUp);
         };
         document.ondragstart = function() {
             return false;
@@ -27,7 +27,7 @@ class SliderHandle {
         document.body.onselectstart = function() {
             return false;
         };
-        this.sliderHandle.addEventListener('mousedown', handleMouseDown);
+        this.sliderHandle.addEventListener('pointerdown', handleMouseDown);
     }
 
     get getSliderHandle() {

@@ -26,9 +26,9 @@ class View extends Observer {
             firstHandle: new SliderHandle(),
             firstValue: new CurrentValue(),
         }
-        if (document.getElementById(id)) {
+        try {
             this.slider = document.getElementById(id) ?? document.createElement('div');
-        } else {
+        } catch {
             throw new Error("Wrong Id");
         }
         if (range === 'true') {
@@ -94,12 +94,6 @@ class View extends Observer {
         return this.slider;
     }
 
-    test(options: Options) {
-        let newOptions = options;
-        newOptions.key = 'sliderHandle';
-        this.notifyObservers(newOptions);
-    }
-
     changeValue(options: Options) {
         let moveHandle: number;
         if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
@@ -143,16 +137,6 @@ class View extends Observer {
                 return true;
             }
             return false;
-    }
-
-    changeSecondValue(options: Options) {
-        this.viewElements.secondValue?.setCurrentValue(options.value2.toString());
-        const moveHandle: number = (options.value2 - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.firstHandle.getSliderHandle.offsetWidth / 2;
-        if (options.isVertical) {
-            this.viewElements.secondHandle!.getSliderHandle.style.top = moveHandle + 'px';
-        } else {
-            this.viewElements.secondHandle!.getSliderHandle.style.left = moveHandle + 'px';
-        }
     }
 
     makeVertical() {
