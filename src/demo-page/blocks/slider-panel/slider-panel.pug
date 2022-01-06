@@ -1,7 +1,7 @@
 include ../slider/slider.pug
 include ../config/config.pug
 
-mixin slider-panel 
+mixin slider-panel(id, config)
     .slider-panel 
-        +slider
-        +config
+        +slider(id)
+        +config(config)

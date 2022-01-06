@@ -10,8 +10,8 @@ export interface ViewElements {
     progressBar: Labels,
     firstHandle: SliderHandle,
     firstValue: CurrentValue,
-    secondValue?: CurrentValue,
-    secondHandle?: SliderHandle
+    secondValue: CurrentValue,
+    secondHandle: SliderHandle
 }
 
 class View extends Observer {
@@ -25,15 +25,13 @@ class View extends Observer {
             sliderTrack: new SliderTrack(),
             firstHandle: new SliderHandle(),
             firstValue: new CurrentValue(),
+            secondHandle: new SliderHandle(),
+            secondValue: new CurrentValue()
         }
         try {
             this.slider = document.getElementById(id) ?? document.createElement('div');
         } catch {
             throw new Error("Wrong Id");
-        }
-        if (range === 'true') {
-            this.viewElements.secondHandle = new SliderHandle();
-            this.viewElements.secondValue = new CurrentValue();
         }
     }
 
@@ -51,7 +49,7 @@ class View extends Observer {
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
         if (options.range === 'true') {
-            this.slider.append(this.viewElements.secondHandle!.getSliderHandle);
+            this.slider.append(this.viewElements.secondHandle.getSliderHandle);
             this.viewElements.secondHandle!.getSliderHandle.append(this.viewElements.secondValue!.getCurrentValue);
             if (!options.value2) {
                 options.value2 = options.min;

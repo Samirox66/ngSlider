@@ -27,6 +27,7 @@
 }
 
 .ng-slider__handle {
+    touch-action: none;
     position: absolute;
     width: 15px;
     height: 15px;
