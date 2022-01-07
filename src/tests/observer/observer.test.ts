@@ -18,7 +18,14 @@ describe('Observer tests', () => {
             }
             options.value = options.min;
         }
+        const mockSetValueToMax = jest.fn((options: Options) => {
+            if (options.key !== 'max') {
+                return;
+            }
+            options.value = options.max;
+        });
         observer.addObserver(setValueToMin);
+        observer.addObserver(mockSetValueToMax);
         const options: Options = {
             value: 0,
             value2: 0,
@@ -34,6 +41,7 @@ describe('Observer tests', () => {
         }
         observer.notifyObservers(options);
         expect(options.value).toBe(2);
+        expect(mockSetValueToMax.mock.calls.length).toBe(1);
     })
     test('Observer should be empty after initializiation', () => {
         expect(observer.observers.length).toBe(0);

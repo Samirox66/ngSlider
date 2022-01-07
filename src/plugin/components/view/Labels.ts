@@ -24,40 +24,45 @@ class Labels {
         }
         barStep = parseFloat(barStep.toFixed(decimals));
         for (let i = options.min; i <= options.max; i = parseFloat((i + barStep).toFixed(decimals))) {
-            const progressBarClick = (): void => {
-                const value: number = parseFloat(elementOfProgressBar.textContent!);
-                options.key = 'progressBarFirst';
-                if (options.value2) {
-                    if (value > options.value2) {
-                        options.value = value;
-                    } else if (value < options.value2) {
-                        options.key = 'progressBarSecond';
-                        options.value2 = value;
-                    }
-                } else {
-                    options.value = value;
-                }
-                notifyObservers(options);
-            }
-            const elementOfProgressBar = document.createElement('div');
-            elementOfProgressBar.textContent = i.toString();
-            elementOfProgressBar.setAttribute('type', 'button');
-            elementOfProgressBar.classList.add('ng-slider__value');
-            this.labels.append(elementOfProgressBar);
-            const pixelsToMove: number = (options.endCord - options.startCord) / (options.max - options.min) * (i - options.min) - elementOfProgressBar.offsetWidth / 2;
-            if (options.isVertical) {
-                elementOfProgressBar.style.top = pixelsToMove + 'px';
-            } else {
-                elementOfProgressBar.style.left = pixelsToMove + 'px';
-            }
-            elementOfProgressBar.addEventListener('click', progressBarClick);
-            this.values?.push(elementOfProgressBar);
+            this.createLabel(i, options, notifyObservers);
         }
+    }
+
+    private createLabel(i: number, options: Options, notifyObservers: Function) {
+        const label = document.createElement('div');
+        label.textContent = i.toString();
+        label.setAttribute('type', 'button');
+        label.classList.add('ng-slider__value');
+        const progressBarClick = (): void => {
+            const value: number = parseFloat(label.textContent!);
+            options.key = 'progressBarFirst';
+            if (options.value2) {
+                if (value > options.value2) {
+                    options.value = value;
+                } else if (value < options.value2) {
+                    options.key = 'progressBarSecond';
+                    options.value2 = value;
+                }
+            } else {
+                options.value = value;
+            }
+            notifyObservers(options);
+        }
+        this.labels.append(label);
+        const pixelsToMove: number = (options.endCord - options.startCord) / (options.max - options.min) * (i - options.min) - label.offsetWidth / 2;
+        if (options.isVertical) {
+            label.style.top = pixelsToMove + 'px';
+        } else {
+            label.style.left = pixelsToMove + 'px';
+        }
+        label.addEventListener('click', progressBarClick);
+        this.values?.push(label);
     }
 
     destroy() {
         while (this.labels.hasChildNodes()) {
             this.labels.firstChild?.remove();
+            this.values.pop();
         }
     }
 
