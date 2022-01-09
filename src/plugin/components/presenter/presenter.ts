@@ -38,16 +38,14 @@ class Presenter {
             return;
         }
         this.model.calcValue();
-        this.view.changeValue(options);
-        this.view.getViewElements.sliderTrack.fillWithColor(options);
+        this.updateSlider();
     }
 
     progressBarClickListener(options: Options) {
         if (options.key !== 'progressBarFirst' && options.key !== 'progressBarSecond') {
             return;
         }
-        this.view.changeValue(options);
-        this.view.getViewElements.sliderTrack.fillWithColor(options);
+        this.updateSlider();
     }
 
     changeFirstValue(value: number | string) {
@@ -57,8 +55,7 @@ class Presenter {
             this.model.changeFirstValue(value);
         }
         this.model.getOptions.key = 'firstHandle';
-        this.view.changeValue(this.model.getOptions);
-        this.view.getViewElements.sliderTrack.fillWithColor(this.model.getOptions);
+        this.updateSlider();
     }
 
     changeSecondValue(value: number | string) {
@@ -68,8 +65,7 @@ class Presenter {
             this.getModel.changeSecondValue(value);
         }
         this.model.getOptions.key = 'secondHandle';
-        this.view.changeValue(this.model.getOptions);
-        this.view.getViewElements.sliderTrack.fillWithColor(this.model.getOptions);
+        this.updateSlider();
     }
 
     changeMaxValue(value: number | string) {
@@ -78,8 +74,7 @@ class Presenter {
         } else if (typeof(value) === 'number' && !isNaN(value)) {
             this.getModel.setMaxValue(value);
         }
-        this.view.destroySlider();
-        this.view.displaySlider(this.model.getOptions);
+        this.rewriteSlider();
     }
 
     changeMinValue(value: number | string) {
@@ -88,8 +83,7 @@ class Presenter {
         } else if (typeof(value) === 'number' && !isNaN(value)) {
             this.getModel.setMinValue(value);
         }
-        this.view.destroySlider();
-        this.view.displaySlider(this.model.getOptions);
+        this.rewriteSlider();
     }
 
     changeStep(step: number | string) {
@@ -98,8 +92,7 @@ class Presenter {
         } else if (typeof(step) === 'number' && !isNaN(step)) {
             this.getModel.setStep(step);
         }
-        this.view.destroySlider();
-        this.view.displaySlider(this.model.getOptions);
+        this.rewriteSlider();
     }
 
     changeRange(range: string) {
@@ -107,8 +100,7 @@ class Presenter {
         if (range !== 'true' && range !== 'max' && range !== 'min') {
             this.view.getViewElements.sliderTrack.hide();
         }
-        this.view.destroySlider();
-        this.view.displaySlider(this.model.getOptions);
+        this.rewriteSlider();
     }
 
     changeMode(isVertical: boolean) {
@@ -120,14 +112,22 @@ class Presenter {
             this.model.setCords(this.view.getSlider.getBoundingClientRect().left, this.view.getSlider.getBoundingClientRect().right);
         }
         this.model.setVerticalMode(isVertical);
-        this.view.destroySlider();
-        this.view.displaySlider(this.model.getOptions);
+        this.rewriteSlider();
     }
 
     changeVisabilityOfValues(isVisible: boolean) {
         this.model.setVisability(isVisible);
+        this.rewriteSlider();
+    }
+
+    private rewriteSlider() {
         this.view.destroySlider();
         this.view.displaySlider(this.model.getOptions);
+    }
+
+    private updateSlider() {
+        this.view.changeValue(this.model.getOptions);
+        this.view.getViewElements.sliderTrack.fillWithColor(this.model.getOptions);
     }
 }
 
