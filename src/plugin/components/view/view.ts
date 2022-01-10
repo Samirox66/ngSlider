@@ -7,7 +7,7 @@ import Observer from '../Observer/Observer';
 
 export interface ViewElements {
     sliderTrack: SliderTrack,
-    progressBar: Labels,
+    labels: Labels,
     firstHandle: SliderHandle,
     firstValue: CurrentValue,
     secondValue: CurrentValue,
@@ -21,7 +21,7 @@ class View extends Observer {
     constructor(id: string, range: string) {
         super();
         this.viewElements = {
-            progressBar: new Labels(),
+            labels: new Labels(),
             sliderTrack: new SliderTrack(),
             firstHandle: new SliderHandle(),
             firstValue: new CurrentValue(),
@@ -35,16 +35,12 @@ class View extends Observer {
         }
     }
 
-    setViewElements(viewElements: ViewElements) {
-        this.viewElements = viewElements;
-    }
-
     displaySlider(options: Options) {
-        this.slider.append(this.viewElements.progressBar.getLabels);
+        this.slider.append(this.viewElements.labels.getLabels);
         this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
         this.slider.append(this.viewElements.firstHandle.getSliderHandle);
         this.viewElements.firstHandle.getSliderHandle.append(this.viewElements.firstValue.getCurrentValue);
-        this.viewElements.progressBar.create(this.notifyObservers.bind(this), options);
+        this.viewElements.labels.create(this.notifyObservers.bind(this), options);
         this.viewElements.sliderTrack.create();
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
@@ -73,7 +69,7 @@ class View extends Observer {
     }
 
     destroySlider() {
-        this.viewElements.progressBar.destroy();
+        this.viewElements.labels.destroy();
         while (this.slider.hasChildNodes()) {
             this.slider.firstChild?.remove();
         }
@@ -145,7 +141,7 @@ class View extends Observer {
             this.viewElements.secondHandle.getSliderHandle.style.left = '-5px';
         }
         this.slider.classList.add('ng-slider_vertical');
-        this.viewElements.progressBar.getLabels.classList.add('ng-slider__values_vertical');
+        this.viewElements.labels.getLabels.classList.add('ng-slider__values_vertical');
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
         this.viewElements.secondValue?.getCurrentValue.classList.add('ng-slider__current-value_vertical');
         this.viewElements.sliderTrack.getSliderTrack.classList.add('ng-slider__slider-track_vertical');
@@ -161,7 +157,7 @@ class View extends Observer {
             this.viewElements.secondHandle.getSliderHandle.style.top = '-5px';
         }
         this.slider.classList.remove('ng-slider_vertical');
-        this.viewElements.progressBar.getLabels.classList.remove('ng-slider__values_vertical');
+        this.viewElements.labels.getLabels.classList.remove('ng-slider__values_vertical');
         this.viewElements.firstValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
         this.viewElements.secondValue?.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
         this.viewElements.sliderTrack.getSliderTrack.classList.remove('ng-slider__slider-track_vertical');

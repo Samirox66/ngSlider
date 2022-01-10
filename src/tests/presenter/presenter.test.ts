@@ -177,5 +177,49 @@ describe('Presenter tests', ()=> {
         expect(makeVerticalMock.mock.calls.length).toBe(0);
         presenter.changeMode(true);
         expect(makeVerticalMock.mock.calls.length).toBe(1);
-    })
+    });
+    test('changeMode should call setCords in model', () => {
+        const setCordsMock = jest.fn(presenter.getModel.setCords.bind(presenter.getModel));
+        presenter.getModel.setCords = setCordsMock;
+        presenter.changeMode(false);
+        expect(setCordsMock.mock.calls.length).toBe(1);
+    });
+    test('changeMode should call rewriteSlider', () => {
+        const rewriteSliderMock = jest.fn(presenter['rewriteSlider']);
+        presenter['rewriteSlider'] = rewriteSliderMock;
+        presenter.changeMode(true);
+        expect(rewriteSliderMock.mock.calls.length).toBe(1);
+    });
+    test('changeMode should call setVerticalMode in model', () => {
+        const setVerticalModeMock = jest.fn(presenter.getModel.setVerticalMode.bind(presenter.getModel));
+        presenter.getModel.setVerticalMode = setVerticalModeMock;
+        presenter.changeMode(false);
+        expect(setVerticalModeMock.mock.calls.length).toBe(1);
+    });
+
+    test('changeVisabilityOfValues should call rewriteSlider', () => {
+        const rewriteSliderMock = jest.fn(presenter['rewriteSlider']);
+        presenter['rewriteSlider'] = rewriteSliderMock;
+        presenter.changeVisabilityOfValues(true);
+        expect(rewriteSliderMock.mock.calls.length).toBe(1);
+    });
+    test('changeVisabilityOfValues should call setVisability in model', () => {
+        const setVisabilityMock = jest.fn(presenter.getModel.setVisability.bind(presenter.getModel));
+        presenter.getModel.setVisability = setVisabilityMock;
+        presenter.changeVisabilityOfValues(true);
+        expect(setVisabilityMock.mock.calls.length).toBe(1);
+    });
+
+    test('rewriteSlider should call destroySlider in view', () => {
+        const destroySliderMock = jest.fn(presenter.getView.destroySlider.bind(presenter.getView));
+        presenter.getView.destroySlider = destroySliderMock;
+        presenter['rewriteSlider']();
+        expect(destroySliderMock.mock.calls.length).toBe(1);
+    });
+    test('rewriteSlider should call displaySlider in view', () => {
+        const displaySliderMock = jest.fn(presenter.getView.displaySlider.bind(presenter.getView));
+        presenter.getView.displaySlider = displaySliderMock;
+        presenter['rewriteSlider']();
+        expect(displaySliderMock.mock.calls.length).toBe(1);
+    });
 })
