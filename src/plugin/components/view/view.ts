@@ -58,10 +58,10 @@ class View extends Observer {
         }
         if (options.isValueVisible === false) {
             this.viewElements.firstValue.hide();
-            this.viewElements.secondValue?.hide();
+            this.viewElements.secondValue.hide();
         } else {
             this.viewElements.firstValue.show();
-            this.viewElements.secondValue?.show();
+            this.viewElements.secondValue.show();
         }
         options.key = 'firstHandle';
         this.changeValue(options);
@@ -89,48 +89,37 @@ class View extends Observer {
     }
 
     changeValue(options: Options) {
-        let moveHandle: number;
         if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
-            this.viewElements.secondValue?.setCurrentValue(options.value2.toString());
-            moveHandle = (options.value2 - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.secondHandle!.getSliderHandle.offsetWidth / 2;
-            if (options.isVertical) {
-                this.viewElements.secondHandle!.getSliderHandle.style.top = moveHandle + 'px';
-            } else {
-                this.viewElements.secondHandle!.getSliderHandle.style.left = moveHandle + 'px';
-            }
+            this.viewElements.secondValue.setCurrentValue(options.value2.toString());
+            this.viewElements.secondHandle.moveHandle(options, options.value2)
         } else {
             this.viewElements.firstValue.setCurrentValue(options.value.toString());
-            moveHandle = (options.value - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.viewElements.firstHandle.getSliderHandle.offsetWidth / 2;
-            if (options.isVertical) {
-                this.viewElements.firstHandle.getSliderHandle.style.top = moveHandle + 'px';
-            } else {
-                this.viewElements.firstHandle.getSliderHandle.style.left = moveHandle + 'px';
-            }
+            this.viewElements.firstHandle.moveHandle(options, options.value);
         }
-        this.reuniteCurrentValues(options);
+        this.detachCurrentValues(options);
         if (options.range === 'true' && this.checkIfCurrentValuesIntersect(options)) {
             this.uniteCurrentValues(options);
             return;
         }
     }
 
-    uniteCurrentValues(options: Options) {
-        this.viewElements.secondValue?.hide();
+    private uniteCurrentValues(options: Options) {
+        this.viewElements.secondValue.hide();
         this.viewElements.firstValue.getCurrentValue.textContent = `${options.value2}-${options.value}`;
     }
 
-    reuniteCurrentValues(options: Options) {
-        this.viewElements.secondValue?.show();
+    private detachCurrentValues(options: Options) {
+        this.viewElements.secondValue.show();
         this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
     }
 
-    checkIfCurrentValuesIntersect(options: Options): boolean {
-            const firstElement = this.viewElements.firstValue.getCurrentValue.getBoundingClientRect();
-            const secondElement = this.viewElements.secondValue?.getCurrentValue.getBoundingClientRect();
-            if (options.isVertical && firstElement.top < secondElement!.bottom || !options.isVertical && firstElement.left < secondElement!.right) {
-                return true;
-            }
-            return false;
+    private checkIfCurrentValuesIntersect(options: Options): boolean {
+        const firstElement = this.viewElements.firstValue.getCurrentValue.getBoundingClientRect();
+        const secondElement = this.viewElements.secondValue?.getCurrentValue.getBoundingClientRect();
+        if (options.isVertical && firstElement.top < secondElement!.bottom || !options.isVertical && firstElement.left < secondElement!.right) {
+            return true;
+        }
+        return false;
     }
 
     makeVertical() {

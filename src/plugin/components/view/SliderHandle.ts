@@ -34,6 +34,15 @@ class SliderHandle {
         return this.sliderHandle;
     }
 
+    moveHandle(options: Options, value: number) {
+        const moveHandle = (value - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.sliderHandle.offsetWidth / 2;
+        if (options.isVertical) {
+            this.sliderHandle.style.top = moveHandle + 'px';
+        } else {
+            this.sliderHandle.style.left = moveHandle + 'px';
+        }
+}
+
     hide() {
         this.sliderHandle.style.display = 'none';
     }

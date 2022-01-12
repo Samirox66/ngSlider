@@ -4,16 +4,16 @@ import { Options } from "../../plugin/components/Model/Model";
 describe('View tests', () => {
     let view: View;
     const options = {
-        value: 0,
-        value2: 0,
+        value: 3,
+        value2: 2,
         step: 0,
         max: 4,
         min: 2,
         id: '',
         startCord: 0,
         endCord: 0,
-        range: '',
-        key: 'min',
+        range: 'min',
+        key: '',
         currentCord: 0
     };
 
@@ -26,5 +26,92 @@ describe('View tests', () => {
         view.getViewElements.labels.destroy = destroyMock;
         view.destroySlider();
         expect(destroyMock.mock.calls.length).toBe(1);
+    });
+    test('destroySlider should remove all child nodes of slider', () => {
+        view.destroySlider();
+        expect(view.getSlider.hasChildNodes()).toBeFalsy();
+    });
+
+    test('setHandles should call setHandle for each handle', () => {
+        const setHandleMock = jest.fn(view.getViewElements.firstHandle.setHandle.bind(view.getViewElements.firstHandle));
+        view.getViewElements.firstHandle.setHandle = setHandleMock;
+        view.getViewElements.secondHandle.setHandle = setHandleMock;
+        view.setHandles(options);
+        expect(setHandleMock.mock.calls.length).toBe(2);
+    });
+
+    test('changeValue should call reuniteCurrentValues', () => {
+        const reuniteCurrentValuesMock = jest.fn(view['detachCurrentValues']);
+        view['detachCurrentValues'] = reuniteCurrentValuesMock;
+        view.changeValue(options);
+        expect(reuniteCurrentValuesMock.mock.calls.length).toBe(1);
+    });
+    test('changeValue should call uniteCurrentValues if it is necessary', () => {
+        const uniteCurrentValueMock = jest.fn(view['uniteCurrentValues']);
+        view['uniteCurrentValues'] = uniteCurrentValueMock;
+        view.changeValue(options);
+        expect(uniteCurrentValueMock.mock.calls.length).toBe(0);
+    });
+    test('changeValue should call setCurrentValue in secondValue if we change second value', () => {
+        const setCurrentValueMock = jest.fn(view.getViewElements.secondValue.setCurrentValue.bind(view.getViewElements.secondValue));
+        view.getViewElements.secondValue.setCurrentValue = setCurrentValueMock;
+        options.key = 'firstHandle';
+        view.changeValue(options);
+        expect(setCurrentValueMock.mock.calls.length).toBe(0);
+        options.key = 'secondHandle';
+        view.changeValue(options);
+        expect(setCurrentValueMock.mock.calls.length).toBe(1);
+    });
+    test('changeValue should call setCurrentValue in firstValue if we change first value', () => {
+        const setCurrentValueMock = jest.fn(view.getViewElements.firstValue.setCurrentValue.bind(view.getViewElements.firstValue));
+        view.getViewElements.firstValue.setCurrentValue = setCurrentValueMock;
+        options.key = 'secondHandle';
+        view.changeValue(options);
+        expect(setCurrentValueMock.mock.calls.length).toBe(0);
+        options.key = 'firstHandle';
+        view.changeValue(options);
+        expect(setCurrentValueMock.mock.calls.length).toBe(1);
+    });
+    test('changeValue should call moveHandle in secondHandle if we change second value', () => {
+        const moveHandleMock = jest.fn(view.getViewElements.secondHandle.moveHandle.bind(view.getViewElements.secondHandle));
+        view.getViewElements.secondHandle.moveHandle = moveHandleMock;
+        options.key = 'firstHandle';
+        view.changeValue(options);
+        expect(moveHandleMock.mock.calls.length).toBe(0);
+        options.key = 'secondHandle';
+        view.changeValue(options);
+        expect(moveHandleMock.mock.calls.length).toBe(1);
+    });
+    test('changeValue should call setCurrentValue in firstValue if we change first value', () => {
+        const moveHandleMock = jest.fn(view.getViewElements.firstHandle.moveHandle.bind(view.getViewElements.firstHandle));
+        view.getViewElements.firstHandle.moveHandle = moveHandleMock;
+        options.key = 'secondHandle';
+        view.changeValue(options);
+        expect(moveHandleMock.mock.calls.length).toBe(0);
+        options.key = 'firstHandle';
+        view.changeValue(options);
+        expect(moveHandleMock.mock.calls.length).toBe(1);
+    });
+
+    test('uniteCurrentValues should call hide in second value', () => {
+        const hideMock = jest.fn(view.getViewElements.secondValue.hide.bind(view.getViewElements.secondValue));
+        view.getViewElements.secondValue.hide = hideMock;
+        view['uniteCurrentValues'](options);
+        expect(hideMock.mock.calls.length).toBe(1);
+    });
+    test('uniteCurrentValues should put in first value text of borh values', () => {
+        view['uniteCurrentValues'](options);
+        expect(view.getViewElements.firstValue.getCurrentValue.textContent).toBe('2-3');
+    })
+
+    test('detachCurrentValues should call show in second value', () => {
+        const showMock = jest.fn(view.getViewElements.secondValue.show.bind(view.getViewElements.secondValue));
+        view.getViewElements.secondValue.show = showMock;
+        view['detachCurrentValues'](options);
+        expect(showMock.mock.calls.length).toBe(1);
+    });
+    test('detachCurrentValues shouls put in first value only one value', () => {
+        view['detachCurrentValues'](options);
+        expect(view.getViewElements.firstValue.getCurrentValue.textContent).toBe('3');
     });
 })
