@@ -90,10 +90,10 @@ class View extends Observer {
 
     changeValue(options: Options) {
         if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
-            this.viewElements.secondValue.setCurrentValue(options.value2.toString());
+            this.viewElements.secondValue.setTextOfCurrentValue(options.value2.toString());
             this.viewElements.secondHandle.moveHandle(options, options.value2)
         } else {
-            this.viewElements.firstValue.setCurrentValue(options.value.toString());
+            this.viewElements.firstValue.setTextOfCurrentValue(options.value.toString());
             this.viewElements.firstHandle.moveHandle(options, options.value);
         }
         this.detachCurrentValues(options);
@@ -115,8 +115,8 @@ class View extends Observer {
 
     private checkIfCurrentValuesIntersect(options: Options): boolean {
         const firstElement = this.viewElements.firstValue.getCurrentValue.getBoundingClientRect();
-        const secondElement = this.viewElements.secondValue?.getCurrentValue.getBoundingClientRect();
-        if (options.isVertical && firstElement.top < secondElement!.bottom || !options.isVertical && firstElement.left < secondElement!.right) {
+        const secondElement = this.viewElements.secondValue.getCurrentValue.getBoundingClientRect();
+        if (options.isVertical && firstElement.top < secondElement.bottom || !options.isVertical && firstElement.left < secondElement.right) {
             return true;
         }
         return false;
@@ -124,34 +124,30 @@ class View extends Observer {
 
     makeVertical() {
         this.viewElements.firstHandle.getSliderHandle.style.left = '-5px';
+        this.viewElements.secondHandle.getSliderHandle.style.left = '-5px';
         this.viewElements.sliderTrack.getSliderTrack.style.width = '5px';
         this.viewElements.sliderTrack.getSliderTrack.style.left = '0';
-        if (this.viewElements.secondHandle) {
-            this.viewElements.secondHandle.getSliderHandle.style.left = '-5px';
-        }
         this.slider.classList.add('ng-slider_vertical');
         this.viewElements.labels.getLabels.classList.add('ng-slider__values_vertical');
         this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
-        this.viewElements.secondValue?.getCurrentValue.classList.add('ng-slider__current-value_vertical');
+        this.viewElements.secondValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
         this.viewElements.sliderTrack.getSliderTrack.classList.add('ng-slider__slider-track_vertical');
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle_vertical');
-        this.viewElements.secondHandle?.getSliderHandle.classList.add('ng-slider__handle_vertical');
+        this.viewElements.secondHandle.getSliderHandle.classList.add('ng-slider__handle_vertical');
     }
 
     makeHorizontal() {
         this.viewElements.firstHandle.getSliderHandle.style.top = '-5px';
+        this.viewElements.secondHandle.getSliderHandle.style.top = '-5px';
         this.viewElements.sliderTrack.getSliderTrack.style.height = '5px';
         this.viewElements.sliderTrack.getSliderTrack.style.top = '0';
-        if (this.viewElements.secondHandle) {
-            this.viewElements.secondHandle.getSliderHandle.style.top = '-5px';
-        }
         this.slider.classList.remove('ng-slider_vertical');
         this.viewElements.labels.getLabels.classList.remove('ng-slider__values_vertical');
         this.viewElements.firstValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
-        this.viewElements.secondValue?.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
+        this.viewElements.secondValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
         this.viewElements.sliderTrack.getSliderTrack.classList.remove('ng-slider__slider-track_vertical');
         this.viewElements.firstHandle.getSliderHandle.classList.remove('ng-slider__handle_vertical');
-        this.viewElements.secondHandle?.getSliderHandle.classList.remove('ng-slider__handle_vertical');
+        this.viewElements.secondHandle.getSliderHandle.classList.remove('ng-slider__handle_vertical');
     }
 }
 

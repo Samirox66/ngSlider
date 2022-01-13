@@ -25,23 +25,23 @@ class SliderTrack {
             },
             max: (options: Options) => {
                 const percentToFill: number = ((options.max - options.value) / (options.max - options.min)) * 100;
-                const pixelsToMoveLeft: number = (options.endCord - options.startCord) / (options.max - options.min) * (options.value - options.min);
+                const percentToMoveLeft: number = (options.value - options.min) / (options.max - options.min) * 100;
                 if (options.isVertical) {
-                    this.sliderTrack.style.top = pixelsToMoveLeft + 'px';
+                    this.sliderTrack.style.top = percentToMoveLeft + '%';
                     this.sliderTrack.style.height = percentToFill + '%';
                 } else {
-                    this.sliderTrack.style.left = pixelsToMoveLeft + 'px'
+                    this.sliderTrack.style.left = percentToMoveLeft + '%';
                     this.sliderTrack.style.width = percentToFill + '%';
                 }
             },
             true: (options: Options) => {
                 const percentToFill: number = (options.value - options.value2!) / (options.max - options.min) * 100;
-                const pixelsToMove: number = (options.endCord - options.startCord) / (options.max - options.min) * (options.value2! - options.min);
+                const percentToMove: number = (options.value2 - options.min) / (options.max - options.min) * 100;
                 if (options.isVertical) {
-                    this.sliderTrack.style.top = pixelsToMove + 'px';
+                    this.sliderTrack.style.top = percentToMove + '%';
                     this.sliderTrack.style.height = percentToFill + '%';
                 } else {
-                    this.sliderTrack.style.left = pixelsToMove + 'px';
+                    this.sliderTrack.style.left = percentToMove + '%';
                     this.sliderTrack.style.width = percentToFill + '%';
                 }
             }

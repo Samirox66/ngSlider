@@ -9,7 +9,7 @@ class CurrentValue {
         return this.currentValue;
     }
 
-    setCurrentValue(value: string) {
+    setTextOfCurrentValue(value: string) {
         this.currentValue.textContent = value;
     }
 

@@ -1,18 +1,17 @@
 import View from "../../plugin/components/View/View";
-import { Options } from "../../plugin/components/Model/Model";
 
 describe('View tests', () => {
     let view: View;
     const options = {
         value: 3,
         value2: 2,
-        step: 0,
+        step: 0.1,
         max: 4,
         min: 2,
         id: '',
         startCord: 0,
         endCord: 0,
-        range: 'min',
+        range: 'true',
         key: '',
         currentCord: 0
     };
@@ -53,8 +52,8 @@ describe('View tests', () => {
         expect(uniteCurrentValueMock.mock.calls.length).toBe(0);
     });
     test('changeValue should call setCurrentValue in secondValue if we change second value', () => {
-        const setCurrentValueMock = jest.fn(view.getViewElements.secondValue.setCurrentValue.bind(view.getViewElements.secondValue));
-        view.getViewElements.secondValue.setCurrentValue = setCurrentValueMock;
+        const setCurrentValueMock = jest.fn(view.getViewElements.secondValue.setTextOfCurrentValue.bind(view.getViewElements.secondValue));
+        view.getViewElements.secondValue.setTextOfCurrentValue = setCurrentValueMock;
         options.key = 'firstHandle';
         view.changeValue(options);
         expect(setCurrentValueMock.mock.calls.length).toBe(0);
@@ -63,8 +62,8 @@ describe('View tests', () => {
         expect(setCurrentValueMock.mock.calls.length).toBe(1);
     });
     test('changeValue should call setCurrentValue in firstValue if we change first value', () => {
-        const setCurrentValueMock = jest.fn(view.getViewElements.firstValue.setCurrentValue.bind(view.getViewElements.firstValue));
-        view.getViewElements.firstValue.setCurrentValue = setCurrentValueMock;
+        const setCurrentValueMock = jest.fn(view.getViewElements.firstValue.setTextOfCurrentValue.bind(view.getViewElements.firstValue));
+        view.getViewElements.firstValue.setTextOfCurrentValue = setCurrentValueMock;
         options.key = 'secondHandle';
         view.changeValue(options);
         expect(setCurrentValueMock.mock.calls.length).toBe(0);
@@ -113,5 +112,41 @@ describe('View tests', () => {
     test('detachCurrentValues shouls put in first value only one value', () => {
         view['detachCurrentValues'](options);
         expect(view.getViewElements.firstValue.getCurrentValue.textContent).toBe('3');
+    });
+
+    test('makeVertical should add css classes with vertical postfix of elements of slider', () => {
+        view.makeVertical();
+        expect(view.getSlider.classList.contains('ng-slider_vertical')).toBeTruthy();
+        expect(view.getViewElements.firstHandle.getSliderHandle.classList.contains('ng-slider__handle_vertical')).toBeTruthy();
+        expect(view.getViewElements.secondHandle.getSliderHandle.classList.contains('ng-slider__handle_vertical')).toBeTruthy();
+        expect(view.getViewElements.sliderTrack.getSliderTrack.classList.contains('ng-slider__slider-track_vertical')).toBeTruthy();
+        expect(view.getViewElements.labels.getLabels.classList.contains('ng-slider__values_vertical')).toBeTruthy();
+        expect(view.getViewElements.firstValue.getCurrentValue.classList.contains('ng-slider__current-value_vertical')).toBeTruthy();
+        expect(view.getViewElements.secondValue.getCurrentValue.classList.contains('ng-slider__current-value_vertical')).toBeTruthy();
+    });
+    test('makeVertical should add default styles for some properties', () => {
+        view.makeVertical();
+        expect(view.getViewElements.sliderTrack.getSliderTrack.style.width).toBe('5px');
+        expect(view.getViewElements.sliderTrack.getSliderTrack.style.left).toBe('0px');
+        expect(view.getViewElements.firstHandle.getSliderHandle.style.left).toBe('-5px');
+        expect(view.getViewElements.secondHandle.getSliderHandle.style.left).toBe('-5px');
+    });
+
+    test('makeHorizontal should remove css classes with vertical postfix of elements of slider', () => {
+        view.makeHorizontal();
+        expect(view.getSlider.classList.contains('ng-slider_vertical')).toBeFalsy();
+        expect(view.getViewElements.firstHandle.getSliderHandle.classList.contains('ng-slider__handle_vertical')).toBeFalsy();
+        expect(view.getViewElements.secondHandle.getSliderHandle.classList.contains('ng-slider__handle_vertical')).toBeFalsy();
+        expect(view.getViewElements.sliderTrack.getSliderTrack.classList.contains('ng-slider__slider-track_vertical')).toBeFalsy();
+        expect(view.getViewElements.labels.getLabels.classList.contains('ng-slider__values_vertical')).toBeFalsy();
+        expect(view.getViewElements.firstValue.getCurrentValue.classList.contains('ng-slider__current-value_vertical')).toBeFalsy();
+        expect(view.getViewElements.secondValue.getCurrentValue.classList.contains('ng-slider__current-value_vertical')).toBeFalsy();
+    });
+    test('makeHorizontal should add default styles for some properties', () => {
+        view.makeHorizontal();
+        expect(view.getViewElements.sliderTrack.getSliderTrack.style.height).toBe('5px');
+        expect(view.getViewElements.sliderTrack.getSliderTrack.style.top).toBe('0px');
+        expect(view.getViewElements.firstHandle.getSliderHandle.style.top).toBe('-5px');
+        expect(view.getViewElements.secondHandle.getSliderHandle.style.top).toBe('-5px');
     });
 })
