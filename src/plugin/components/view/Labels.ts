@@ -36,7 +36,7 @@ class Labels {
         const progressBarClick = (): void => {
             const value: number = parseFloat(label.textContent!);
             options.key = 'progressBarFirst';
-            if (options.value2) {
+            if (options.range === 'true') {
                 if (value > options.value2) {
                     options.value = value;
                 } else if (value < options.value2) {
@@ -49,11 +49,12 @@ class Labels {
             notifyObservers(options);
         }
         this.labels.append(label);
-        const pixelsToMove: number = (options.endCord - options.startCord) / (options.max - options.min) * (i - options.min) - label.offsetWidth / 2;
         if (options.isVertical) {
-            label.style.top = pixelsToMove + 'px';
+            const pixelsToMove: number = ((i - options.min) / (options.max - options.min) - label.offsetHeight / 2 / (options.endCord - options.startCord)) * 100;
+            label.style.top = pixelsToMove + '%';
         } else {
-            label.style.left = pixelsToMove + 'px';
+            const pixelsToMove: number = ((i - options.min) / (options.max - options.min) - label.offsetWidth / 2 / (options.endCord - options.startCord)) * 100;
+            label.style.left = pixelsToMove + '%';
         }
         label.addEventListener('click', progressBarClick);
         this.values?.push(label);

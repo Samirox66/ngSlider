@@ -35,13 +35,13 @@ class SliderHandle {
     }
 
     moveHandle(options: Options, value: number) {
-        const moveHandle = (value - options.min) / (options.max - options.min) * (options.endCord - options.startCord) - this.sliderHandle.offsetWidth / 2;
+        const moveHandle = ((value - options.min) / (options.max - options.min) - this.sliderHandle.offsetWidth / 2 / (options.endCord - options.startCord)) * 100;
         if (options.isVertical) {
-            this.sliderHandle.style.top = moveHandle + 'px';
+            this.sliderHandle.style.top = moveHandle + '%';
         } else {
-            this.sliderHandle.style.left = moveHandle + 'px';
+            this.sliderHandle.style.left = moveHandle + '%';
         }
-}
+    }
 
     hide() {
         this.sliderHandle.style.display = 'none';

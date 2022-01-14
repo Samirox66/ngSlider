@@ -16,10 +16,10 @@ class SliderTrack {
             min: (options: Options) => {
                 const percentToFill: number = ((options.value - options.min) / (options.max - options.min)) * 100;
                 if (options.isVertical) {
-                    this.sliderTrack.style.top = '0';
+                    this.sliderTrack.style.top = '0%';
                     this.sliderTrack.style.height = percentToFill + '%';
                 } else {
-                    this.sliderTrack.style.left = '0';
+                    this.sliderTrack.style.left = '0%';
                     this.sliderTrack.style.width = percentToFill + '%';
                 }
             },
@@ -44,6 +44,13 @@ class SliderTrack {
                     this.sliderTrack.style.left = percentToMove + '%';
                     this.sliderTrack.style.width = percentToFill + '%';
                 }
+            },
+            default: () => {
+                if (options.isVertical) {
+                    this.sliderTrack.style.height = '0%';
+                } else {
+                    this.sliderTrack.style.width = '0%';
+                }
             }
         }
         switch (options.range) {
@@ -52,6 +59,8 @@ class SliderTrack {
             case 'max': fill.max(options);
             break;
             case 'true': fill.true(options);
+            break;
+            default: fill.default();
             break;
         }
     }
