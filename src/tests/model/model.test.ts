@@ -1,8 +1,8 @@
-import Model, {Options} from '../../plugin/components/Model/Model';
+import Model, {CompleteOptions} from '../../plugin/components/Model/Model';
 
 describe('Model tests', () => {
     let model: Model;
-    let options: Options;
+    let options: CompleteOptions;
     beforeEach(() => {
         options = {
             value: 5,

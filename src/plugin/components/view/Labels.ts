@@ -1,4 +1,4 @@
-import { Options } from "../Model/Model";
+import { CompleteOptions } from "../Model/Model";
 
 class Labels {
     private labels: HTMLDivElement;
@@ -6,10 +6,10 @@ class Labels {
 
     constructor() {
         this.labels = document.createElement('div');
-        this.values = new Array;
+        this.values = [];
     }
 
-    create(notifyObservers: Function, options: Options) {
+    create(notifyObservers: (options: CompleteOptions) => void, options: CompleteOptions) {
         this.labels.classList.add('ng-slider__values')
         const countDecimals = (value: number): number => {
             if (value.toString().includes('.')) {
@@ -28,25 +28,27 @@ class Labels {
         }
     }
 
-    private createLabel(i: number, options: Options, notifyObservers: Function) {
+    private createLabel(i: number, options: CompleteOptions, notifyObservers: (options: CompleteOptions) => void): void {
         const label = document.createElement('div');
         label.textContent = i.toString();
         label.setAttribute('type', 'button');
         label.classList.add('ng-slider__value');
         const progressBarClick = (): void => {
-            const value: number = parseFloat(label.textContent!);
-            options.key = 'progressBarFirst';
-            if (options.range === 'true') {
-                if (value > options.value2) {
+            if (label.textContent) {
+                const value: number = parseFloat(label.textContent);
+                options.key = 'progressBarFirst';
+                if (options.range === 'true') {
+                    if (value > options.value2) {
+                        options.value = value;
+                    } else if (value < options.value2) {
+                        options.key = 'progressBarSecond';
+                        options.value2 = value;
+                    }
+                } else {
                     options.value = value;
-                } else if (value < options.value2) {
-                    options.key = 'progressBarSecond';
-                    options.value2 = value;
                 }
-            } else {
-                options.value = value;
+                notifyObservers(options);
             }
-            notifyObservers(options);
         }
         this.labels.append(label);
         if (options.isVertical) {

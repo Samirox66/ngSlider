@@ -1,10 +1,10 @@
 import Presenter from "../../plugin/components/Presenter/Presenter";
 import View from "../../plugin/components/View/View"
-import Model, {Options} from "../../plugin/components/Model/Model"
+import Model, {CompleteOptions} from "../../plugin/components/Model/Model"
 
 describe('Presenter tests', ()=> {
     let presenter: Presenter;
-    let options: Options;
+    let options: CompleteOptions;
     beforeEach(() => {
         options = {
             value: 0,
@@ -19,7 +19,7 @@ describe('Presenter tests', ()=> {
             key: 'min',
             currentCord: 0
         }
-        presenter = new Presenter(new View(options.id, options.range), new Model(options));
+        presenter = new Presenter(new View(options.id), new Model(options));
     })
     test('onInit should add 2 observers', () => {
         presenter.onInit(options);

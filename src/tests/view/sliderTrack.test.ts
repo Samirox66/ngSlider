@@ -1,9 +1,9 @@
 import SliderTrack from "../../plugin/components/View/SliderTrack";
-import { Options } from "../../plugin/components/Model/Model";
+import { CompleteOptions } from "../../plugin/components/Model/Model";
 
 describe('SliderTrack tests', () => {
     let sliderTrack: SliderTrack;
-    const options: Options = {
+    const options: CompleteOptions = {
         value: 3,
         value2: 2,
         step: 0.1,

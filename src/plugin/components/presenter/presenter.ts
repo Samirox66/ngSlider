@@ -1,7 +1,5 @@
-import Model, { Options } from '../Model/Model'
+import Model, { CompleteOptions } from '../Model/Model'
 import View from '../View/View'
-
-
 
 class Presenter {
     private view: View;
@@ -20,7 +18,7 @@ class Presenter {
         return this.view;
     }
 
-    onInit(options: Options) {
+    onInit(options: CompleteOptions) {
         this.view.addObserver(this.handleInputListener.bind(this));
         this.view.addObserver(this.progressBarClickListener.bind(this));
         if (options.isVertical) {
@@ -33,7 +31,7 @@ class Presenter {
         this.view.setHandles(options);
     }
 
-    handleInputListener(options: Options) {
+    handleInputListener(options: CompleteOptions): void {
         if (options.key !== 'firstHandle' && options.key !== 'secondHandle') {
             return;
         }
@@ -41,7 +39,7 @@ class Presenter {
         this.updateSlider();
     }
 
-    progressBarClickListener(options: Options) {
+    progressBarClickListener(options: CompleteOptions): void {
         if (options.key !== 'progressBarFirst' && options.key !== 'progressBarSecond') {
             return;
         }

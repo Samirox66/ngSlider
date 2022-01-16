@@ -1,17 +1,19 @@
-import { Options } from "../Model/Model";
+import { CompleteOptions } from "../Model/Model";
 
+type ObserverFunction = (options: CompleteOptions) => void;
+    
 class Observer {
-    observers: Function[];
+    observers: ObserverFunction[];
 
     constructor() {
         this.observers = [];
     }
 
-    addObserver(observerToAdd: Function) {
+    addObserver(observerToAdd: ObserverFunction) {
         this.observers.push(observerToAdd);
     }
 
-    removeObserver(observerToDelete: Function) {
+    removeObserver(observerToDelete: ObserverFunction) {
         this.observers.forEach((observer, index) => {
             if (observer.toString() === observerToDelete.toString()) {
                 this.observers.splice(index, 1);
@@ -19,7 +21,7 @@ class Observer {
         })
     }
 
-    notifyObservers(options: Options) {
+    notifyObservers(options: CompleteOptions) {
         this.observers.forEach(observer => {
             observer(options);
         })

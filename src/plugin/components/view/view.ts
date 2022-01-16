@@ -2,7 +2,7 @@ import SliderTrack from './SliderTrack'
 import SliderHandle from './SliderHandle';
 import Labels from './Labels';
 import CurrentValue from './СurrentValue';
-import { Options } from '../Model/Model';
+import { CompleteOptions } from '../Model/Model';
 import Observer from '../Observer/Observer';
 
 export interface ViewElements {
@@ -18,7 +18,7 @@ class View extends Observer {
     private viewElements: ViewElements;
     private slider: HTMLElement;
 
-    constructor(id: string, range: string) {
+    constructor(id: string) {
         super();
         this.viewElements = {
             labels: new Labels(),
@@ -35,7 +35,7 @@ class View extends Observer {
         }
     }
 
-    displaySlider(options: Options) {
+    displaySlider(options: CompleteOptions) {
         this.slider.append(this.viewElements.labels.getLabels);
         this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
         this.slider.append(this.viewElements.firstHandle.getSliderHandle);
@@ -46,13 +46,13 @@ class View extends Observer {
         this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle');
         if (options.range === 'true') {
             this.slider.append(this.viewElements.secondHandle.getSliderHandle);
-            this.viewElements.secondHandle!.getSliderHandle.append(this.viewElements.secondValue!.getCurrentValue);
+            this.viewElements.secondHandle.getSliderHandle.append(this.viewElements.secondValue.getCurrentValue);
             if (!options.value2) {
                 options.value2 = options.min;
             }
-            this.viewElements.secondValue?.getCurrentValue.classList.add('ng-slider__current-value');
-            this.viewElements.secondHandle?.getSliderHandle.classList.add('ng-slider__handle');
-            this.viewElements.secondValue!.getCurrentValue.textContent = options.value2.toString();
+            this.viewElements.secondValue.getCurrentValue.classList.add('ng-slider__current-value');
+            this.viewElements.secondHandle.getSliderHandle.classList.add('ng-slider__handle');
+            this.viewElements.secondValue.getCurrentValue.textContent = options.value2.toString();
             options.key = 'secondHandle';
             this.changeValue(options);
         }
@@ -75,7 +75,7 @@ class View extends Observer {
         }
     }
 
-    setHandles(options: Options) {
+    setHandles(options: CompleteOptions) {
         this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options, false);
         this.viewElements.secondHandle?.setHandle(this.notifyObservers.bind(this), options, true);
     }
@@ -88,7 +88,7 @@ class View extends Observer {
         return this.slider;
     }
 
-    changeValue(options: Options) {
+    changeValue(options: CompleteOptions) {
         if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
             this.viewElements.secondValue.setTextOfCurrentValue(options.value2.toString());
             this.viewElements.secondHandle.moveHandle(options, options.value2)
@@ -103,17 +103,17 @@ class View extends Observer {
         }
     }
 
-    private uniteCurrentValues(options: Options) {
+    private uniteCurrentValues(options: CompleteOptions) {
         this.viewElements.secondValue.hide();
         this.viewElements.firstValue.getCurrentValue.textContent = `${options.value2}-${options.value}`;
     }
 
-    private detachCurrentValues(options: Options) {
+    private detachCurrentValues(options: CompleteOptions) {
         this.viewElements.secondValue.show();
         this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
     }
 
-    private checkIfCurrentValuesIntersect(options: Options): boolean {
+    private checkIfCurrentValuesIntersect(options: CompleteOptions): boolean {
         const firstElement = this.viewElements.firstValue.getCurrentValue.getBoundingClientRect();
         const secondElement = this.viewElements.secondValue.getCurrentValue.getBoundingClientRect();
         if (options.isVertical && firstElement.top < secondElement.bottom || !options.isVertical && firstElement.left < secondElement.right) {

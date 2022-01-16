@@ -1,6 +1,6 @@
 import Observer from "../Observer/Observer";
 
-export interface Options {
+export interface CompleteOptions {
     key: string
     range: string,
     id: string,
@@ -17,17 +17,9 @@ export interface Options {
 }
 
 class Model extends Observer{
-    private options: Options;
 
-    constructor(options: Options) {
+    constructor(private options: CompleteOptions) {
         super();
-        this.options = options;
-        if (!options.value) {
-            this.options.value = options.max;
-        }
-        if (!options.step) {
-            options.step = (options.max - options.min) / 10;
-        }
     }
 
     setCords(startCord: number, endCord: number) {

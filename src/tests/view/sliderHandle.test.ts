@@ -1,10 +1,10 @@
-import { Options } from "../../plugin/components/Model/Model";
+import { CompleteOptions } from "../../plugin/components/Model/Model";
 import SliderHandle from "../../plugin/components/View/SliderHandle";
 import View from "../../plugin/components/View/View";
 
 describe('SliderHandle tests', () => {
     let sliderHandle: SliderHandle;
-    const options: Options = {
+    const options: CompleteOptions = {
         value: 3,
         value2: 2,
         step: 0.1,
@@ -44,7 +44,7 @@ describe('SliderHandle tests', () => {
     test('setHandle should set event listener of pointerdown to handle', () => {
         const eventListenerMock = jest.fn(sliderHandle.getSliderHandle.addEventListener);
         sliderHandle.getSliderHandle.addEventListener = eventListenerMock;
-        const view = new View(options.id, options.range);
+        const view = new View(options.id);
         document.body.innerHTML = `<div class='ng-slider' id='slider'></div>`;
         sliderHandle.setHandle(view.notifyObservers , options, false);
         expect(eventListenerMock.mock.calls.length).toBe(1);

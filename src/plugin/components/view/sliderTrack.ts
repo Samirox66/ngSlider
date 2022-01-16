@@ -1,4 +1,4 @@
-import { Options } from "../Model/Model";
+import { CompleteOptions } from "../Model/Model";
 
 class SliderTrack {
     private sliderTrack: HTMLDivElement;
@@ -11,9 +11,9 @@ class SliderTrack {
         this.sliderTrack.classList.add('ng-slider__slider-track');
     }
 
-    fillWithColor(options: Options) {
+    fillWithColor(options: CompleteOptions) {
         const fill = {
-            min: (options: Options) => {
+            min: (options: CompleteOptions) => {
                 const percentToFill: number = ((options.value - options.min) / (options.max - options.min)) * 100;
                 if (options.isVertical) {
                     this.sliderTrack.style.top = '0%';
@@ -23,7 +23,7 @@ class SliderTrack {
                     this.sliderTrack.style.width = percentToFill + '%';
                 }
             },
-            max: (options: Options) => {
+            max: (options: CompleteOptions) => {
                 const percentToFill: number = ((options.max - options.value) / (options.max - options.min)) * 100;
                 const percentToMoveLeft: number = (options.value - options.min) / (options.max - options.min) * 100;
                 if (options.isVertical) {
@@ -34,8 +34,8 @@ class SliderTrack {
                     this.sliderTrack.style.width = percentToFill + '%';
                 }
             },
-            true: (options: Options) => {
-                const percentToFill: number = (options.value - options.value2!) / (options.max - options.min) * 100;
+            true: (options: CompleteOptions) => {
+                const percentToFill: number = (options.value - options.value2) / (options.max - options.min) * 100;
                 const percentToMove: number = (options.value2 - options.min) / (options.max - options.min) * 100;
                 if (options.isVertical) {
                     this.sliderTrack.style.top = percentToMove + '%';

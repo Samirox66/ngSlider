@@ -1,4 +1,4 @@
-import { Options } from '../../plugin/components/Model/Model';
+import { CompleteOptions } from '../../plugin/components/Model/Model';
 import Observer from '../../plugin/components/Observer/Observer';
 
 describe('Observer tests', () => {
@@ -7,18 +7,20 @@ describe('Observer tests', () => {
         observer = new Observer();
     })
     test('addObserver should add one observer', () => {
-        const testFunction = () => {};
+        const testFunction = () => {
+            console.log('Success');
+        };
         observer.addObserver(testFunction);
         expect(observer.observers.length).toBe(1);
     })
     test('notifyObservers should work with specific observer', () => {
-        const setValueToMin = (options: Options) => {
+        const setValueToMin = (options: CompleteOptions) => {
             if (options.key !== 'min') {
                 return;
             }
             options.value = options.min;
         }
-        const mockSetValueToMax = jest.fn((options: Options) => {
+        const mockSetValueToMax = jest.fn((options: CompleteOptions) => {
             if (options.key !== 'max') {
                 return;
             }
@@ -26,7 +28,7 @@ describe('Observer tests', () => {
         });
         observer.addObserver(setValueToMin);
         observer.addObserver(mockSetValueToMax);
-        const options: Options = {
+        const options: CompleteOptions = {
             value: 0,
             value2: 0,
             step: 0,
@@ -47,7 +49,9 @@ describe('Observer tests', () => {
         expect(observer.observers.length).toBe(0);
     })
     test('observerRemove should delete observer', () => {
-        const testFunction = () => {};
+        const testFunction = () => {
+            console.log('Success');
+        };
         observer.addObserver(testFunction);
         observer.removeObserver(testFunction);
         expect(observer.observers.length).toBe(0);

@@ -1,11 +1,11 @@
 import Labels from "../../plugin/components/View/Labels";
-import {Options} from "../../plugin/components/Model/Model"
+import {CompleteOptions} from "../../plugin/components/Model/Model"
 import View from "../../plugin/components/View/View"
 
 describe('Labels tests', () => {
     let labels: Labels;
-    const view: View = new View('', '');
-    const options: Options = {
+    const view: View = new View('');
+    const options: CompleteOptions = {
         value: 3,
         value2: 0,
         step: 1,

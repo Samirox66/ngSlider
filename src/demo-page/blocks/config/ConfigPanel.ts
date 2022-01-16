@@ -1,5 +1,5 @@
 import Presenter from "../../../plugin/components/Presenter/Presenter";
-import { Options } from "../../../plugin/components/Model/Model";
+import { CompleteOptions } from "../../../plugin/components/Model/Model";
 
 interface PanelIds {
     max: string,
@@ -86,7 +86,7 @@ class ConfigPanel {
         this.currentValueVisible.addEventListener('change', () => slider.changeVisabilityOfValues(this.currentValueVisible.checked));
     }
 
-    setPanel(options: Options) {
+    setPanel(options: CompleteOptions) {
         this.range.value = options.range;
         this.step.value = options.step.toString();
         this.maxValue.value = options.max.toString();
@@ -102,7 +102,7 @@ class ConfigPanel {
         slider.getView.addObserver(this.valueChangedInputListener.bind(this));
     }
 
-    valueChangedInputListener(options: Options) {
+    valueChangedInputListener(options: CompleteOptions) {
         if (options.key === 'firstHandle' || options.key === 'progressBarFirst') {
             this.firstValue.value = options.value.toString();
             return;

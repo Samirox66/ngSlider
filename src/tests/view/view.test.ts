@@ -17,7 +17,7 @@ describe('View tests', () => {
     };
 
     beforeEach(() => {
-        view = new View(options.id, options.range);
+        view = new View(options.id);
     })
 
     test('destroySlider should call destroy labels', () => {
