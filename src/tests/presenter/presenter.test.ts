@@ -21,35 +21,43 @@ describe('Presenter tests', ()=> {
         }
         presenter = new Presenter(new View(options.id), new Model(options));
     })
+
+    test('onInit should call validateOptoins', () => {
+        const validateOptionsMock = jest.fn(presenter.getModel.validateOptions.bind(presenter.getModel));
+        presenter.getModel.validateOptions = validateOptionsMock;
+        presenter.onInit();
+        expect(validateOptionsMock.mock.calls.length).toBe(1);
+    })
+
     test('onInit should add 2 observers', () => {
-        presenter.onInit(options);
+        presenter.onInit();
         expect(presenter.getView.observers.length).toBe(2);
     });
     test('onInit should display slider', () => {
         const displaySliderMock = jest.fn(presenter.getView.displaySlider.bind(presenter.getView));
         presenter.getView.displaySlider = displaySliderMock;
-        presenter.onInit(options);
+        presenter.onInit();
         expect(displaySliderMock.mock.calls.length).toBe(1);
     });
     test('onInit should set handles', () => {
         const setHandlesMock = jest.fn(presenter.getView.setHandles.bind(presenter.getView));
         presenter.getView.setHandles = setHandlesMock;
-        presenter.onInit(options);
+        presenter.onInit();
         expect(setHandlesMock.mock.calls.length).toBe(1);
     });
     test('onInit should set cords', () => {
         const setCordsMock = jest.fn(presenter.getModel.setCords.bind(presenter.getModel));
         presenter.getModel.setCords = setCordsMock;
-        presenter.onInit(options);
+        presenter.onInit();
         expect(setCordsMock.mock.calls.length).toBe(1);
     });
     test('onInit should make slider vertical if it is necessary', () => {
         const makeVerticalMock = jest.fn(presenter.getView.makeVertical.bind(presenter.getView));
         presenter.getView.makeVertical = makeVerticalMock;
-        presenter.onInit(options);
+        presenter.onInit();
         expect(makeVerticalMock.mock.calls.length).toBe(0);
         options.isVertical = true;
-        presenter.onInit(options);
+        presenter.onInit();
         expect(makeVerticalMock.mock.calls.length).toBe(1);
     });
 

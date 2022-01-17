@@ -1,37 +1,54 @@
 import Observer from "../Observer/Observer";
+import { Options } from "../../slider"
 
-export interface CompleteOptions {
-    key: string
-    range: string,
-    id: string,
-    min: number,
-    max: number,
-    step: number,
-    value: number,
+interface CompleteOptions extends Options {
+    key: string,
     value2: number,
-    isValueVisible?: boolean,
-    isVertical?: boolean,
     startCord: number,
     endCord: number,
-    currentCord: number
+    currentCord: number,
+    range: string
 }
 
 class Model extends Observer{
-
-    constructor(private options: CompleteOptions) {
+    private options: CompleteOptions;
+    constructor(op: Options) {
         super();
+        this.options = <CompleteOptions>op;
+    }
+
+    validateOptions() {
+        const decimals = this.countDecimals(this.options.step);
+        const isStepIncorrect: boolean = ((this.options.max - this.options.min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) !== 0;
+        if (isStepIncorrect) {
+            throw new Error(`${this.options.step} is incorrect step for ${this.options.id}`);
+        }
+        if (!this.options.max) {
+            throw new Error(`Max value should be defined`);
+        }
+        if (!this.options.min) {
+            throw new Error(`Min value should be defined`);
+        }
+        if (this.options.min >= this.options.max) {
+            throw new Error(`Min value should be less than max one`);
+        }
+        if (!this.options.step) {
+            throw new Error('Step should be defined');
+        }
+        if (!this.options.id) {
+            throw new Error('Id should be defined');
+        }
+        if (!this.options.value2 || this.options.value2 < this.options.min || this.options.value2 > this.options.max) {
+            this.options.value2 = this.options.min;
+        }
+        if (this.options.value > this.options.max || this.options.value < this.options.min || this.options.range === 'true' && this.options.value2 >= this.options.value) {
+            this.options.value = this.options.max;
+        }
     }
 
     setCords(startCord: number, endCord: number) {
         this.options.startCord = startCord;
         this.options.endCord = endCord;
-    }
-
-    private countDecimals = (value: number): number => {
-        if (value.toString().includes('.')) {
-            return value.toString().split('.')[1].length;
-        }
-        return 0;
     }
 
     calcValue() {
@@ -161,9 +178,17 @@ class Model extends Observer{
         this.options.isVertical = isVertical;
     }
 
+    private countDecimals = (value: number): number => {
+        if (value.toString().includes('.')) {
+            return value.toString().split('.')[1].length;
+        }
+        return 0;
+    }
+
     get getOptions() {
         return this.options;
     }
 }
 
 export default Model;
+export { CompleteOptions };

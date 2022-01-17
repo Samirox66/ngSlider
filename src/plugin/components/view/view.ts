@@ -28,11 +28,12 @@ class View extends Observer {
             secondHandle: new SliderHandle(),
             secondValue: new CurrentValue()
         }
-        try {
-            this.slider = document.getElementById(id) ?? document.createElement('div');
-        } catch {
+        const slider = document.getElementById(id);
+        if (!slider) {
             throw new Error("Wrong Id");
         }
+        this.slider = slider;
+        
     }
 
     displaySlider(options: CompleteOptions) {

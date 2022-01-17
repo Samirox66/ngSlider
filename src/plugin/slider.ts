@@ -9,7 +9,7 @@ declare global {
 }
 
 interface Options {
-    range: string,
+    range?: string,
     id: string,
     min: number,
     max: number,
@@ -21,25 +21,13 @@ interface Options {
 }
 
 (function( $ ) {
-    const methods = {
-        init: (options: CompleteOptions): Presenter => {
-            const model = new Model(options);
-            const view = new View(options.id);
-            const slider = new Presenter(view, model);
-            slider.onInit(options);
-            return slider;
-        },
-        setOptions: (options: Options): CompleteOptions => {
-            const completeOptions = <CompleteOptions>options;
-            if (!completeOptions.value2) {
-                completeOptions.value2 = options.min;
-            }
-            return completeOptions;
-        }
-
-    };
     ($.fn as slider).ngSlider = function(options: Options) {
-        const completeOptions = methods.setOptions(options);
-        return methods.init(completeOptions);
+        const model = new Model(options);
+        const view = new View(options.id);
+        const slider = new Presenter(view, model);
+        slider.onInit();
+        return slider;
     };
 })(jQuery);
+
+export { Options };

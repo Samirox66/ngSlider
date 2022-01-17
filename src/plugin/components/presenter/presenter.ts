@@ -18,17 +18,18 @@ class Presenter {
         return this.view;
     }
 
-    onInit(options: CompleteOptions) {
+    onInit() {
+        this.model.validateOptions();
         this.view.addObserver(this.handleInputListener.bind(this));
         this.view.addObserver(this.progressBarClickListener.bind(this));
-        if (options.isVertical) {
+        if (this.model.getOptions.isVertical) {
             this.view.makeVertical();
             this.model.setCords(this.view.getSlider.getBoundingClientRect().top, this.view.getSlider.getBoundingClientRect().bottom)
         } else {
             this.model.setCords(this.view.getSlider.getBoundingClientRect().left, this.view.getSlider.getBoundingClientRect().right);
         }
         this.view.displaySlider(this.model.getOptions);
-        this.view.setHandles(options);
+        this.view.setHandles(this.model.getOptions);
     }
 
     handleInputListener(options: CompleteOptions): void {

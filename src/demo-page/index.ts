@@ -7,7 +7,7 @@ import ConfigPanel from './blocks/config/ConfigPanel';
 
 const slider =  {
     init: function() {
-        const slider1: Presenter = ($('#slider-1') as slider).ngSlider({range: 'true', id: 'slider-1', max: 9, min: 2, isValueVisible: true, value: 6, step: 0.1, isVertical: false});
+        const slider1: Presenter = ($('#slider-1') as slider).ngSlider({range: 'true', id: 'slider-1', max: 9, min: 2, isValueVisible: true, value: 2, step: 0.1, isVertical: false});
         const configPanel1: ConfigPanel = new ConfigPanel({
             firstValue: 'first-value1',
             secondValue: 'second-value1',
