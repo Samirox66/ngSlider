@@ -23,19 +23,19 @@ class Model extends Observer{
         if (isStepIncorrect) {
             throw new Error(`${this.options.step} is incorrect step for ${this.options.id}`);
         }
-        if (!this.options.max) {
+        if (this.options.max === undefined) {
             throw new Error(`Max value should be defined`);
         }
-        if (!this.options.min) {
+        if (this.options.min === undefined) {
             throw new Error(`Min value should be defined`);
         }
         if (this.options.min >= this.options.max) {
             throw new Error(`Min value should be less than max one`);
         }
-        if (!this.options.step) {
-            throw new Error('Step should be defined');
+        if (this.options.step === undefined || this.options.step <= 0) {
+            throw new Error('Step should be defined and correct');
         }
-        if (!this.options.id) {
+        if (this.options.id === undefined) {
             throw new Error('Id should be defined');
         }
         if (!this.options.value2 || this.options.value2 < this.options.min || this.options.value2 > this.options.max) {
@@ -122,7 +122,7 @@ class Model extends Observer{
         }
     }
 
-    setMaxValue(max: number) {
+    setMaxValue(max: number): string {
         if (max > this.options.min) {
             const decimals: number = this.countDecimals(this.options.step);
             const isStepMultiplier: boolean = ((max - this.options.min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) === 0;
@@ -134,11 +134,14 @@ class Model extends Observer{
                 if (this.options.range === 'true' && this.options.value2 > this.options.max) {
                     this.options.value2 = this.options.min;
                 }
+                return '';
             }
+            return 'Difference between max and min values should be multiplier of the step';
         }
+        return 'Max value should be more than min one';
     }
 
-    setMinValue(min: number) {
+    setMinValue(min: number):string {
         if (min < this.options.max) {
             const decimals: number = this.countDecimals(this.options.step);
             const isStepMultiplier: boolean = ((this.options.max - min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) === 0;
@@ -149,17 +152,21 @@ class Model extends Observer{
                 } else if (this.options.value < this.options.min) {
                     this.options.value = this.options.min;
                 }
+                return '';
             }
-            
+            return 'Difference between max and min values should be multiplier of the step';
         }
+        return 'Min value should be less than max one';
     }
 
-    setStep(step: number) {
+    setStep(step: number):string {
         const decimals: number = this.countDecimals(step);
         const isStepMultiplier: boolean = ((this.options.max - this.options.min) * Math.pow(10, decimals)) % (step * Math.pow(10, decimals)) === 0;
         if (isStepMultiplier) {
             this.options.step = step;
+            return '';
         }
+        return 'Difference between max and min values should be multiplier of the step';
     }
 
     setRange(range: string) {

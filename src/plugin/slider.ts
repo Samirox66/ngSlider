@@ -1,5 +1,5 @@
 import Presenter from './components/Presenter/Presenter'
-import Model, {CompleteOptions} from './components/Model/Model'
+import Model from './components/Model/Model'
 import View from './components/View/View'
 
 declare global {

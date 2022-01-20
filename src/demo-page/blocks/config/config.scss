@@ -1,7 +1,11 @@
+@import url('./config__button.scss');
+@import url('./config__error.scss');
+@import url('./config__input.scss');
+@import url('./config__item.scss');
+@import url('./config__text.scss');
+
 .config {
     width: 100%;
-    height: 10rem;
-    display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
-    grid-template-rows: 50% 50%;
+    display: flex;
+    flex-direction: column;
 }

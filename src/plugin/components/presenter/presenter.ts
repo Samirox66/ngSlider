@@ -67,31 +67,37 @@ class Presenter {
         this.updateSlider();
     }
 
-    changeMaxValue(value: number | string) {
+    changeMaxValue(value: number | string): string {
+        let error = '';
         if (typeof(value) === 'string' && !isNaN(parseFloat(value))) {
-            this.getModel.setMaxValue(parseFloat(value));
+            error = this.getModel.setMaxValue(parseFloat(value));
         } else if (typeof(value) === 'number' && !isNaN(value)) {
-            this.getModel.setMaxValue(value);
+            error = this.getModel.setMaxValue(value);
         }
         this.rewriteSlider();
+        return error;
     }
 
-    changeMinValue(value: number | string) {
+    changeMinValue(value: number | string): string {
+        let error = '';
         if (typeof(value) === 'string' && !isNaN(parseFloat(value))) {
-            this.getModel.setMinValue(parseFloat(value));
+            error = this.getModel.setMinValue(parseFloat(value));
         } else if (typeof(value) === 'number' && !isNaN(value)) {
-            this.getModel.setMinValue(value);
+            error = this.getModel.setMinValue(value);
         }
         this.rewriteSlider();
+        return error;
     }
 
-    changeStep(step: number | string) {
+    changeStep(step: number | string): string {
+        let error = '';
         if (typeof(step) === 'string' && !isNaN(parseFloat(step))) {
-            this.getModel.setStep(parseFloat(step));
+            error = this.getModel.setStep(parseFloat(step));
         } else if (typeof(step) === 'number' && !isNaN(step)) {
-            this.getModel.setStep(step);
+            error = this.getModel.setStep(step);
         }
         this.rewriteSlider();
+        return error;
     }
 
     changeRange(range: string) {

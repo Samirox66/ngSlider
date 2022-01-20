@@ -49,7 +49,10 @@ class ConfigPanel {
     }
 
     changeMinValue(slider: Presenter) {
-        slider.changeMinValue(this.minValue.value);
+        const error = slider.changeMinValue(this.minValue.value);
+        if (error !== '') {
+            this.manageError(error, this.minValue);
+        }
         this.minValue.value = slider.getModel.getOptions.min.toString();
         if (slider.getModel.getOptions.range == 'true') {
             if (slider.getModel.getOptions.min > parseFloat(this.secondValue.value)) {
@@ -63,16 +66,37 @@ class ConfigPanel {
     }
 
     changeStep(slider:Presenter) {
-        slider.changeStep(this.step.value);
+        const error = slider.changeStep(this.step.value);
+        if (error !== '') {
+            this.manageError(error, this.step);
+        }
         this.step.value = slider.getModel.getOptions.step.toString();
     }
 
     changeMaxValue(slider: Presenter) {
-        slider.changeMaxValue(this.maxValue.value);
+        const error = slider.changeMaxValue(this.maxValue.value);
+        if (error !== '') {
+            this.manageError(error, this.maxValue);
+        }
         this.maxValue.value = slider.getModel.getOptions.max.toString();
         if (slider.getModel.getOptions.max < parseFloat(this.firstValue.value)) {
             this.firstValue.value = slider.getModel.getOptions.max.toString();
         }
+    }
+
+    manageError(error: string, inputWithError: HTMLInputElement) {
+        const errorElement = this.showError(error, inputWithError);
+        setTimeout(() => errorElement.style.opacity = '0.7', 1000);
+        setTimeout(() => errorElement.style.opacity = '0.4', 2000);
+        setTimeout(() => errorElement.remove(), 3000);
+    }
+
+    showError(error: string, inputWithError: HTMLInputElement): HTMLParagraphElement {
+        const errorElement = document.createElement('p');
+        errorElement.textContent = error;
+        errorElement.classList.add('config__error');
+        inputWithError.parentElement?.append(errorElement);
+        return errorElement;
     }
 
     addEventListeners(slider: Presenter) {
