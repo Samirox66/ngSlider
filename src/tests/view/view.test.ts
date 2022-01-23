@@ -2,13 +2,14 @@ import View from "../../plugin/components/View/View";
 
 describe('View tests', () => {
     let view: View;
+    let root: HTMLDivElement;
     const options = {
         value: 3,
         value2: 2,
         step: 0.1,
         max: 4,
         min: 2,
-        id: '',
+        id: 'slider-test',
         startCord: 0,
         endCord: 0,
         range: 'true',
@@ -17,7 +18,14 @@ describe('View tests', () => {
     };
 
     beforeEach(() => {
+        root = document.createElement('div');
+        root.setAttribute('id', 'slider-test');
+        document.body.append(root);
         view = new View(options.id);
+    })
+
+    afterEach(() => {
+        root.remove();
     })
 
     test('destroySlider should call destroy labels', () => {

@@ -20,28 +20,16 @@ class Model extends Observer{
     validateOptions() {
         const decimals = this.countDecimals(this.options.step);
         const isStepIncorrect: boolean = ((this.options.max - this.options.min) * Math.pow(10, decimals)) % (this.options.step * Math.pow(10, decimals)) !== 0;
-        if (isStepIncorrect) {
-            throw new Error(`${this.options.step} is incorrect step for ${this.options.id}`);
-        }
-        if (this.options.max === undefined) {
-            throw new Error(`Max value should be defined`);
-        }
-        if (this.options.min === undefined) {
-            throw new Error(`Min value should be defined`);
-        }
         if (this.options.min >= this.options.max) {
             throw new Error(`Min value should be less than max one`);
         }
-        if (this.options.step === undefined || this.options.step <= 0) {
-            throw new Error('Step should be defined and correct');
+        if (isStepIncorrect || this.options.step <= 0) {
+            throw new Error(`${this.options.step} is incorrect step for ${this.options.id}`);
         }
-        if (this.options.id === undefined) {
-            throw new Error('Id should be defined');
-        }
-        if (!this.options.value2 || this.options.value2 < this.options.min || this.options.value2 > this.options.max) {
+        if (this.options.value2 < this.options.min || this.options.value2 >= this.options.max) {
             this.options.value2 = this.options.min;
         }
-        if (this.options.value > this.options.max || this.options.value < this.options.min || this.options.range === 'true' && this.options.value2 >= this.options.value) {
+        if (this.options.value > this.options.max || this.options.value < this.options.min || this.options.value2 >= this.options.value) {
             this.options.value = this.options.max;
         }
     }

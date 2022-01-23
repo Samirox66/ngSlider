@@ -10,7 +10,7 @@ describe('SliderHandle tests', () => {
         step: 0.1,
         max: 5,
         min: 1,
-        id: 'slider',
+        id: 'slider-test',
         startCord: 0,
         endCord: 200,
         range: 'true',
@@ -44,8 +44,8 @@ describe('SliderHandle tests', () => {
     test('setHandle should set event listener of pointerdown to handle', () => {
         const eventListenerMock = jest.fn(sliderHandle.getSliderHandle.addEventListener);
         sliderHandle.getSliderHandle.addEventListener = eventListenerMock;
+        document.body.innerHTML = `<div id='slider-test'></div>`;
         const view = new View(options.id);
-        document.body.innerHTML = `<div class='ng-slider' id='slider'></div>`;
         sliderHandle.setHandle(view.notifyObservers , options, false);
         expect(eventListenerMock.mock.calls.length).toBe(1);
     })

@@ -4,23 +4,32 @@ import View from "../../plugin/components/View/View"
 
 describe('Labels tests', () => {
     let labels: Labels;
-    const view: View = new View('');
     const options: CompleteOptions = {
         value: 3,
         value2: 0,
         step: 1,
         max: 4,
         min: 2,
-        id: '',
+        id: 'slider-test',
         startCord: 0,
         endCord: 0,
         range: '',
         key: 'min',
         currentCord: 0
     }
+    let view: View;
+    let root: HTMLDivElement;
     beforeEach(() => {
+        root = document.createElement('div');
+        root.setAttribute('id', 'slider-test');
+        document.body.append(root);
         labels = new Labels();
+        view = new View(options.id);
     });
+
+    afterEach(() => {
+        root.remove();
+    })
     test('getValues should return values of labels', () => {
         expect(labels.getValues.length).toBe(0);
     });

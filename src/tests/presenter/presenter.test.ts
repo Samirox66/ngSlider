@@ -1,25 +1,33 @@
 import Presenter from "../../plugin/components/Presenter/Presenter";
-import View from "../../plugin/components/View/View"
-import Model, {CompleteOptions} from "../../plugin/components/Model/Model"
+import View from "../../plugin/components/View/View";
+import Model, {CompleteOptions} from "../../plugin/components/Model/Model";
 
 describe('Presenter tests', ()=> {
     let presenter: Presenter;
     let options: CompleteOptions;
+    let root: HTMLDivElement;
     beforeEach(() => {
         options = {
             value: 0,
             value2: 0,
-            step: 0,
+            step: 1,
             max: 4,
             min: 2,
-            id: '',
+            id: 'slider-test',
             startCord: 0,
             endCord: 0,
             range: '',
             key: 'min',
             currentCord: 0
-        }
+        };
+        root = document.createElement('div');
+        root.setAttribute('id', 'slider-test');
+        document.body.append(root);
         presenter = new Presenter(new View(options.id), new Model(options));
+    });
+
+    afterEach(() => {
+        root.remove();
     })
 
     test('onInit should call validateOptoins', () => {
@@ -27,7 +35,7 @@ describe('Presenter tests', ()=> {
         presenter.getModel.validateOptions = validateOptionsMock;
         presenter.onInit();
         expect(validateOptionsMock.mock.calls.length).toBe(1);
-    })
+    });
 
     test('onInit should add 2 observers', () => {
         presenter.onInit();
@@ -149,7 +157,7 @@ describe('Presenter tests', ()=> {
         presenter['rewriteSlider'] = rewriteSliderMock;
         presenter.changeStep(1);
         expect(rewriteSliderMock.mock.calls.length).toBe(1);
-    })
+    });
     test('changeStep should call setStep in model', () => {
         const setStepMock = jest.fn(presenter.getModel.setStep.bind(presenter.getModel));
         presenter.getModel.setStep = setStepMock;
