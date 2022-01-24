@@ -67,10 +67,10 @@ class Model extends Observer{
     changeFirstValue(value: number) {
         const decimals: number = this.countDecimals(this.options.step);
         const isValueCloserToBiggerNumber: boolean = (value - this.options.min) % this.options.step > this.options.step / 2;
-        if (this.options.range === 'true' && this.options.value2) {
-            if (value >= this.options.max) {
-                value = this.options.max;
-            } else if (value <= this.options.value2 + this.options.step) {
+        if (value >= this.options.max) {
+            value = this.options.max;
+        } else if (this.options.range === 'true' && this.options.value2) {
+            if (value <= this.options.value2 + this.options.step) {
                 value = this.options.value2 + this.options.step;
             } else if (isValueCloserToBiggerNumber) {
                 value = value - (value - this.options.min) % this.options.step + this.options.step;
@@ -78,9 +78,7 @@ class Model extends Observer{
                 value = value - (value -this.options.min) % this.options.step;
             }
         } else {
-            if (value >= this.options.max) {
-                value = this.options.max;
-            } else if (value <= this.options.min) {
+            if (value <= this.options.min) {
                 value = this.options.min;
             } else if (isValueCloserToBiggerNumber) {
                 value = value - (value - this.options.min) % this.options.step + this.options.step;
@@ -124,7 +122,7 @@ class Model extends Observer{
                 }
                 return '';
             }
-            return 'Difference between max and min values should be multiplier of the step';
+            return 'The step should be a multiplier of the difference between max and min values';
         }
         return 'Max value should be more than min one';
     }
@@ -142,7 +140,7 @@ class Model extends Observer{
                 }
                 return '';
             }
-            return 'Difference between max and min values should be multiplier of the step';
+            return 'The step should be a multiplier of the difference between max and min values';
         }
         return 'Min value should be less than max one';
     }
@@ -154,7 +152,7 @@ class Model extends Observer{
             this.options.step = step;
             return '';
         }
-        return 'Difference between max and min values should be multiplier of the step';
+        return 'The step should be a multiplier of the difference between max and min values';
     }
 
     setRange(range: string) {

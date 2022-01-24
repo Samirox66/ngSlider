@@ -65,6 +65,9 @@ describe('Model tests', () => {
     test('calcValue should calcalute values based on current coordinate', () => {
         model.calcValue();
         expect(model.getOptions.value).toBe(6);
+        model.getOptions.currentCord = 290;
+        model.calcValue();
+        expect(model.getOptions.value).toBe(6);
         model.getOptions.key = 'secondHandle';
         model.getOptions.currentCord = 250;
         model.calcValue();
@@ -78,15 +81,30 @@ describe('Model tests', () => {
         model.getOptions.range = 'min';
         model.calcValue();
         expect(model.getOptions.value).toBe(2);
-    })
+    });
+    test('calcValue should not change value2 if it is more than first value', () => {
+        model.getOptions.key = 'secondHandle';
+        model.calcValue();
+        expect(model.getOptions.value2).toBe(3);
+    });
 
     test('changeFirstValue should change first value to the closest appropraite value', () => {
         model.changeFirstValue(8.6);
         expect(model.getOptions.value).toBe(9);
+        model.changeFirstValue(8.3);
+        expect(model.getOptions.value).toBe(8);
         model.getOptions.range = 'true';
-        model.changeFirstValue(2);
+        model.changeFirstValue(2.3);
         expect(model.getOptions.value).toBe(4);
+        model.changeFirstValue(8.6);
+        expect(model.getOptions.value).toBe(9);
+        model.changeFirstValue(8.3);
+        expect(model.getOptions.value).toBe(8);
     });
+    test('changeFirstValue should set first value to max value if it is bigger than max one', () => {
+        model.changeFirstValue(11);
+        expect(model.getOptions.value).toBe(10);
+    })
 
     test('changeSecondValue should change second value to the closest appropraite value in range mode', () => {
         model.changeSecondValue(2);
@@ -94,6 +112,12 @@ describe('Model tests', () => {
         model.getOptions.range = 'true';
         model.changeSecondValue(2);
         expect(model.getOptions.value2).toBe(2);
+        model.changeSecondValue(6);
+        expect(model.getOptions.value2).toBe(4);
+        model.changeSecondValue(3.4);
+        expect(model.getOptions.value2).toBe(3);
+        model.changeSecondValue(3.6);
+        expect(model.getOptions.value2).toBe(4);
     });
 
     test('setMaxValue should change max value if new max value is bigger than min one', () => {
@@ -102,12 +126,36 @@ describe('Model tests', () => {
         model.setMaxValue(1);
         expect(model.getOptions.max).toBe(12);
     });
+    test('setMaxValue should set value to new max value if max value is less than value', () => {
+        model.getOptions.value = 8;
+        model.setMaxValue(6);
+        expect(model.getOptions.max).toBe(6);
+        expect(model.getOptions.value).toBe(6);
+    });
+    test('setMaxValue should set value2 to min value if new max value is less than value2', () => {
+        model.getOptions.range = 'true';
+        model.getOptions.value = 8;
+        model.getOptions.value2 = 7;
+        model.setMaxValue(6);
+        expect(model.getOptions.value2).toBe(2);
+    });
+    test('setMaxValue should return an error string if the step is not a multyplier of the difference between new max value and min one', () => {
+        expect(model.setMaxValue(7.7)).toBe('The step should be a multiplier of the difference between max and min values');
+    });
 
     test('setMinValue should change min value if new min value is less than max one', () => {
         model.setMinValue(12);
         expect(model.getOptions.min).toBe(2);
         model.setMinValue(1);
         expect(model.getOptions.min).toBe(1);
+    });
+    test('setMinValue should set value2 to min value if new min value is more than value2', () => {
+        model.getOptions.range = 'true';
+        model.setMinValue(4);
+        expect(model.getOptions.value2).toBe(4);
+    });
+    test('setMinValue should return an error string if the step is not a multyplier of the difference between new max value and min one', () => {
+        expect(model.setMinValue(1.2)).toBe('The step should be a multiplier of the difference between max and min values');
     });
 
     test('setStep should change step if it is a multiplier of the difference between max and min values', () => {
