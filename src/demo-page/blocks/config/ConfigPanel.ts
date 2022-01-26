@@ -9,7 +9,7 @@ interface PanelIds {
   firstValue: string,
   secondValue: string,
   verticalMode: string,
-  currentValueVisible: string
+  isValueVisible: string
 }
 
 class ConfigPanel {
@@ -27,7 +27,7 @@ class ConfigPanel {
 
   private verticalMode: HTMLInputElement;
 
-  private currentValueVisible: HTMLInputElement;
+  private isValueVisible: HTMLInputElement;
 
   constructor(panelIds: PanelIds) {
     this.firstValue = <HTMLInputElement>document.getElementById(panelIds.firstValue);
@@ -37,7 +37,7 @@ class ConfigPanel {
     this.step = <HTMLInputElement>document.getElementById(panelIds.step);
     this.range = <HTMLInputElement>document.getElementById(panelIds.range);
     this.verticalMode = <HTMLInputElement>document.getElementById(panelIds.verticalMode);
-    this.currentValueVisible = <HTMLInputElement>document.getElementById(panelIds.currentValueVisible);
+    this.isValueVisible = <HTMLInputElement>document.getElementById(panelIds.isValueVisible);
   }
 
   changeFirstValue(slider: Presenter) {
@@ -57,10 +57,10 @@ class ConfigPanel {
   changeMinValue(slider: Presenter) {
     const error = slider.changeMinValue(this.minValue.value);
     if (error !== '') {
-      this.manageError(error, this.minValue);
+      ConfigPanel.manageError(error, this.minValue);
     }
     this.minValue.value = slider.getModel.getOptions.min.toString();
-    if (slider.getModel.getOptions.range == 'true') {
+    if (slider.getModel.getOptions.range === 'true') {
       if (slider.getModel.getOptions.min > parseFloat(this.secondValue.value)) {
         this.secondValue.value = slider.getModel.getOptions.min.toString();
       }
@@ -72,7 +72,7 @@ class ConfigPanel {
   changeStep(slider:Presenter) {
     const error = slider.changeStep(this.step.value);
     if (error !== '') {
-      this.manageError(error, this.step);
+      ConfigPanel.manageError(error, this.step);
     }
     this.step.value = slider.getModel.getOptions.step.toString();
   }
@@ -80,7 +80,7 @@ class ConfigPanel {
   changeMaxValue(slider: Presenter) {
     const error = slider.changeMaxValue(this.maxValue.value);
     if (error !== '') {
-      this.manageError(error, this.maxValue);
+      ConfigPanel.manageError(error, this.maxValue);
     }
     this.maxValue.value = slider.getModel.getOptions.max.toString();
     if (slider.getModel.getOptions.max < parseFloat(this.firstValue.value)) {
@@ -88,14 +88,18 @@ class ConfigPanel {
     }
   }
 
-  manageError(error: string, inputWithError: HTMLInputElement) {
-    const errorElement = this.showError(error, inputWithError);
-    setTimeout(() => errorElement.style.opacity = '0.7', 1000);
-    setTimeout(() => errorElement.style.opacity = '0.4', 2000);
+  static manageError(error: string, inputWithError: HTMLInputElement) {
+    const errorElement = ConfigPanel.showError(error, inputWithError);
+    setTimeout((): void => {
+      errorElement.style.opacity = '0.7';
+    }, 1000);
+    setTimeout((): void => {
+      errorElement.style.opacity = '0.4';
+    }, 2000);
     setTimeout(() => errorElement.remove(), 3000);
   }
 
-  showError(error: string, inputWithError: HTMLInputElement): HTMLParagraphElement {
+  static showError(error: string, inputWithError: HTMLInputElement): HTMLParagraphElement {
     const errorElement = document.createElement('p');
     errorElement.textContent = error;
     errorElement.classList.add('config__error');
@@ -111,7 +115,7 @@ class ConfigPanel {
     this.range.addEventListener('change', () => slider.changeRange(this.range.value));
     this.step.addEventListener('change', () => this.changeStep(slider));
     this.verticalMode.addEventListener('change', () => slider.changeMode(this.verticalMode.checked));
-    this.currentValueVisible.addEventListener('change', () => slider.changeVisabilityOfValues(this.currentValueVisible.checked));
+    this.isValueVisible.addEventListener('change', () => slider.changeVisabilityOfValues(this.isValueVisible.checked));
   }
 
   setPanel(options: CompleteOptions) {
@@ -169,7 +173,7 @@ class ConfigPanel {
   }
 
   get getCurrentValueVisible() {
-    return this.currentValueVisible;
+    return this.isValueVisible;
   }
 }
 

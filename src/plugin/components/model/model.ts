@@ -20,7 +20,9 @@ class Model extends Observer {
 
   validateOptions() {
     const decimals = this.countDecimals(this.options.step);
-    const isStepIncorrect: boolean = ((this.options.max - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) !== 0;
+    const integerStep = this.options.step * 10 ** decimals;
+    const maxMinIntegerDifference = (this.options.max - this.options.min) * 10 ** decimals;
+    const isStepIncorrect = maxMinIntegerDifference % integerStep !== 0;
     if (!this.options.value2) {
       this.options.value2 = this.options.min;
     }
@@ -33,7 +35,10 @@ class Model extends Observer {
     if (this.options.value2 < this.options.min || this.options.value2 >= this.options.max) {
       this.options.value2 = this.options.min;
     }
-    if (this.options.value > this.options.max || this.options.value < this.options.min || this.options.value2 >= this.options.value) {
+    const isValueMoreThanMax = this.options.value > this.options.max;
+    const isValueLessThanMin = this.options.value < this.options.min;
+    const isValue2NotLessThanValue = this.options.value2 >= this.options.value;
+    if (isValueMoreThanMax || isValueLessThanMin || isValue2NotLessThanValue) {
       this.options.value = this.options.max;
     }
   }

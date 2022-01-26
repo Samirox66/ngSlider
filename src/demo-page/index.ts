@@ -5,7 +5,7 @@ import '../plugin/slider.scss';
 import Presenter from '../plugin/components/Presenter/Presenter';
 import ConfigPanel from './blocks/config/ConfigPanel';
 
-const slider = {
+const sliderApp = {
   init() {
     const slider1: Presenter = ($('#slider-1') as slider).ngSlider({
       range: 'true', id: 'slider-1', max: 9, min: 2, isValueVisible: true, value: 2, step: 0.1, isVertical: false,
@@ -18,7 +18,7 @@ const slider = {
       range: 'range1',
       step: 'step1',
       verticalMode: 'vertical-button1',
-      currentValueVisible: 'current-value-visible-button1',
+      isValueVisible: 'current-value-visible-button1',
     });
     const slider2: Presenter = ($('#slider-2') as slider).ngSlider({
       range: 'max', id: 'slider-2', max: 21, min: 6, isValueVisible: true, value: 10, step: 3, isVertical: true,
@@ -31,7 +31,7 @@ const slider = {
       range: 'range2',
       step: 'step2',
       verticalMode: 'vertical-button2',
-      currentValueVisible: 'current-value-visible-button2',
+      isValueVisible: 'current-value-visible-button2',
     });
     const slider3: Presenter = ($('#slider-3') as slider).ngSlider({
       range: 'min', id: 'slider-3', max: 180, min: 120, isValueVisible: true, value: 170, step: 10, isVertical: false,
@@ -44,7 +44,7 @@ const slider = {
       range: 'range3',
       step: 'step3',
       verticalMode: 'vertical-button3',
-      currentValueVisible: 'current-value-visible-button3',
+      isValueVisible: 'current-value-visible-button3',
     });
     const slider4: Presenter = ($('#slider-4') as slider).ngSlider({
       range: '', id: 'slider-4', max: 10, min: 0, isValueVisible: true, value: 6, step: 1, isVertical: true,
@@ -57,7 +57,7 @@ const slider = {
       range: 'range4',
       step: 'step4',
       verticalMode: 'vertical-button4',
-      currentValueVisible: 'current-value-visible-button4',
+      isValueVisible: 'current-value-visible-button4',
     });
     this.set(slider1, configPanel1);
     this.set(slider2, configPanel2);
@@ -71,4 +71,4 @@ const slider = {
   },
 };
 
-slider.init();
+sliderApp.init();
