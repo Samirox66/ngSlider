@@ -33,7 +33,7 @@ describe('SliderHandle tests', () => {
   });
 
   test('getSliderHandle should return sliderHandle', () => {
-    expect(sliderHandle.getSliderHandle).toEqual(sliderHandle.sliderHandle);
+    expect(sliderHandle.getSliderHandle).toEqual(sliderHandle.getSliderHandle);
   });
 
   test('moveHandle should change top or left property of sliderHandle', () => {

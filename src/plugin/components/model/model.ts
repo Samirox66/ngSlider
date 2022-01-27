@@ -1,5 +1,5 @@
 import Observer from '../Observer/Observer';
-import { Options } from '../../slider';
+import Options from '../../slider';
 
 interface CompleteOptions extends Options {
   key: string,
@@ -19,7 +19,7 @@ class Model extends Observer {
   }
 
   validateOptions() {
-    const decimals = this.countDecimals(this.options.step);
+    const decimals = Model.countDecimals(this.options.step);
     const integerStep = this.options.step * 10 ** decimals;
     const maxMinIntegerDifference = (this.options.max - this.options.min) * 10 ** decimals;
     const isStepIncorrect = maxMinIntegerDifference % integerStep !== 0;
@@ -49,13 +49,18 @@ class Model extends Observer {
   }
 
   calcValue() {
-    let value: number = (this.options.currentCord - this.options.startCord) * (this.options.max - this.options.min) / (this.options.endCord - this.options.startCord) + this.options.min;
-    const decimals: number = this.countDecimals(this.options.step);
-    const isValueCloserToBiggerOne: boolean = ((value - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) > this.options.step * 10 ** decimals / 2;
+    const ratioForValuesAndCords = (
+      (this.options.max - this.options.min) / (this.options.endCord - this.options.startCord)
+    );
+    let value = (this.options.currentCord - this.options.startCord) * ratioForValuesAndCords + this.options.min;
+    const decimals = Model.countDecimals(this.options.step);
+    const integerStep = this.options.step * 10 ** decimals;
+    const valueMinIntegerDifference = (value - this.options.min) * 10 ** decimals;
+    const isValueCloserToBiggerOne = valueMinIntegerDifference % integerStep > integerStep / 2;
     if (isValueCloserToBiggerOne) {
-      value = value - ((value - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) / 10 ** decimals + this.options.step;
+      value = value - valueMinIntegerDifference % integerStep / 10 ** decimals + this.options.step;
     } else {
-      value -= ((value - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) / 10 ** decimals;
+      value -= valueMinIntegerDifference % integerStep / 10 ** decimals;
     }
     value = parseFloat(value.toFixed(decimals));
     if (value >= this.options.min && value <= this.options.max) {
@@ -74,22 +79,22 @@ class Model extends Observer {
   }
 
   changeFirstValue(value: number) {
-    const decimals: number = this.countDecimals(this.options.step);
-    const isValueCloserToBiggerNumber: boolean = (value - this.options.min) % this.options.step > this.options.step / 2;
+    const decimals = Model.countDecimals(this.options.step);
+    const isValueCloserToBiggerNumber = (value - this.options.min) % this.options.step > this.options.step / 2;
     if (value >= this.options.max) {
       value = this.options.max;
     } else if (this.options.range === 'true' && this.options.value2) {
       if (value <= this.options.value2 + this.options.step) {
         value = this.options.value2 + this.options.step;
       } else if (isValueCloserToBiggerNumber) {
-        value = value - (value - this.options.min) % this.options.step + this.options.step;
+        value -= (value - this.options.min) % this.options.step - this.options.step;
       } else {
         value -= (value - this.options.min) % this.options.step;
       }
     } else if (value <= this.options.min) {
       value = this.options.min;
     } else if (isValueCloserToBiggerNumber) {
-      value = value - (value - this.options.min) % this.options.step + this.options.step;
+      value -= (value - this.options.min) % this.options.step - this.options.step;
     } else {
       value -= (value - this.options.min) % this.options.step;
     }
@@ -97,15 +102,15 @@ class Model extends Observer {
   }
 
   changeSecondValue(value: number) {
-    const decimals: number = this.countDecimals(this.options.step);
-    const isValueCloserToBiggerNumber: boolean = (value - this.options.min) % this.options.step > this.options.step / 2;
+    const decimals = Model.countDecimals(this.options.step);
+    const isValueCloserToBiggerNumber = (value - this.options.min) % this.options.step > this.options.step / 2;
     if (this.options.range === 'true') {
       if (value <= this.options.min) {
         value = this.options.min;
       } else if (value >= this.options.value - this.options.step) {
         value = this.options.value - this.options.step;
       } else if (isValueCloserToBiggerNumber) {
-        value = value - (value - this.options.min) % this.options.step + this.options.step;
+        value -= (value - this.options.min) % this.options.step - this.options.step;
       } else {
         value -= (value - this.options.min) % this.options.step;
       }
@@ -115,8 +120,8 @@ class Model extends Observer {
 
   setMaxValue(max: number): string {
     if (max > this.options.min) {
-      const decimals: number = this.countDecimals(this.options.step);
-      const isStepMultiplier: boolean = ((max - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0;
+      const decimals = Model.countDecimals(this.options.step);
+      const isStepMultiplier = ((max - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0;
       if (isStepMultiplier) {
         this.options.max = max;
         if (this.options.value > this.options.max) {
@@ -134,8 +139,8 @@ class Model extends Observer {
 
   setMinValue(min: number):string {
     if (min < this.options.max) {
-      const decimals: number = this.countDecimals(this.options.step);
-      const isStepMultiplier: boolean = ((this.options.max - min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0;
+      const decimals = Model.countDecimals(this.options.step);
+      const isStepMultiplier = ((this.options.max - min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0;
       if (isStepMultiplier) {
         this.options.min = min;
         if (this.options.range === 'true' && this.options.value2 < this.options.min) {
@@ -151,8 +156,8 @@ class Model extends Observer {
   }
 
   setStep(step: number):string {
-    const decimals: number = this.countDecimals(step);
-    const isStepMultiplier: boolean = ((this.options.max - this.options.min) * 10 ** decimals) % (step * 10 ** decimals) === 0;
+    const decimals = Model.countDecimals(step);
+    const isStepMultiplier = ((this.options.max - this.options.min) * 10 ** decimals) % (step * 10 ** decimals) === 0;
     if (isStepMultiplier) {
       this.options.step = step;
       return '';
@@ -176,7 +181,7 @@ class Model extends Observer {
     this.options.isVertical = isVertical;
   }
 
-  private countDecimals = (value: number): number => {
+  private static countDecimals = (value: number): number => {
     if (value.toString().includes('.')) {
       return value.toString().split('.')[1].length;
     }

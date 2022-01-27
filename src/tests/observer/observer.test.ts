@@ -7,9 +7,7 @@ describe('Observer tests', () => {
     observer = new Observer();
   });
   test('addObserver should add one observer', () => {
-    const testFunction = () => {
-      console.log('Success');
-    };
+    const testFunction = () => 3;
     observer.addObserver(testFunction);
     expect(observer.observers.length).toBe(1);
   });
@@ -49,9 +47,7 @@ describe('Observer tests', () => {
     expect(observer.observers.length).toBe(0);
   });
   test('observerRemove should delete observer', () => {
-    const testFunction = () => {
-      console.log('Success');
-    };
+    const testFunction = () => 3;
     observer.addObserver(testFunction);
     observer.removeObserver(testFunction);
     expect(observer.observers.length).toBe(0);

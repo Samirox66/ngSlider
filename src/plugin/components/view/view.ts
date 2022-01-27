@@ -119,7 +119,11 @@ class View extends Observer {
   private checkIfCurrentValuesIntersect(options: CompleteOptions): boolean {
     const firstElement = this.viewElements.firstValue.getCurrentValue.getBoundingClientRect();
     const secondElement = this.viewElements.secondValue.getCurrentValue.getBoundingClientRect();
-    if (options.isVertical && firstElement.top < secondElement.bottom || !options.isVertical && firstElement.left < secondElement.right) {
+    const isFirstLowerThanSecond = options.isVertical && firstElement.top < secondElement.bottom;
+    const isFirstMoreToTheLeftThanSecond = (
+      !options.isVertical && firstElement.left < secondElement.right
+    );
+    if (isFirstLowerThanSecond || isFirstMoreToTheLeftThanSecond) {
       return true;
     }
     return false;

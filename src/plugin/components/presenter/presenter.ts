@@ -23,11 +23,14 @@ class Presenter {
     this.model.validateOptions();
     this.view.addObserver(this.handleInputListener.bind(this));
     this.view.addObserver(this.progressBarClickListener.bind(this));
+    let sliderRect: DOMRect;
     if (this.model.getOptions.isVertical) {
       this.view.makeVertical();
-      this.model.setCords(this.view.getSlider.getBoundingClientRect().top, this.view.getSlider.getBoundingClientRect().bottom);
+      sliderRect = this.view.getSlider.getBoundingClientRect();
+      this.model.setCords(sliderRect.top, sliderRect.bottom);
     } else {
-      this.model.setCords(this.view.getSlider.getBoundingClientRect().left, this.view.getSlider.getBoundingClientRect().right);
+      sliderRect = this.view.getSlider.getBoundingClientRect();
+      this.model.setCords(sliderRect.left, sliderRect.right);
     }
     this.view.displaySlider(this.model.getOptions);
     this.view.setHandles(this.model.getOptions);
@@ -49,9 +52,9 @@ class Presenter {
   }
 
   changeFirstValue(value: number | string) {
-    if (typeof (value) === 'string' && !isNaN(parseFloat(value))) {
+    if (typeof (value) === 'string' && !Number.isNaN(parseFloat(value))) {
       this.model.changeFirstValue(parseFloat(value));
-    } else if (typeof (value) === 'number' && !isNaN(value)) {
+    } else if (typeof (value) === 'number' && !Number.isNaN(value)) {
       this.model.changeFirstValue(value);
     }
     this.model.getOptions.key = 'firstHandle';
@@ -59,9 +62,9 @@ class Presenter {
   }
 
   changeSecondValue(value: number | string) {
-    if (typeof (value) === 'string' && !isNaN(parseFloat(value))) {
+    if (typeof (value) === 'string' && !Number.isNaN(parseFloat(value))) {
       this.getModel.changeSecondValue(parseFloat(value));
-    } else if (typeof (value) === 'number' && !isNaN(value)) {
+    } else if (typeof (value) === 'number' && !Number.isNaN(value)) {
       this.getModel.changeSecondValue(value);
     }
     this.model.getOptions.key = 'secondHandle';
@@ -70,9 +73,9 @@ class Presenter {
 
   changeMaxValue(value: number | string): string {
     let error = '';
-    if (typeof (value) === 'string' && !isNaN(parseFloat(value))) {
+    if (typeof (value) === 'string' && !Number.isNaN(parseFloat(value))) {
       error = this.getModel.setMaxValue(parseFloat(value));
-    } else if (typeof (value) === 'number' && !isNaN(value)) {
+    } else if (typeof (value) === 'number' && !Number.isNaN(value)) {
       error = this.getModel.setMaxValue(value);
     }
     this.rewriteSlider();
@@ -81,9 +84,9 @@ class Presenter {
 
   changeMinValue(value: number | string): string {
     let error = '';
-    if (typeof (value) === 'string' && !isNaN(parseFloat(value))) {
+    if (typeof (value) === 'string' && !Number.isNaN(parseFloat(value))) {
       error = this.getModel.setMinValue(parseFloat(value));
-    } else if (typeof (value) === 'number' && !isNaN(value)) {
+    } else if (typeof (value) === 'number' && !Number.isNaN(value)) {
       error = this.getModel.setMinValue(value);
     }
     this.rewriteSlider();
@@ -92,9 +95,9 @@ class Presenter {
 
   changeStep(step: number | string): string {
     let error = '';
-    if (typeof (step) === 'string' && !isNaN(parseFloat(step))) {
+    if (typeof (step) === 'string' && !Number.isNaN(parseFloat(step))) {
       error = this.getModel.setStep(parseFloat(step));
-    } else if (typeof (step) === 'number' && !isNaN(step)) {
+    } else if (typeof (step) === 'number' && !Number.isNaN(step)) {
       error = this.getModel.setStep(step);
     }
     this.rewriteSlider();
@@ -110,12 +113,15 @@ class Presenter {
   }
 
   changeMode(isVertical: boolean) {
+    let sliderRect: DOMRect;
     if (isVertical) {
       this.view.makeVertical();
-      this.model.setCords(this.view.getSlider.getBoundingClientRect().top, this.view.getSlider.getBoundingClientRect().bottom);
+      sliderRect = this.view.getSlider.getBoundingClientRect();
+      this.model.setCords(sliderRect.top, sliderRect.bottom);
     } else {
       this.view.makeHorizontal();
-      this.model.setCords(this.view.getSlider.getBoundingClientRect().left, this.view.getSlider.getBoundingClientRect().right);
+      sliderRect = this.view.getSlider.getBoundingClientRect();
+      this.model.setCords(sliderRect.left, sliderRect.right);
     }
     this.model.setVerticalMode(isVertical);
     this.rewriteSlider();

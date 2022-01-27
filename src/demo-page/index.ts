@@ -7,7 +7,7 @@ import ConfigPanel from './blocks/config/ConfigPanel';
 
 const sliderApp = {
   init() {
-    const slider1: Presenter = ($('#slider-1') as slider).ngSlider({
+    const slider1: Presenter = ($('#slider-1') as Slider).ngSlider({
       range: 'true', id: 'slider-1', max: 9, min: 2, isValueVisible: true, value: 2, step: 0.1, isVertical: false,
     });
     const configPanel1: ConfigPanel = new ConfigPanel({
@@ -20,7 +20,7 @@ const sliderApp = {
       verticalMode: 'vertical-button1',
       isValueVisible: 'current-value-visible-button1',
     });
-    const slider2: Presenter = ($('#slider-2') as slider).ngSlider({
+    const slider2: Presenter = ($('#slider-2') as Slider).ngSlider({
       range: 'max', id: 'slider-2', max: 21, min: 6, isValueVisible: true, value: 10, step: 3, isVertical: true,
     });
     const configPanel2: ConfigPanel = new ConfigPanel({
@@ -33,7 +33,7 @@ const sliderApp = {
       verticalMode: 'vertical-button2',
       isValueVisible: 'current-value-visible-button2',
     });
-    const slider3: Presenter = ($('#slider-3') as slider).ngSlider({
+    const slider3: Presenter = ($('#slider-3') as Slider).ngSlider({
       range: 'min', id: 'slider-3', max: 180, min: 120, isValueVisible: true, value: 170, step: 10, isVertical: false,
     });
     const configPanel3: ConfigPanel = new ConfigPanel({
@@ -46,7 +46,7 @@ const sliderApp = {
       verticalMode: 'vertical-button3',
       isValueVisible: 'current-value-visible-button3',
     });
-    const slider4: Presenter = ($('#slider-4') as slider).ngSlider({
+    const slider4: Presenter = ($('#slider-4') as Slider).ngSlider({
       range: '', id: 'slider-4', max: 10, min: 0, isValueVisible: true, value: 6, step: 1, isVertical: true,
     });
     const configPanel4: ConfigPanel = new ConfigPanel({

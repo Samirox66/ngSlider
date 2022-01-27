@@ -7,11 +7,23 @@ class SliderHandle {
     this.sliderHandle = document.createElement('div');
   }
 
-  setHandle(notifyObservers: (options: CompleteOptions) => void, options: CompleteOptions, isSecondHandle: boolean) {
+  setHandle(
+    notifyObservers: (options: CompleteOptions) => void,
+    options: CompleteOptions,
+    isSecondHandle: boolean,
+  ) {
     const handleMouseDown = () => {
       const handleMouseMove = (event: PointerEvent) => {
-        isSecondHandle ? options.key = 'secondHandle' : options.key = 'firstHandle';
-        options.isVertical ? options.currentCord = event.pageY : options.currentCord = event.pageX;
+        if (isSecondHandle) {
+          options.key = 'secondHandle';
+        } else {
+          options.key = 'firstHandle';
+        }
+        if (options.isVertical) {
+          options.currentCord = event.pageY;
+        } else {
+          options.currentCord = event.pageX;
+        }
         notifyObservers(options);
       };
       const handleMouseUp = () => {
@@ -21,12 +33,8 @@ class SliderHandle {
       document.addEventListener('pointermove', handleMouseMove);
       document.addEventListener('pointerup', handleMouseUp);
     };
-    document.ondragstart = function () {
-      return false;
-    };
-    document.body.onselectstart = function () {
-      return false;
-    };
+    document.ondragstart = () => false;
+    document.body.onselectstart = () => false;
     this.sliderHandle.addEventListener('pointerdown', handleMouseDown);
   }
 
@@ -35,7 +43,9 @@ class SliderHandle {
   }
 
   moveHandle(options: CompleteOptions, value: number) {
-    const moveHandle = ((value - options.min) / (options.max - options.min) - this.sliderHandle.offsetWidth / 2 / (options.endCord - options.startCord)) * 100;
+    const moveHandle = (
+      ((value - options.min) / (options.max - options.min) - this.sliderHandle.offsetWidth / 2 / (options.endCord - options.startCord)) * 100
+    );
     if (options.isVertical) {
       this.sliderHandle.style.top = `${moveHandle}%`;
     } else {

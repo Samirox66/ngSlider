@@ -13,8 +13,8 @@ class SliderTrack {
 
   fillWithColor(options: CompleteOptions) {
     const fill = {
-      min: (options: CompleteOptions) => {
-        const percentToFill: number = ((options.value - options.min) / (options.max - options.min)) * 100;
+      min: () => {
+        const percentToFill = ((options.value - options.min) / (options.max - options.min)) * 100;
         if (options.isVertical) {
           this.sliderTrack.style.top = '0%';
           this.sliderTrack.style.height = `${percentToFill}%`;
@@ -23,9 +23,11 @@ class SliderTrack {
           this.sliderTrack.style.width = `${percentToFill}%`;
         }
       },
-      max: (options: CompleteOptions) => {
-        const percentToFill: number = ((options.max - options.value) / (options.max - options.min)) * 100;
-        const percentToMoveLeft: number = (options.value - options.min) / (options.max - options.min) * 100;
+      max: () => {
+        const percentToFill = ((options.max - options.value) / (options.max - options.min)) * 100;
+        const percentToMoveLeft = (
+          ((options.value - options.min) / (options.max - options.min)) * 100
+        );
         if (options.isVertical) {
           this.sliderTrack.style.top = `${percentToMoveLeft}%`;
           this.sliderTrack.style.height = `${percentToFill}%`;
@@ -34,9 +36,11 @@ class SliderTrack {
           this.sliderTrack.style.width = `${percentToFill}%`;
         }
       },
-      true: (options: CompleteOptions) => {
-        const percentToFill: number = (options.value - options.value2) / (options.max - options.min) * 100;
-        const percentToMove: number = (options.value2 - options.min) / (options.max - options.min) * 100;
+      true: () => {
+        const percentToFill = (
+          ((options.value - options.value2) / (options.max - options.min)) * 100
+        );
+        const percentToMove = ((options.value2 - options.min) / (options.max - options.min)) * 100;
         if (options.isVertical) {
           this.sliderTrack.style.top = `${percentToMove}%`;
           this.sliderTrack.style.height = `${percentToFill}%`;
@@ -54,11 +58,11 @@ class SliderTrack {
       },
     };
     switch (options.range) {
-      case 'min': fill.min(options);
+      case 'min': fill.min();
         break;
-      case 'max': fill.max(options);
+      case 'max': fill.max();
         break;
-      case 'true': fill.true(options);
+      case 'true': fill.true();
         break;
       default: fill.default();
         break;

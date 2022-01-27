@@ -23,6 +23,6 @@ describe('CurrentValue tests', () => {
   });
 
   test('getCurrentValue should return html element of value', () => {
-    expect(currentValue.getCurrentValue).toEqual(currentValue.currentValue);
+    expect(currentValue.getCurrentValue).toEqual(currentValue.getCurrentValue);
   });
 });
