@@ -1,4 +1,4 @@
-import Model, { CompleteOptions } from '../Model/Model';
+import Model, { ObserverOptions } from '../Model/Model';
 import View from '../View/View';
 
 class Presenter {
@@ -36,46 +36,58 @@ class Presenter {
     this.view.setHandles(this.model.getOptions);
   }
 
-  handleInputListener(options: CompleteOptions): void {
-    if (options.key !== 'firstHandle' && options.key !== 'secondHandle') {
+  handleInputListener(options: ObserverOptions): void {
+    const keyIsNotRelatedToHandle = options.key !== 'firstHandle' && options.key !== 'secondHandle';
+    if (keyIsNotRelatedToHandle) {
       return;
     }
+    if (options.currentCord) {
+      this.model.setCurrentCord(options.currentCord);
+    }
+    this.model.setKey(options.key);
     this.model.calcValue();
-    this.updateSlider();
+    this.updateSlider(options.key === 'secondHandle');
   }
 
-  progressBarClickListener(options: CompleteOptions): void {
-    if (options.key !== 'progressBarFirst' && options.key !== 'progressBarSecond') {
+  progressBarClickListener(options: ObserverOptions): void {
+    const keyIsNotRelatedToLabels = options.key !== 'firstLabels' && options.key !== 'secondLabels';
+    if (keyIsNotRelatedToLabels) {
       return;
     }
-    this.updateSlider();
+    this.model.setKey(options.key);
+    if (options.value) {
+      this.model.setFirstValue(options.value);
+    } else if (options.value2) {
+      this.model.setSecondValue(options.value2);
+    }
+    this.updateSlider(options.key === 'secondLabels');
   }
 
   changeFirstValue(value: number | string) {
-    if (typeof (value) === 'string' && !Number.isNaN(parseFloat(value))) {
+    if (typeof (value) === 'string') {
       this.model.changeFirstValue(parseFloat(value));
-    } else if (typeof (value) === 'number' && !Number.isNaN(value)) {
+    } else if (typeof (value) === 'number') {
       this.model.changeFirstValue(value);
     }
     this.model.getOptions.key = 'firstHandle';
-    this.updateSlider();
+    this.updateSlider(false);
   }
 
   changeSecondValue(value: number | string) {
-    if (typeof (value) === 'string' && !Number.isNaN(parseFloat(value))) {
+    if (typeof (value) === 'string') {
       this.getModel.changeSecondValue(parseFloat(value));
-    } else if (typeof (value) === 'number' && !Number.isNaN(value)) {
+    } else if (typeof (value) === 'number') {
       this.getModel.changeSecondValue(value);
     }
     this.model.getOptions.key = 'secondHandle';
-    this.updateSlider();
+    this.updateSlider(true);
   }
 
   changeMaxValue(value: number | string): string {
     let error = '';
-    if (typeof (value) === 'string' && !Number.isNaN(parseFloat(value))) {
+    if (typeof (value) === 'string') {
       error = this.getModel.setMaxValue(parseFloat(value));
-    } else if (typeof (value) === 'number' && !Number.isNaN(value)) {
+    } else if (typeof (value) === 'number') {
       error = this.getModel.setMaxValue(value);
     }
     this.rewriteSlider();
@@ -84,9 +96,9 @@ class Presenter {
 
   changeMinValue(value: number | string): string {
     let error = '';
-    if (typeof (value) === 'string' && !Number.isNaN(parseFloat(value))) {
+    if (typeof (value) === 'string') {
       error = this.getModel.setMinValue(parseFloat(value));
-    } else if (typeof (value) === 'number' && !Number.isNaN(value)) {
+    } else if (typeof (value) === 'number') {
       error = this.getModel.setMinValue(value);
     }
     this.rewriteSlider();
@@ -95,9 +107,9 @@ class Presenter {
 
   changeStep(step: number | string): string {
     let error = '';
-    if (typeof (step) === 'string' && !Number.isNaN(parseFloat(step))) {
+    if (typeof (step) === 'string') {
       error = this.getModel.setStep(parseFloat(step));
-    } else if (typeof (step) === 'number' && !Number.isNaN(step)) {
+    } else if (typeof (step) === 'number') {
       error = this.getModel.setStep(step);
     }
     this.rewriteSlider();
@@ -106,7 +118,8 @@ class Presenter {
 
   changeRange(range: string) {
     this.model.setRange(range);
-    if (range !== 'true' && range !== 'max' && range !== 'min') {
+    const rangeIsNotDefined = range !== 'true' && range !== 'max' && range !== 'min';
+    if (rangeIsNotDefined) {
       this.view.getViewElements.sliderTrack.hide();
     }
     this.rewriteSlider();
@@ -137,8 +150,8 @@ class Presenter {
     this.view.displaySlider(this.model.getOptions);
   }
 
-  private updateSlider() {
-    this.view.changeValue(this.model.getOptions);
+  private updateSlider(isSecond: boolean) {
+    this.view.changeValue(this.model.getOptions, isSecond);
     this.view.getViewElements.sliderTrack.fillWithColor(this.model.getOptions);
   }
 }

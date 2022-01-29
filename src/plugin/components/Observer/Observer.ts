@@ -1,6 +1,6 @@
-import { CompleteOptions } from '../Model/Model';
+import { ObserverOptions } from '../Model/Model';
 
-type ObserverFunction = (options: CompleteOptions) => void;
+type ObserverFunction = (options: ObserverOptions) => void;
 
 class Observer {
   observers: ObserverFunction[];
@@ -21,7 +21,7 @@ class Observer {
     });
   }
 
-  notifyObservers(options: CompleteOptions) {
+  notifyObservers(options: ObserverOptions) {
     this.observers.forEach((observer) => {
       observer(options);
     });

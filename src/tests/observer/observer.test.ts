@@ -12,20 +12,6 @@ describe('Observer tests', () => {
     expect(observer.observers.length).toBe(1);
   });
   test('notifyObservers should work with specific observer', () => {
-    const setValueToMin = (options: CompleteOptions) => {
-      if (options.key !== 'min') {
-        return;
-      }
-      options.value = options.min;
-    };
-    const mockSetValueToMax = jest.fn((options: CompleteOptions) => {
-      if (options.key !== 'max') {
-        return;
-      }
-      options.value = options.max;
-    });
-    observer.addObserver(setValueToMin);
-    observer.addObserver(mockSetValueToMax);
     const options: CompleteOptions = {
       value: 0,
       value2: 0,
@@ -39,6 +25,20 @@ describe('Observer tests', () => {
       key: 'min',
       currentCord: 0,
     };
+    const setValueToMin = () => {
+      if (options.key !== 'min') {
+        return;
+      }
+      options.value = options.min;
+    };
+    const mockSetValueToMax = jest.fn(() => {
+      if (options.key !== 'max') {
+        return;
+      }
+      options.value = options.max;
+    });
+    observer.addObserver(setValueToMin);
+    observer.addObserver(mockSetValueToMax);
     observer.notifyObservers(options);
     expect(options.value).toBe(2);
     expect(mockSetValueToMax.mock.calls.length).toBe(1);

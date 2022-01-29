@@ -46,7 +46,7 @@ describe('SliderHandle tests', () => {
     sliderHandle.getSliderHandle.addEventListener = eventListenerMock;
     document.body.innerHTML = '<div id=\'slider-test\'></div>';
     const view = new View(options.id);
-    sliderHandle.setHandle(view.notifyObservers, options, false);
+    sliderHandle.setHandle(view.notifyObservers, options.isVertical ?? false, false);
     expect(eventListenerMock.mock.calls.length).toBe(1);
   });
 });

@@ -1,4 +1,4 @@
-import { CompleteOptions } from '../Model/Model';
+import { CompleteOptions, ObserverOptions } from '../Model/Model';
 
 class SliderHandle {
   private sliderHandle: HTMLDivElement;
@@ -8,23 +8,22 @@ class SliderHandle {
   }
 
   setHandle(
-    notifyObservers: (options: CompleteOptions) => void,
-    options: CompleteOptions,
+    notifyObservers: (options: ObserverOptions) => void,
+    isVertical: boolean,
     isSecondHandle: boolean,
   ) {
     const handleMouseDown = () => {
       const handleMouseMove = (event: PointerEvent) => {
+        const handleOptions: ObserverOptions = { key: 'firstHandle' };
         if (isSecondHandle) {
-          options.key = 'secondHandle';
-        } else {
-          options.key = 'firstHandle';
+          handleOptions.key = 'secondHandle';
         }
-        if (options.isVertical) {
-          options.currentCord = event.pageY;
+        if (isVertical) {
+          handleOptions.currentCord = event.pageY;
         } else {
-          options.currentCord = event.pageX;
+          handleOptions.currentCord = event.pageX;
         }
-        notifyObservers(options);
+        notifyObservers(handleOptions);
       };
       const handleMouseUp = () => {
         document.removeEventListener('pointermove', handleMouseMove);

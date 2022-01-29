@@ -1,6 +1,3 @@
-import Observer from '../Observer/Observer';
-import Options from '../../slider';
-
 interface CompleteOptions extends Options {
   key: string,
   value2: number,
@@ -10,11 +7,29 @@ interface CompleteOptions extends Options {
   range: string
 }
 
-class Model extends Observer {
+interface ObserverOptions {
+  key: string,
+  currentCord?: number,
+  value?: number,
+  value2?: number
+}
+
+interface Options {
+  range?: string,
+  id: string,
+  min: number,
+  max: number,
+  step: number,
+  value: number,
+  value2?: number,
+  isValueVisible?: boolean,
+  isVertical?: boolean,
+}
+
+class Model {
   private options: CompleteOptions;
 
   constructor(op: Options) {
-    super();
     this.options = <CompleteOptions>op;
   }
 
@@ -22,17 +37,23 @@ class Model extends Observer {
     const decimals = Model.countDecimals(this.options.step);
     const integerStep = this.options.step * 10 ** decimals;
     const maxMinIntegerDifference = (this.options.max - this.options.min) * 10 ** decimals;
-    const isStepIncorrect = maxMinIntegerDifference % integerStep !== 0;
+    const isStepIncorrect = maxMinIntegerDifference % integerStep !== 0 || this.options.step <= 0;
+    if (this.options.isValueVisible === undefined) {
+      this.options.isValueVisible = false;
+    }
     if (!this.options.value2) {
       this.options.value2 = this.options.min;
     }
     if (this.options.min >= this.options.max) {
       throw new Error('Min value should be less than max one');
     }
-    if (isStepIncorrect || this.options.step <= 0) {
+    if (isStepIncorrect) {
       throw new Error(`${this.options.step} is incorrect step for ${this.options.id}`);
     }
-    if (this.options.value2 < this.options.min || this.options.value2 >= this.options.max) {
+    const value2isOutsideMaxMin = (
+      this.options.value2 < this.options.min || this.options.value2 >= this.options.max
+    );
+    if (value2isOutsideMaxMin) {
       this.options.value2 = this.options.min;
     }
     const isValueMoreThanMax = this.options.value > this.options.max;
@@ -41,6 +62,14 @@ class Model extends Observer {
     if (isValueMoreThanMax || isValueLessThanMin || isValue2NotLessThanValue) {
       this.options.value = this.options.max;
     }
+  }
+
+  setKey(key: string) {
+    this.options.key = key;
+  }
+
+  setCurrentCord(currentCord: number) {
+    this.options.currentCord = currentCord;
   }
 
   setCords(startCord: number, endCord: number) {
@@ -52,25 +81,29 @@ class Model extends Observer {
     const ratioForValuesAndCords = (
       (this.options.max - this.options.min) / (this.options.endCord - this.options.startCord)
     );
-    let value = (this.options.currentCord - this.options.startCord) * ratioForValuesAndCords + this.options.min;
+    let value = (
+      (this.options.currentCord - this.options.startCord) * ratioForValuesAndCords + this.options.min
+    );
     const decimals = Model.countDecimals(this.options.step);
     const integerStep = this.options.step * 10 ** decimals;
     const valueMinIntegerDifference = (value - this.options.min) * 10 ** decimals;
     const isValueCloserToBiggerOne = valueMinIntegerDifference % integerStep > integerStep / 2;
     if (isValueCloserToBiggerOne) {
-      value = value - valueMinIntegerDifference % integerStep / 10 ** decimals + this.options.step;
+      value -= (valueMinIntegerDifference % integerStep) / 10 ** decimals - this.options.step;
     } else {
-      value -= valueMinIntegerDifference % integerStep / 10 ** decimals;
+      value -= (valueMinIntegerDifference % integerStep) / 10 ** decimals;
     }
     value = parseFloat(value.toFixed(decimals));
-    if (value >= this.options.min && value <= this.options.max) {
+    const valueIsInsideMaxMin = value >= this.options.min && value <= this.options.max;
+    if (valueIsInsideMaxMin) {
       if (this.options.key === 'secondHandle') {
         if (value >= this.options.value) {
           return;
         }
         this.options.value2 = value;
       } else {
-        if (this.options.range === 'true' && value <= this.options.value2) {
+        const valueIsLessThanValue2 = this.options.range === 'true' && value <= this.options.value2;
+        if (valueIsLessThanValue2) {
           return;
         }
         this.options.value = value;
@@ -78,27 +111,35 @@ class Model extends Observer {
     }
   }
 
+  setFirstValue(value: number) {
+    this.options.value = value;
+  }
+
+  setSecondValue(value: number) {
+    this.options.value2 = value;
+  }
+
   changeFirstValue(value: number) {
     const decimals = Model.countDecimals(this.options.step);
-    const isValueCloserToBiggerNumber = (value - this.options.min) % this.options.step > this.options.step / 2;
+    const isValueCloserToGreater = (value - this.options.min) % this.options.step > this.options.step / 2;
     if (value >= this.options.max) {
-      value = this.options.max;
-    } else if (this.options.range === 'true' && this.options.value2) {
+      this.options.value = this.options.max;
+    } else if (this.options.range === 'true') {
       if (value <= this.options.value2 + this.options.step) {
-        value = this.options.value2 + this.options.step;
-      } else if (isValueCloserToBiggerNumber) {
-        value -= (value - this.options.min) % this.options.step - this.options.step;
+        this.options.value = this.options.value2 + this.options.step;
+      } else if (isValueCloserToGreater) {
+        this.options.value = value - ((value - this.options.min) % this.options.step) + this.options.step;
       } else {
-        value -= (value - this.options.min) % this.options.step;
+        this.options.value = value - ((value - this.options.min) % this.options.step);
       }
     } else if (value <= this.options.min) {
-      value = this.options.min;
-    } else if (isValueCloserToBiggerNumber) {
-      value -= (value - this.options.min) % this.options.step - this.options.step;
+      this.options.value = this.options.min;
+    } else if (isValueCloserToGreater) {
+      this.options.value = value - ((value - this.options.min) % this.options.step) + this.options.step;
     } else {
-      value -= (value - this.options.min) % this.options.step;
+      this.options.value = value - ((value - this.options.min) % this.options.step);
     }
-    this.options.value = parseFloat(value.toFixed(decimals));
+    this.options.value = parseFloat(this.options.value.toFixed(decimals));
   }
 
   changeSecondValue(value: number) {
@@ -106,15 +147,15 @@ class Model extends Observer {
     const isValueCloserToBiggerNumber = (value - this.options.min) % this.options.step > this.options.step / 2;
     if (this.options.range === 'true') {
       if (value <= this.options.min) {
-        value = this.options.min;
+        this.options.value2 = this.options.min;
       } else if (value >= this.options.value - this.options.step) {
-        value = this.options.value - this.options.step;
+        this.options.value2 = this.options.value - this.options.step;
       } else if (isValueCloserToBiggerNumber) {
-        value -= (value - this.options.min) % this.options.step - this.options.step;
+        this.options.value2 = value - ((value - this.options.min) % this.options.step) + this.options.step;
       } else {
-        value -= (value - this.options.min) % this.options.step;
+        this.options.value2 = value - ((value - this.options.min) % this.options.step);
       }
-      this.options.value2 = parseFloat(value.toFixed(decimals));
+      this.options.value2 = parseFloat(this.options.value2.toFixed(decimals));
     }
   }
 
@@ -127,7 +168,8 @@ class Model extends Observer {
         if (this.options.value > this.options.max) {
           this.options.value = this.options.max;
         }
-        if (this.options.range === 'true' && this.options.value2 > this.options.max) {
+        const value2isGreaterThanMax = this.options.range === 'true' && this.options.value2 > this.options.max;
+        if (value2isGreaterThanMax) {
           this.options.value2 = this.options.min;
         }
         return '';
@@ -143,7 +185,8 @@ class Model extends Observer {
       const isStepMultiplier = ((this.options.max - min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0;
       if (isStepMultiplier) {
         this.options.min = min;
-        if (this.options.range === 'true' && this.options.value2 < this.options.min) {
+        const valu2IsLessThanMin = this.options.range === 'true' && this.options.value2 < this.options.min;
+        if (valu2IsLessThanMin) {
           this.options.value2 = this.options.min;
         } else if (this.options.value < this.options.min) {
           this.options.value = this.options.min;
@@ -166,7 +209,8 @@ class Model extends Observer {
   }
 
   setRange(range: string) {
-    if (range === 'min' || range === 'max' || range === 'true') {
+    const rangeIsDefined = range === 'min' || range === 'max' || range === 'true';
+    if (rangeIsDefined) {
       this.options.range = range;
     } else {
       this.options.range = 'false';
@@ -194,4 +238,4 @@ class Model extends Observer {
 }
 
 export default Model;
-export { CompleteOptions };
+export { CompleteOptions, Options, ObserverOptions };

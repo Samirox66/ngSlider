@@ -1,4 +1,4 @@
-import { CompleteOptions } from '../Model/Model';
+import { CompleteOptions, ObserverOptions } from '../Model/Model';
 
 class Labels {
   private labels: HTMLDivElement;
@@ -10,7 +10,7 @@ class Labels {
     this.values = [];
   }
 
-  create(notifyObservers: (options: CompleteOptions) => void, options: CompleteOptions) {
+  create(notifyObservers: (options: ObserverOptions) => void, options: CompleteOptions) {
     this.labels.classList.add('ng-slider__values');
     const countDecimals = (value: number): number => {
       if (value.toString().includes('.')) {
@@ -32,27 +32,27 @@ class Labels {
   private createLabel(
     i: number,
     options: CompleteOptions,
-    notifyObservers: (options: CompleteOptions) => void,
+    notifyObservers: (options: ObserverOptions) => void,
   ): void {
     const label = document.createElement('div');
     label.textContent = i.toString();
     label.setAttribute('type', 'button');
     label.classList.add('ng-slider__value');
-    const progressBarClick = (): void => {
+    const labelsClick = (): void => {
+      const labelsOptions: ObserverOptions = { key: 'firstLabels' };
       if (label.textContent) {
         const value = parseFloat(label.textContent);
-        options.key = 'progressBarFirst';
         if (options.range === 'true') {
           if (value > options.value2) {
-            options.value = value;
+            labelsOptions.value = value;
           } else if (value < options.value2) {
-            options.key = 'progressBarSecond';
-            options.value2 = value;
+            labelsOptions.key = 'secondLabels';
+            labelsOptions.value2 = value;
           }
         } else {
-          options.value = value;
+          labelsOptions.value = value;
         }
-        notifyObservers(options);
+        notifyObservers(labelsOptions);
       }
     };
     this.labels.append(label);
@@ -67,7 +67,7 @@ class Labels {
       );
       label.style.left = `${pixelsToMove}%`;
     }
-    label.addEventListener('click', progressBarClick);
+    label.addEventListener('click', labelsClick);
     this.values?.push(label);
   }
 

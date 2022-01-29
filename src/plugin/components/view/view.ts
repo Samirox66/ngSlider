@@ -43,23 +43,18 @@ class View extends Observer {
     this.viewElements.labels.create(this.notifyObservers.bind(this), options);
     this.viewElements.sliderTrack.create();
     if (options.range === 'true') {
-      if (!options.value2) {
-        options.value2 = options.min;
-      }
       this.createHandleWithValue(this.viewElements.secondHandle, this.viewElements.secondValue);
       this.viewElements.secondValue.getCurrentValue.textContent = options.value2.toString();
-      options.key = 'secondHandle';
-      this.changeValue(options);
+      this.changeValue(options, true);
     }
-    if (options.isValueVisible === false || options.isValueVisible === undefined) {
+    if (options.isValueVisible === false) {
       this.viewElements.firstValue.hide();
       this.viewElements.secondValue.hide();
     } else {
       this.viewElements.firstValue.show();
       this.viewElements.secondValue.show();
     }
-    options.key = 'firstHandle';
-    this.changeValue(options);
+    this.changeValue(options, false);
     this.viewElements.sliderTrack.fillWithColor(options);
   }
 
@@ -78,8 +73,8 @@ class View extends Observer {
   }
 
   setHandles(options: CompleteOptions) {
-    this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options, false);
-    this.viewElements.secondHandle?.setHandle(this.notifyObservers.bind(this), options, true);
+    this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options.isVertical ?? false, false);
+    this.viewElements.secondHandle.setHandle(this.notifyObservers.bind(this), options.isVertical ?? false, true);
   }
 
   get getViewElements() {
@@ -90,8 +85,8 @@ class View extends Observer {
     return this.slider;
   }
 
-  changeValue(options: CompleteOptions) {
-    if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
+  changeValue(options: CompleteOptions, isSecondHandle: boolean) {
+    if (isSecondHandle) {
       this.viewElements.secondValue.setTextOfCurrentValue(options.value2.toString());
       this.viewElements.secondHandle.moveHandle(options, options.value2);
     } else {
@@ -99,29 +94,29 @@ class View extends Observer {
       this.viewElements.firstHandle.moveHandle(options, options.value);
     }
     if (options.isValueVisible) {
-      this.detachCurrentValues(options);
-      if (options.range === 'true' && this.checkIfCurrentValuesIntersect(options)) {
-        this.uniteCurrentValues(options);
+      this.detachCurrentValues(options.value);
+      if (options.range === 'true' && this.checkIfCurrentValuesIntersect(options.isVertical ?? false)) {
+        this.uniteCurrentValues(options.value, options.value2);
       }
     }
   }
 
-  private uniteCurrentValues(options: CompleteOptions) {
+  private uniteCurrentValues(value: number, value2: number) {
     this.viewElements.secondValue.hide();
-    this.viewElements.firstValue.getCurrentValue.textContent = `${options.value2}-${options.value}`;
+    this.viewElements.firstValue.getCurrentValue.textContent = `${value2}-${value}`;
   }
 
-  private detachCurrentValues(options: CompleteOptions) {
+  private detachCurrentValues(value: number) {
     this.viewElements.secondValue.show();
-    this.viewElements.firstValue.getCurrentValue.textContent = options.value.toString();
+    this.viewElements.firstValue.getCurrentValue.textContent = value.toString();
   }
 
-  private checkIfCurrentValuesIntersect(options: CompleteOptions): boolean {
+  private checkIfCurrentValuesIntersect(isVertical: boolean): boolean {
     const firstElement = this.viewElements.firstValue.getCurrentValue.getBoundingClientRect();
     const secondElement = this.viewElements.secondValue.getCurrentValue.getBoundingClientRect();
-    const isFirstLowerThanSecond = options.isVertical && firstElement.top < secondElement.bottom;
+    const isFirstLowerThanSecond = isVertical && firstElement.top < secondElement.bottom;
     const isFirstMoreToTheLeftThanSecond = (
-      !options.isVertical && firstElement.left < secondElement.right
+      isVertical === false && firstElement.left < secondElement.right
     );
     if (isFirstLowerThanSecond || isFirstMoreToTheLeftThanSecond) {
       return true;

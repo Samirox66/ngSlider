@@ -1,5 +1,5 @@
 import Presenter from '../../../plugin/components/Presenter/Presenter';
-import { CompleteOptions } from '../../../plugin/components/Model/Model';
+import { CompleteOptions, ObserverOptions } from '../../../plugin/components/Model/Model';
 
 interface PanelIds {
   max: string,
@@ -131,16 +131,20 @@ class ConfigPanel {
   }
 
   addObservers(slider: Presenter) {
-    slider.getView.addObserver(this.valueChangedInputListener.bind(this));
+    slider.getView.addObserver(this.valueChangedInputListener);
   }
 
-  valueChangedInputListener(options: CompleteOptions) {
-    if (options.key === 'firstHandle' || options.key === 'progressBarFirst') {
-      this.firstValue.value = options.value.toString();
+  valueChangedInputListener(options: ObserverOptions) {
+    if (options.key === 'firstHandle' || options.key === 'firstLabels') {
+      if (options.value) {
+        this.firstValue.value = options.value.toString();
+      }
       return;
     }
-    if (options.key === 'secondHandle' || options.key === 'progressBarSecond') {
-      this.secondValue.value = options.value2.toString();
+    if (options.key === 'secondHandle' || options.key === 'secondLabels') {
+      if (options.value2) {
+        this.secondValue.value = options.value2.toString();
+      }
     }
   }
 
