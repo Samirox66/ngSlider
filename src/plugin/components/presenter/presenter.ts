@@ -1,5 +1,6 @@
-import Model, { ObserverOptions } from '../Model/Model';
+import Model from '../Model/Model';
 import View from '../View/View';
+import { ObserverOptions } from '../Observer/Observer';
 
 class Presenter {
   private view: View;
@@ -46,6 +47,7 @@ class Presenter {
     }
     this.model.setKey(options.key);
     this.model.calcValue();
+    this.model.notifyObservers(this.model.getOptions);
     this.updateSlider(options.key === 'secondHandle');
   }
 
@@ -60,6 +62,7 @@ class Presenter {
     } else if (options.value2) {
       this.model.setSecondValue(options.value2);
     }
+    this.model.notifyObservers(this.model.getOptions);
     this.updateSlider(options.key === 'secondLabels');
   }
 

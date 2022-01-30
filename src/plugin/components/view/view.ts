@@ -59,8 +59,8 @@ class View extends Observer {
   }
 
   private createHandleWithValue(handle: SliderHandle, value: CurrentValue) {
-    this.slider.append(handle.getSliderHandle);
     handle.getSliderHandle.append(value.getCurrentValue);
+    this.slider.append(handle.getSliderHandle);
     value.getCurrentValue.classList.add('ng-slider__current-value');
     handle.getSliderHandle.classList.add('ng-slider__handle');
   }
@@ -73,8 +73,8 @@ class View extends Observer {
   }
 
   setHandles(options: CompleteOptions) {
-    this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options.isVertical ?? false, false);
-    this.viewElements.secondHandle.setHandle(this.notifyObservers.bind(this), options.isVertical ?? false, true);
+    this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options, false);
+    this.viewElements.secondHandle.setHandle(this.notifyObservers.bind(this), options, true);
   }
 
   get getViewElements() {

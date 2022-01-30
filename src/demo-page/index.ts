@@ -34,7 +34,7 @@ const sliderApp = {
       isValueVisible: 'current-value-visible-button2',
     });
     const slider3: Presenter = ($('#slider-3') as Slider).ngSlider({
-      range: 'min', id: 'slider-3', max: 180, min: 120, isValueVisible: true, value: 170, step: 10, isVertical: false,
+      range: 'min', id: 'slider-3', max: 180, min: 120, isValueVisible: true, value: 170, step: 10,
     });
     const configPanel3: ConfigPanel = new ConfigPanel({
       firstValue: 'first-value3',

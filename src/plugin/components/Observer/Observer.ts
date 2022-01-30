@@ -1,4 +1,9 @@
-import { ObserverOptions } from '../Model/Model';
+interface ObserverOptions {
+  key: string,
+  currentCord?: number,
+  value?: number,
+  value2?: number
+}
 
 type ObserverFunction = (options: ObserverOptions) => void;
 
@@ -29,3 +34,4 @@ class Observer {
 }
 
 export default Observer;
+export { ObserverOptions };

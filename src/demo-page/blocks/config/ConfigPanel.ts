@@ -1,5 +1,6 @@
 import Presenter from '../../../plugin/components/Presenter/Presenter';
-import { CompleteOptions, ObserverOptions } from '../../../plugin/components/Model/Model';
+import { CompleteOptions } from '../../../plugin/components/Model/Model';
+import { ObserverOptions } from '../../../plugin/components/Observer/Observer';
 
 interface PanelIds {
   max: string,
@@ -131,17 +132,19 @@ class ConfigPanel {
   }
 
   addObservers(slider: Presenter) {
-    slider.getView.addObserver(this.valueChangedInputListener);
+    slider.getModel.addObserver(this.valueChangedInputListener.bind(this));
   }
 
   valueChangedInputListener(options: ObserverOptions) {
-    if (options.key === 'firstHandle' || options.key === 'firstLabels') {
+    const isRelatedToFirstValue = options.key === 'firstHandle' || options.key === 'firstLabels';
+    const isRelatedToSecondValue = options.key === 'secondHandle' || options.key === 'secondLabels';
+    if (isRelatedToFirstValue) {
       if (options.value) {
         this.firstValue.value = options.value.toString();
       }
       return;
     }
-    if (options.key === 'secondHandle' || options.key === 'secondLabels') {
+    if (isRelatedToSecondValue) {
       if (options.value2) {
         this.secondValue.value = options.value2.toString();
       }

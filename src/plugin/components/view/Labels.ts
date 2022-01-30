@@ -1,4 +1,5 @@
-import { CompleteOptions, ObserverOptions } from '../Model/Model';
+import { CompleteOptions } from '../Model/Model';
+import { ObserverOptions } from '../Observer/Observer';
 
 class Labels {
   private labels: HTMLDivElement;

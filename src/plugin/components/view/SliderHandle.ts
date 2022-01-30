@@ -1,4 +1,5 @@
-import { CompleteOptions, ObserverOptions } from '../Model/Model';
+import { CompleteOptions } from '../Model/Model';
+import { ObserverOptions } from '../Observer/Observer';
 
 class SliderHandle {
   private sliderHandle: HTMLDivElement;
@@ -9,7 +10,7 @@ class SliderHandle {
 
   setHandle(
     notifyObservers: (options: ObserverOptions) => void,
-    isVertical: boolean,
+    options: CompleteOptions,
     isSecondHandle: boolean,
   ) {
     const handleMouseDown = () => {
@@ -18,7 +19,7 @@ class SliderHandle {
         if (isSecondHandle) {
           handleOptions.key = 'secondHandle';
         }
-        if (isVertical) {
+        if (options.isVertical) {
           handleOptions.currentCord = event.pageY;
         } else {
           handleOptions.currentCord = event.pageX;

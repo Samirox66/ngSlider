@@ -1,3 +1,5 @@
+import Observer from '../Observer/Observer';
+
 interface CompleteOptions extends Options {
   key: string,
   value2: number,
@@ -5,13 +7,6 @@ interface CompleteOptions extends Options {
   endCord: number,
   currentCord: number,
   range: string
-}
-
-interface ObserverOptions {
-  key: string,
-  currentCord?: number,
-  value?: number,
-  value2?: number
 }
 
 interface Options {
@@ -26,10 +21,11 @@ interface Options {
   isVertical?: boolean,
 }
 
-class Model {
+class Model extends Observer {
   private options: CompleteOptions;
 
   constructor(op: Options) {
+    super();
     this.options = <CompleteOptions>op;
   }
 
@@ -38,9 +34,6 @@ class Model {
     const integerStep = this.options.step * 10 ** decimals;
     const maxMinIntegerDifference = (this.options.max - this.options.min) * 10 ** decimals;
     const isStepIncorrect = maxMinIntegerDifference % integerStep !== 0 || this.options.step <= 0;
-    if (this.options.isValueVisible === undefined) {
-      this.options.isValueVisible = false;
-    }
     if (!this.options.value2) {
       this.options.value2 = this.options.min;
     }
@@ -121,39 +114,41 @@ class Model {
 
   changeFirstValue(value: number) {
     const decimals = Model.countDecimals(this.options.step);
-    const isValueCloserToGreater = (value - this.options.min) % this.options.step > this.options.step / 2;
+    const remainderOfValue = (value - this.options.min) % this.options.step;
+    const isValueCloserToGreater = remainderOfValue > this.options.step / 2;
     if (value >= this.options.max) {
       this.options.value = this.options.max;
     } else if (this.options.range === 'true') {
       if (value <= this.options.value2 + this.options.step) {
         this.options.value = this.options.value2 + this.options.step;
       } else if (isValueCloserToGreater) {
-        this.options.value = value - ((value - this.options.min) % this.options.step) + this.options.step;
+        this.options.value = value - remainderOfValue + this.options.step;
       } else {
-        this.options.value = value - ((value - this.options.min) % this.options.step);
+        this.options.value = value - remainderOfValue;
       }
     } else if (value <= this.options.min) {
       this.options.value = this.options.min;
     } else if (isValueCloserToGreater) {
-      this.options.value = value - ((value - this.options.min) % this.options.step) + this.options.step;
+      this.options.value = value - remainderOfValue + this.options.step;
     } else {
-      this.options.value = value - ((value - this.options.min) % this.options.step);
+      this.options.value = value - remainderOfValue;
     }
     this.options.value = parseFloat(this.options.value.toFixed(decimals));
   }
 
   changeSecondValue(value: number) {
     const decimals = Model.countDecimals(this.options.step);
-    const isValueCloserToBiggerNumber = (value - this.options.min) % this.options.step > this.options.step / 2;
+    const remainderOfValue = (value - this.options.min) % this.options.step;
+    const isValueCloserToGreater = remainderOfValue > this.options.step / 2;
     if (this.options.range === 'true') {
       if (value <= this.options.min) {
         this.options.value2 = this.options.min;
       } else if (value >= this.options.value - this.options.step) {
         this.options.value2 = this.options.value - this.options.step;
-      } else if (isValueCloserToBiggerNumber) {
-        this.options.value2 = value - ((value - this.options.min) % this.options.step) + this.options.step;
+      } else if (isValueCloserToGreater) {
+        this.options.value2 = value - remainderOfValue + this.options.step;
       } else {
-        this.options.value2 = value - ((value - this.options.min) % this.options.step);
+        this.options.value2 = value - remainderOfValue;
       }
       this.options.value2 = parseFloat(this.options.value2.toFixed(decimals));
     }
@@ -162,7 +157,9 @@ class Model {
   setMaxValue(max: number): string {
     if (max > this.options.min) {
       const decimals = Model.countDecimals(this.options.step);
-      const isStepMultiplier = ((max - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0;
+      const isStepMultiplier = (
+        ((max - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0
+      );
       if (isStepMultiplier) {
         this.options.max = max;
         if (this.options.value > this.options.max) {
@@ -182,7 +179,9 @@ class Model {
   setMinValue(min: number):string {
     if (min < this.options.max) {
       const decimals = Model.countDecimals(this.options.step);
-      const isStepMultiplier = ((this.options.max - min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0;
+      const isStepMultiplier = (
+        ((this.options.max - min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0
+      );
       if (isStepMultiplier) {
         this.options.min = min;
         const valu2IsLessThanMin = this.options.range === 'true' && this.options.value2 < this.options.min;
@@ -200,7 +199,9 @@ class Model {
 
   setStep(step: number):string {
     const decimals = Model.countDecimals(step);
-    const isStepMultiplier = ((this.options.max - this.options.min) * 10 ** decimals) % (step * 10 ** decimals) === 0;
+    const isStepMultiplier = (
+      ((this.options.max - this.options.min) * 10 ** decimals) % (step * 10 ** decimals) === 0
+    );
     if (isStepMultiplier) {
       this.options.step = step;
       return '';
@@ -238,4 +239,4 @@ class Model {
 }
 
 export default Model;
-export { CompleteOptions, Options, ObserverOptions };
+export { CompleteOptions, Options };
