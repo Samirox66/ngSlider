@@ -1,17 +1,18 @@
-import SliderTrack from './SliderTrack';
-import SliderHandle from './SliderHandle';
+import Track from './Track';
+import Handle from './Handle';
 import Labels from './Labels';
-import CurrentValue from './СurrentValue';
-import { CompleteOptions } from '../Model/Model';
+import CurrentValue from './CurrentValue';
 import Observer from '../Observer/Observer';
+import { CompleteOptions } from '../Model/Model';
+import { rangeModule } from '../Model/consonants';
 
 export interface ViewElements {
-  sliderTrack: SliderTrack,
+  sliderTrack: Track,
   labels: Labels,
-  firstHandle: SliderHandle,
+  firstHandle: Handle,
   firstValue: CurrentValue,
   secondValue: CurrentValue,
-  secondHandle: SliderHandle
+  secondHandle: Handle
 }
 
 class View extends Observer {
@@ -23,10 +24,10 @@ class View extends Observer {
     super();
     this.viewElements = {
       labels: new Labels(),
-      sliderTrack: new SliderTrack(),
-      firstHandle: new SliderHandle(),
+      sliderTrack: new Track(),
+      firstHandle: new Handle(),
       firstValue: new CurrentValue(),
-      secondHandle: new SliderHandle(),
+      secondHandle: new Handle(),
       secondValue: new CurrentValue(),
     };
     const slider = document.getElementById(id);
@@ -42,7 +43,7 @@ class View extends Observer {
     this.createHandleWithValue(this.viewElements.firstHandle, this.viewElements.firstValue);
     this.viewElements.labels.create(this.notifyObservers.bind(this), options);
     this.viewElements.sliderTrack.create();
-    if (options.range === 'true') {
+    if (options.range === rangeModule.TRUE) {
       this.createHandleWithValue(this.viewElements.secondHandle, this.viewElements.secondValue);
       this.viewElements.secondValue.getCurrentValue.textContent = options.value2.toString();
       this.changeValue(options, true);
@@ -58,7 +59,7 @@ class View extends Observer {
     this.viewElements.sliderTrack.fillWithColor(options);
   }
 
-  private createHandleWithValue(handle: SliderHandle, value: CurrentValue) {
+  private createHandleWithValue(handle: Handle, value: CurrentValue) {
     handle.getSliderHandle.append(value.getCurrentValue);
     this.slider.append(handle.getSliderHandle);
     value.getCurrentValue.classList.add('ng-slider__current-value');
@@ -95,7 +96,7 @@ class View extends Observer {
     }
     if (options.isValueVisible) {
       this.detachCurrentValues(options.value);
-      if (options.range === 'true' && this.checkIfCurrentValuesIntersect(options.isVertical ?? false)) {
+      if (options.range === rangeModule.TRUE && this.checkIfCurrentValuesIntersect(options.isVertical ?? false)) {
         this.uniteCurrentValues(options.value, options.value2);
       }
     }
@@ -125,31 +126,23 @@ class View extends Observer {
   }
 
   makeVertical() {
-    this.viewElements.firstHandle.getSliderHandle.style.left = '-5px';
-    this.viewElements.secondHandle.getSliderHandle.style.left = '-5px';
-    this.viewElements.sliderTrack.getSliderTrack.style.width = '5px';
-    this.viewElements.sliderTrack.getSliderTrack.style.left = '0';
     this.slider.classList.add('ng-slider_vertical');
     this.viewElements.labels.getLabels.classList.add('ng-slider__values_vertical');
     this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
     this.viewElements.secondValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
-    this.viewElements.sliderTrack.getSliderTrack.classList.add('ng-slider__slider-track_vertical');
-    this.viewElements.firstHandle.getSliderHandle.classList.add('ng-slider__handle_vertical');
-    this.viewElements.secondHandle.getSliderHandle.classList.add('ng-slider__handle_vertical');
+    this.viewElements.sliderTrack.makeVertical();
+    this.viewElements.firstHandle.makeVertical();
+    this.viewElements.secondHandle.makeVertical();
   }
 
   makeHorizontal() {
-    this.viewElements.firstHandle.getSliderHandle.style.top = '-5px';
-    this.viewElements.secondHandle.getSliderHandle.style.top = '-5px';
-    this.viewElements.sliderTrack.getSliderTrack.style.height = '5px';
-    this.viewElements.sliderTrack.getSliderTrack.style.top = '0';
     this.slider.classList.remove('ng-slider_vertical');
     this.viewElements.labels.getLabels.classList.remove('ng-slider__values_vertical');
     this.viewElements.firstValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
     this.viewElements.secondValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
-    this.viewElements.sliderTrack.getSliderTrack.classList.remove('ng-slider__slider-track_vertical');
-    this.viewElements.firstHandle.getSliderHandle.classList.remove('ng-slider__handle_vertical');
-    this.viewElements.secondHandle.getSliderHandle.classList.remove('ng-slider__handle_vertical');
+    this.viewElements.sliderTrack.makeHorizontal();
+    this.viewElements.firstHandle.makeHorizontal();
+    this.viewElements.secondHandle.makeHorizontal();
   }
 }
 

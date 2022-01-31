@@ -1,6 +1,7 @@
-import Model from '../Model/Model';
 import View from '../View/View';
 import { ObserverOptions } from '../Observer/Observer';
+import Model from '../Model/Model';
+import { actionModule, rangeModule } from '../Model/consonants';
 
 class Presenter {
   private view: View;
@@ -28,17 +29,28 @@ class Presenter {
     if (this.model.getOptions.isVertical) {
       this.view.makeVertical();
       sliderRect = this.view.getSlider.getBoundingClientRect();
-      this.model.setCords(sliderRect.top, sliderRect.bottom);
+      this.model.setCords(sliderRect.top + window.scrollY, sliderRect.bottom + window.scrollY);
     } else {
       sliderRect = this.view.getSlider.getBoundingClientRect();
-      this.model.setCords(sliderRect.left, sliderRect.right);
+      this.model.setCords(sliderRect.left + window.scrollX, sliderRect.right + window.scrollX);
     }
     this.view.displaySlider(this.model.getOptions);
     this.view.setHandles(this.model.getOptions);
+    window.addEventListener('resize', this.handleResizeWindow.bind(this));
+  }
+
+  handleResizeWindow() {
+    const sliderRect = this.view.getSlider.getBoundingClientRect();
+    if (this.model.getOptions.isVertical) {
+      this.model.setCords(sliderRect.top + window.scrollY, sliderRect.bottom + window.scrollY);
+    } else {
+      this.model.setCords(sliderRect.left + window.scrollX, sliderRect.right + window.scrollX);
+    }
+    this.rewriteSlider();
   }
 
   handleInputListener(options: ObserverOptions): void {
-    const keyIsNotRelatedToHandle = options.key !== 'firstHandle' && options.key !== 'secondHandle';
+    const keyIsNotRelatedToHandle = options.key !== actionModule.FIRSTHANDLE && options.key !== actionModule.SECONDHANDLE;
     if (keyIsNotRelatedToHandle) {
       return;
     }
@@ -48,11 +60,11 @@ class Presenter {
     this.model.setKey(options.key);
     this.model.calcValue();
     this.model.notifyObservers(this.model.getOptions);
-    this.updateSlider(options.key === 'secondHandle');
+    this.updateSlider(options.key === actionModule.SECONDHANDLE);
   }
 
   progressBarClickListener(options: ObserverOptions): void {
-    const keyIsNotRelatedToLabels = options.key !== 'firstLabels' && options.key !== 'secondLabels';
+    const keyIsNotRelatedToLabels = options.key !== actionModule.FIRSTLABEL && options.key !== actionModule.SECONDLABEL;
     if (keyIsNotRelatedToLabels) {
       return;
     }
@@ -63,16 +75,16 @@ class Presenter {
       this.model.setSecondValue(options.value2);
     }
     this.model.notifyObservers(this.model.getOptions);
-    this.updateSlider(options.key === 'secondLabels');
+    this.updateSlider(options.key === actionModule.SECONDLABEL);
   }
 
   changeFirstValue(value: number | string) {
-    if (typeof (value) === 'string') {
+    if (typeof value === 'string') {
       this.model.changeFirstValue(parseFloat(value));
-    } else if (typeof (value) === 'number') {
+    } else if (typeof value === 'number') {
       this.model.changeFirstValue(value);
     }
-    this.model.getOptions.key = 'firstHandle';
+    this.model.getOptions.key = actionModule.FIRSTHANDLE;
     this.updateSlider(false);
   }
 
@@ -82,7 +94,7 @@ class Presenter {
     } else if (typeof (value) === 'number') {
       this.getModel.changeSecondValue(value);
     }
-    this.model.getOptions.key = 'secondHandle';
+    this.model.getOptions.key = actionModule.SECONDHANDLE;
     this.updateSlider(true);
   }
 
@@ -121,7 +133,7 @@ class Presenter {
 
   changeRange(range: string) {
     this.model.setRange(range);
-    const rangeIsNotDefined = range !== 'true' && range !== 'max' && range !== 'min';
+    const rangeIsNotDefined = range !== rangeModule.TRUE && range !== rangeModule.MAX && range !== rangeModule.MIN;
     if (rangeIsNotDefined) {
       this.view.getViewElements.sliderTrack.hide();
     }
@@ -133,18 +145,18 @@ class Presenter {
     if (isVertical) {
       this.view.makeVertical();
       sliderRect = this.view.getSlider.getBoundingClientRect();
-      this.model.setCords(sliderRect.top, sliderRect.bottom);
+      this.model.setCords(sliderRect.top + window.scrollY, sliderRect.bottom + window.scrollY);
     } else {
       this.view.makeHorizontal();
       sliderRect = this.view.getSlider.getBoundingClientRect();
-      this.model.setCords(sliderRect.left, sliderRect.right);
+      this.model.setCords(sliderRect.left + window.scrollX, sliderRect.right + window.scrollX);
     }
-    this.model.setVerticalMode(isVertical);
+    this.model.setMode(isVertical);
     this.rewriteSlider();
   }
 
-  changeVisabilityOfValues(isVisible: boolean) {
-    this.model.setVisability(isVisible);
+  changeVisibilityOfValues(isVisible: boolean) {
+    this.model.setVisibility(isVisible);
     this.rewriteSlider();
   }
 

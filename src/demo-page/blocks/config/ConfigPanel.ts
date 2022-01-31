@@ -116,7 +116,7 @@ class ConfigPanel {
     this.range.addEventListener('change', () => slider.changeRange(this.range.value));
     this.step.addEventListener('change', () => this.changeStep(slider));
     this.verticalMode.addEventListener('change', () => slider.changeMode(this.verticalMode.checked));
-    this.isValueVisible.addEventListener('change', () => slider.changeVisabilityOfValues(this.isValueVisible.checked));
+    this.isValueVisible.addEventListener('change', () => slider.changeVisibilityOfValues(this.isValueVisible.checked));
   }
 
   setPanel(options: CompleteOptions) {

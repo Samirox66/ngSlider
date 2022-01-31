@@ -1,3 +1,4 @@
+import { actionModule, rangeModule } from './consonants';
 import Observer from '../Observer/Observer';
 
 interface CompleteOptions extends Options {
@@ -89,13 +90,13 @@ class Model extends Observer {
     value = parseFloat(value.toFixed(decimals));
     const valueIsInsideMaxMin = value >= this.options.min && value <= this.options.max;
     if (valueIsInsideMaxMin) {
-      if (this.options.key === 'secondHandle') {
+      if (this.options.key === actionModule.SECONDHANDLE) {
         if (value >= this.options.value) {
           return;
         }
         this.options.value2 = value;
       } else {
-        const valueIsLessThanValue2 = this.options.range === 'true' && value <= this.options.value2;
+        const valueIsLessThanValue2 = this.options.range === rangeModule.TRUE && value <= this.options.value2;
         if (valueIsLessThanValue2) {
           return;
         }
@@ -118,7 +119,7 @@ class Model extends Observer {
     const isValueCloserToGreater = remainderOfValue > this.options.step / 2;
     if (value >= this.options.max) {
       this.options.value = this.options.max;
-    } else if (this.options.range === 'true') {
+    } else if (this.options.range === rangeModule.TRUE) {
       if (value <= this.options.value2 + this.options.step) {
         this.options.value = this.options.value2 + this.options.step;
       } else if (isValueCloserToGreater) {
@@ -140,7 +141,7 @@ class Model extends Observer {
     const decimals = Model.countDecimals(this.options.step);
     const remainderOfValue = (value - this.options.min) % this.options.step;
     const isValueCloserToGreater = remainderOfValue > this.options.step / 2;
-    if (this.options.range === 'true') {
+    if (this.options.range === rangeModule.TRUE) {
       if (value <= this.options.min) {
         this.options.value2 = this.options.min;
       } else if (value >= this.options.value - this.options.step) {
@@ -165,7 +166,7 @@ class Model extends Observer {
         if (this.options.value > this.options.max) {
           this.options.value = this.options.max;
         }
-        const value2isGreaterThanMax = this.options.range === 'true' && this.options.value2 > this.options.max;
+        const value2isGreaterThanMax = this.options.range === rangeModule.TRUE && this.options.value2 > this.options.max;
         if (value2isGreaterThanMax) {
           this.options.value2 = this.options.min;
         }
@@ -184,8 +185,8 @@ class Model extends Observer {
       );
       if (isStepMultiplier) {
         this.options.min = min;
-        const valu2IsLessThanMin = this.options.range === 'true' && this.options.value2 < this.options.min;
-        if (valu2IsLessThanMin) {
+        const value2IsLessThanMin = this.options.range === rangeModule.TRUE && this.options.value2 < this.options.min;
+        if (value2IsLessThanMin) {
           this.options.value2 = this.options.min;
         } else if (this.options.value < this.options.min) {
           this.options.value = this.options.min;
@@ -210,19 +211,19 @@ class Model extends Observer {
   }
 
   setRange(range: string) {
-    const rangeIsDefined = range === 'min' || range === 'max' || range === 'true';
+    const rangeIsDefined = range === rangeModule.MIN || range === rangeModule.MAX || range === rangeModule.TRUE;
     if (rangeIsDefined) {
       this.options.range = range;
     } else {
-      this.options.range = 'false';
+      this.options.range = rangeModule.FALSE;
     }
   }
 
-  setVisability(isVisible: boolean) {
+  setVisibility(isVisible: boolean) {
     this.options.isValueVisible = isVisible;
   }
 
-  setVerticalMode(isVertical: boolean) {
+  setMode(isVertical: boolean) {
     this.options.isVertical = isVertical;
   }
 

@@ -1,9 +1,9 @@
 import { CompleteOptions } from '../../plugin/components/Model/Model';
-import SliderHandle from '../../plugin/components/View/SliderHandle';
+import Handle from '../../plugin/components/View/Handle';
 import View from '../../plugin/components/View/View';
 
-describe('SliderHandle tests', () => {
-  let sliderHandle: SliderHandle;
+describe('Handle tests', () => {
+  let sliderHandle: Handle;
   const options: CompleteOptions = {
     value: 3,
     value2: 2,
@@ -19,7 +19,7 @@ describe('SliderHandle tests', () => {
   };
 
   beforeEach(() => {
-    sliderHandle = new SliderHandle();
+    sliderHandle = new Handle();
   });
 
   test('hide should change display property to none', () => {
@@ -27,7 +27,7 @@ describe('SliderHandle tests', () => {
     expect(sliderHandle.getSliderHandle.style.display).toBe('none');
   });
 
-  test('show should change disaply property to block', () => {
+  test('show should change display property to block', () => {
     sliderHandle.show();
     expect(sliderHandle.getSliderHandle.style.display).toBe('block');
   });

@@ -43,7 +43,7 @@ describe('Observer tests', () => {
     expect(options.value).toBe(2);
     expect(mockSetValueToMax.mock.calls.length).toBe(1);
   });
-  test('Observer should be empty after initializiation', () => {
+  test('Observer should be empty after initialization', () => {
     expect(observer.observers.length).toBe(0);
   });
   test('observerRemove should delete observer', () => {

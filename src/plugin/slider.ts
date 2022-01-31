@@ -19,5 +19,3 @@ declare global {
     return slider;
   };
 }(jQuery));
-
-export default Options;

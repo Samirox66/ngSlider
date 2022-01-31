@@ -1,4 +1,4 @@
-import CurrentValue from '../../plugin/components/View/СurrentValue';
+import CurrentValue from '../../plugin/components/View/CurrentValue';
 
 describe('CurrentValue tests', () => {
   let currentValue: CurrentValue;

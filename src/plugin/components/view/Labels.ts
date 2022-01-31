@@ -39,7 +39,7 @@ class Labels {
     label.textContent = i.toString();
     label.setAttribute('type', 'button');
     label.classList.add('ng-slider__value');
-    const labelsClick = (): void => {
+    const handleLabelsClick = (): void => {
       const labelsOptions: ObserverOptions = { key: 'firstLabels' };
       if (label.textContent) {
         const value = parseFloat(label.textContent);
@@ -68,7 +68,7 @@ class Labels {
       );
       label.style.left = `${pixelsToMove}%`;
     }
-    label.addEventListener('click', labelsClick);
+    label.addEventListener('click', handleLabelsClick);
     this.values?.push(label);
   }
 

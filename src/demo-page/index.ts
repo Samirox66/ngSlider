@@ -1,7 +1,8 @@
 import $ from 'jquery';
+
 import './styles.scss';
-import '../plugin/slider';
 import '../plugin/slider.scss';
+import '../plugin/slider';
 import Presenter from '../plugin/components/Presenter/Presenter';
 import ConfigPanel from './blocks/config/ConfigPanel';
 

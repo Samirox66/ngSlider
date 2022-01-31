@@ -30,7 +30,7 @@ describe('Presenter tests', () => {
     root.remove();
   });
 
-  test('onInit should call validateOptoins', () => {
+  test('onInit should call validateOptions', () => {
     const validateOptionsMock = (
       jest.fn(presenter.getModel.validateOptions.bind(presenter.getModel))
     );
@@ -71,7 +71,7 @@ describe('Presenter tests', () => {
     expect(makeVerticalMock.mock.calls.length).toBe(1);
   });
 
-  test('handleInputListener should call calueValue in model', () => {
+  test('handleInputListener should call calculateValue in model', () => {
     const calcValueMock = jest.fn(presenter.getModel.calcValue.bind(presenter.getModel));
     presenter.getModel.calcValue = calcValueMock;
     presenter.handleInputListener(options);
@@ -163,17 +163,17 @@ describe('Presenter tests', () => {
   });
   test('changeMode should call setVerticalMode in model', () => {
     const setVerticalModeMock = (
-      jest.fn(presenter.getModel.setVerticalMode.bind(presenter.getModel))
+      jest.fn(presenter.getModel.setMode.bind(presenter.getModel))
     );
-    presenter.getModel.setVerticalMode = setVerticalModeMock;
+    presenter.getModel.setMode = setVerticalModeMock;
     presenter.changeMode(false);
     expect(setVerticalModeMock.mock.calls.length).toBe(1);
   });
 
-  test('changeVisabilityOfValues should call setVisability in model', () => {
-    const setVisabilityMock = jest.fn(presenter.getModel.setVisability.bind(presenter.getModel));
-    presenter.getModel.setVisability = setVisabilityMock;
-    presenter.changeVisabilityOfValues(true);
-    expect(setVisabilityMock.mock.calls.length).toBe(1);
+  test('changeVisibilityOfValues should call setVisibility in model', () => {
+    const setVisibilityMock = jest.fn(presenter.getModel.setVisibility.bind(presenter.getModel));
+    presenter.getModel.setVisibility = setVisibilityMock;
+    presenter.changeVisibilityOfValues(true);
+    expect(setVisibilityMock.mock.calls.length).toBe(1);
   });
 });

@@ -20,7 +20,7 @@ describe('Model tests', () => {
     model = new Model(options);
   });
 
-  test('validateOptoins should throw an error if step is incorrect', () => {
+  test('validateOptions should throw an error if step is incorrect', () => {
     expect(() => model.validateOptions()).not.toThrowError();
     model.getOptions.step = 3;
     expect(() => model.validateOptions()).toThrowError();
@@ -62,7 +62,7 @@ describe('Model tests', () => {
     expect(model.getOptions.endCord).toBe(500);
   });
 
-  test('calcValue should calcalute values based on current coordinate', () => {
+  test('calcValue should calculate values based on current coordinate', () => {
     model.calcValue();
     expect(model.getOptions.value).toBe(6);
     model.getOptions.currentCord = 290;
@@ -88,7 +88,7 @@ describe('Model tests', () => {
     expect(model.getOptions.value2).toBe(3);
   });
 
-  test('changeFirstValue should change first value to the closest appropraite value', () => {
+  test('changeFirstValue should change first value to the closest appropriate value', () => {
     model.changeFirstValue(8.6);
     expect(model.getOptions.value).toBe(9);
     model.changeFirstValue(8.3);
@@ -106,7 +106,7 @@ describe('Model tests', () => {
     expect(model.getOptions.value).toBe(10);
   });
 
-  test('changeSecondValue should change second value to the closest appropraite value in range mode', () => {
+  test('changeSecondValue should change second value to the closest appropriate value in range mode', () => {
     model.changeSecondValue(2);
     expect(model.getOptions.value2).toBe(3);
     model.getOptions.range = 'true';
@@ -139,7 +139,7 @@ describe('Model tests', () => {
     model.setMaxValue(6);
     expect(model.getOptions.value2).toBe(2);
   });
-  test('setMaxValue should return an error string if the step is not a multyplier of the difference between new max value and min one', () => {
+  test('setMaxValue should return an error string if the step is not a multiplier of the difference between new max value and min one', () => {
     expect(model.setMaxValue(7.7)).toBe('The step should be a multiplier of the difference between max and min values');
   });
 
@@ -154,7 +154,7 @@ describe('Model tests', () => {
     model.setMinValue(4);
     expect(model.getOptions.value2).toBe(4);
   });
-  test('setMinValue should return an error string if the step is not a multyplier of the difference between new max value and min one', () => {
+  test('setMinValue should return an error string if the step is not a multiplier of the difference between new max value and min one', () => {
     expect(model.setMinValue(1.2)).toBe('The step should be a multiplier of the difference between max and min values');
   });
 
@@ -172,13 +172,13 @@ describe('Model tests', () => {
     expect(model.getOptions.range).toBe('false');
   });
 
-  test('setVisability should change boolean value displaying if current value is visible', () => {
-    model.setVisability(false);
+  test('setVisibility should change boolean value displaying if current value is visible', () => {
+    model.setVisibility(false);
     expect(model.getOptions.isValueVisible).toBe(false);
   });
 
   test('setVerticalMode should change boolean value displaying if slider is in vertical mode', () => {
-    model.setVerticalMode(true);
+    model.setMode(true);
     expect(model.getOptions.isVertical).toBe(true);
   });
 
