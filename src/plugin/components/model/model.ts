@@ -38,18 +38,22 @@ class Model extends Observer {
     if (!this.options.value2) {
       this.options.value2 = this.options.min;
     }
+
     if (this.options.min >= this.options.max) {
       throw new Error('Min value should be less than max one');
     }
+
     if (isStepIncorrect) {
       throw new Error(`${this.options.step} is incorrect step for ${this.options.id}`);
     }
+
     const value2isOutsideMaxMin = (
       this.options.value2 < this.options.min || this.options.value2 >= this.options.max
     );
     if (value2isOutsideMaxMin) {
       this.options.value2 = this.options.min;
     }
+
     const isValueMoreThanMax = this.options.value > this.options.max;
     const isValueLessThanMin = this.options.value < this.options.min;
     const isValue2NotLessThanValue = this.options.value2 >= this.options.value;
@@ -87,19 +91,22 @@ class Model extends Observer {
     } else {
       value -= (valueMinIntegerDifference % integerStep) / 10 ** decimals;
     }
+
     value = parseFloat(value.toFixed(decimals));
     const valueIsInsideMaxMin = value >= this.options.min && value <= this.options.max;
     if (valueIsInsideMaxMin) {
-      if (this.options.key === actionModule.SECONDHANDLE) {
+      if (this.options.key === actionModule.SECOND_HANDLE) {
         if (value >= this.options.value) {
           return;
         }
+
         this.options.value2 = value;
       } else {
         const valueIsLessThanValue2 = this.options.range === rangeModule.TRUE && value <= this.options.value2;
         if (valueIsLessThanValue2) {
           return;
         }
+
         this.options.value = value;
       }
     }
@@ -134,6 +141,7 @@ class Model extends Observer {
     } else {
       this.options.value = value - remainderOfValue;
     }
+
     this.options.value = parseFloat(this.options.value.toFixed(decimals));
   }
 
@@ -151,6 +159,7 @@ class Model extends Observer {
       } else {
         this.options.value2 = value - remainderOfValue;
       }
+
       this.options.value2 = parseFloat(this.options.value2.toFixed(decimals));
     }
   }
@@ -170,10 +179,13 @@ class Model extends Observer {
         if (value2isGreaterThanMax) {
           this.options.value2 = this.options.min;
         }
+
         return '';
       }
+
       return 'The step should be a multiplier of the difference between max and min values';
     }
+
     return 'Max value should be more than min one';
   }
 
@@ -191,10 +203,13 @@ class Model extends Observer {
         } else if (this.options.value < this.options.min) {
           this.options.value = this.options.min;
         }
+
         return '';
       }
+
       return 'The step should be a multiplier of the difference between max and min values';
     }
+
     return 'Min value should be less than max one';
   }
 
@@ -207,6 +222,7 @@ class Model extends Observer {
       this.options.step = step;
       return '';
     }
+
     return 'The step should be a multiplier of the difference between max and min values';
   }
 
@@ -228,9 +244,10 @@ class Model extends Observer {
   }
 
   private static countDecimals = (value: number): number => {
-    if (value.toString().includes('.')) {
-      return value.toString().split('.')[1].length;
+    if (String(value).includes('.')) {
+      return String(value).split('.')[1].length;
     }
+
     return 0;
   };
 

@@ -14,29 +14,37 @@ class Handle {
     options: CompleteOptions,
     isSecondHandle: boolean,
   ) {
-    const handleHandleMouseDown = () => {
-      const handleHandleMouseMove = (event: PointerEvent) => {
-        const handleOptions: ObserverOptions = { key: actionModule.FIRSTHANDLE };
-        if (isSecondHandle) {
-          handleOptions.key = actionModule.SECONDHANDLE;
-        }
-        if (options.isVertical) {
-          handleOptions.currentCord = event.pageY;
-        } else {
-          handleOptions.currentCord = event.pageX;
-        }
-        notifyObservers(handleOptions);
-      };
-      const handleHandleMouseUp = () => {
-        document.removeEventListener('pointermove', handleHandleMouseMove);
-        this.handleElement.removeEventListener('pointerup', handleHandleMouseUp);
-      };
-      document.addEventListener('pointermove', handleHandleMouseMove);
-      document.addEventListener('pointerup', handleHandleMouseUp);
-    };
     document.ondragstart = () => false;
     document.body.onselectstart = () => false;
-    this.handleElement.addEventListener('pointerdown', handleHandleMouseDown);
+    this.handleElement.addEventListener(
+      'pointerdown',
+      this.handleHandleMouseDown.bind(this, options, isSecondHandle, notifyObservers
+    ));
+  }
+  
+  handleHandleMouseDown({ isVertical }: CompleteOptions, isSecondHandle: boolean, notifyObservers: (options: ObserverOptions) => void,) {
+    const handleHandleMouseMove = (event: PointerEvent) => {
+      const handleOptions: ObserverOptions = { key: actionModule.FIRST_HANDLE };
+      if (isSecondHandle) {
+        handleOptions.key = actionModule.SECOND_HANDLE;
+      }
+
+      if (isVertical) {
+        handleOptions.currentCord = event.pageY;
+      } else {
+        handleOptions.currentCord = event.pageX;
+      }
+
+      notifyObservers(handleOptions);
+    };
+    
+    const handleHandleMouseUp = () => {
+      document.removeEventListener('pointermove', handleHandleMouseMove);
+      this.handleElement.removeEventListener('pointerup', handleHandleMouseUp);
+    };
+
+    document.addEventListener('pointermove', handleHandleMouseMove);
+    document.addEventListener('pointerup', handleHandleMouseUp);
   }
 
   get getSliderHandle() {

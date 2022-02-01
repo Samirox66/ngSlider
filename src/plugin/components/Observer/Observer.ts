@@ -20,7 +20,7 @@ class Observer {
 
   removeObserver(observerToDelete: ObserverFunction) {
     this.observers.forEach((observer, index) => {
-      if (observer.toString() === observerToDelete.toString()) {
+      if (String(observer) === String(observerToDelete)) {
         this.observers.splice(index, 1);
       }
     });

@@ -1,8 +1,8 @@
 const actionModule = {
-  FIRSTHANDLE: 'firstHandle',
-  SECONDHANDLE: 'secondHandle',
-  FIRSTLABEL: 'firstLabel',
-  SECONDLABEL: 'secondLabel',
+  FIRST_HANDLE: 'firstHandle',
+  SECOND_HANDLE: 'secondHandle',
+  FIRST_LABELS: 'firstLabels',
+  SECOND_LABELS: 'secondLabels',
 };
 
 const rangeModule = {

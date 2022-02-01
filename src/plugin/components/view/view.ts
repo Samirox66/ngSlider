@@ -34,27 +34,31 @@ class View extends Observer {
     if (!slider) {
       throw new Error('Wrong Id');
     }
+
     this.slider = slider;
   }
 
   displaySlider(options: CompleteOptions) {
+    const { range, isValueVisible, value2 } = options;
     this.slider.append(this.viewElements.labels.getLabels);
     this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
     this.createHandleWithValue(this.viewElements.firstHandle, this.viewElements.firstValue);
     this.viewElements.labels.create(this.notifyObservers.bind(this), options);
     this.viewElements.sliderTrack.create();
-    if (options.range === rangeModule.TRUE) {
+    if (range === rangeModule.TRUE) {
       this.createHandleWithValue(this.viewElements.secondHandle, this.viewElements.secondValue);
-      this.viewElements.secondValue.getCurrentValue.textContent = options.value2.toString();
+      this.viewElements.secondValue.getCurrentValue.textContent = String(value2);
       this.changeValue(options, true);
     }
-    if (options.isValueVisible === false) {
+
+    if (isValueVisible === false) {
       this.viewElements.firstValue.hide();
       this.viewElements.secondValue.hide();
     } else {
       this.viewElements.firstValue.show();
       this.viewElements.secondValue.show();
     }
+
     this.changeValue(options, false);
     this.viewElements.sliderTrack.fillWithColor(options);
   }
@@ -87,17 +91,19 @@ class View extends Observer {
   }
 
   changeValue(options: CompleteOptions, isSecondHandle: boolean) {
+    const { range, isValueVisible, value2, value, isVertical } = options;
     if (isSecondHandle) {
-      this.viewElements.secondValue.setTextOfCurrentValue(options.value2.toString());
-      this.viewElements.secondHandle.moveHandle(options, options.value2);
+      this.viewElements.secondValue.setTextOfCurrentValue(String(value2));
+      this.viewElements.secondHandle.moveHandle(options, value2);
     } else {
-      this.viewElements.firstValue.setTextOfCurrentValue(options.value.toString());
-      this.viewElements.firstHandle.moveHandle(options, options.value);
+      this.viewElements.firstValue.setTextOfCurrentValue(String(value));
+      this.viewElements.firstHandle.moveHandle(options, value);
     }
-    if (options.isValueVisible) {
-      this.detachCurrentValues(options.value);
-      if (options.range === rangeModule.TRUE && this.checkIfCurrentValuesIntersect(options.isVertical ?? false)) {
-        this.uniteCurrentValues(options.value, options.value2);
+
+    if (isValueVisible) {
+      this.detachCurrentValues(value);
+      if (range === rangeModule.TRUE && this.checkIfCurrentValuesIntersect(isVertical ?? false)) {
+        this.uniteCurrentValues(value, value2);
       }
     }
   }
@@ -109,7 +115,7 @@ class View extends Observer {
 
   private detachCurrentValues(value: number) {
     this.viewElements.secondValue.show();
-    this.viewElements.firstValue.getCurrentValue.textContent = value.toString();
+    this.viewElements.firstValue.getCurrentValue.textContent = String(value);
   }
 
   private checkIfCurrentValuesIntersect(isVertical: boolean): boolean {
@@ -122,6 +128,7 @@ class View extends Observer {
     if (isFirstLowerThanSecond || isFirstMoreToTheLeftThanSecond) {
       return true;
     }
+
     return false;
   }
 

@@ -43,15 +43,15 @@ class ConfigPanel {
 
   changeFirstValue(slider: Presenter) {
     slider.changeFirstValue(this.firstValue.value);
-    if (this.firstValue.value !== slider.getModel.getOptions.value.toString()) {
-      this.firstValue.value = slider.getModel.getOptions.value.toString();
+    if (this.firstValue.value !== String(slider.getModel.getOptions.value)) {
+      this.firstValue.value = String(slider.getModel.getOptions.value);
     }
   }
 
   changeSecondValue(slider: Presenter) {
     slider.changeSecondValue(this.secondValue.value);
-    if (this.secondValue.value !== slider.getModel.getOptions.value2.toString()) {
-      this.secondValue.value = slider.getModel.getOptions.value2.toString();
+    if (this.secondValue.value !== String(slider.getModel.getOptions.value2)) {
+      this.secondValue.value = String(slider.getModel.getOptions.value2);
     }
   }
 
@@ -60,22 +60,24 @@ class ConfigPanel {
     if (error !== '') {
       ConfigPanel.manageError(error, this.minValue);
     }
-    this.minValue.value = slider.getModel.getOptions.min.toString();
+
+    this.minValue.value = String(slider.getModel.getOptions.min);
     if (slider.getModel.getOptions.range === 'true') {
       if (slider.getModel.getOptions.min > parseFloat(this.secondValue.value)) {
-        this.secondValue.value = slider.getModel.getOptions.min.toString();
+        this.secondValue.value = String(slider.getModel.getOptions.min);
       }
     } else if (slider.getModel.getOptions.min > parseFloat(this.firstValue.value)) {
-      this.firstValue.value = slider.getModel.getOptions.min.toString();
+      this.firstValue.value = String(slider.getModel.getOptions.min);
     }
   }
 
-  changeStep(slider:Presenter) {
+  changeStep(slider: Presenter) {
     const error = slider.changeStep(this.step.value);
     if (error !== '') {
       ConfigPanel.manageError(error, this.step);
     }
-    this.step.value = slider.getModel.getOptions.step.toString();
+
+    this.step.value = String(slider.getModel.getOptions.step);
   }
 
   changeMaxValue(slider: Presenter) {
@@ -83,9 +85,10 @@ class ConfigPanel {
     if (error !== '') {
       ConfigPanel.manageError(error, this.maxValue);
     }
-    this.maxValue.value = slider.getModel.getOptions.max.toString();
+
+    this.maxValue.value = String(slider.getModel.getOptions.max);
     if (slider.getModel.getOptions.max < parseFloat(this.firstValue.value)) {
-      this.firstValue.value = slider.getModel.getOptions.max.toString();
+      this.firstValue.value = String(slider.getModel.getOptions.max);
     }
   }
 
@@ -119,15 +122,15 @@ class ConfigPanel {
     this.isValueVisible.addEventListener('change', () => slider.changeVisibilityOfValues(this.isValueVisible.checked));
   }
 
-  setPanel(options: CompleteOptions) {
-    this.range.value = options.range;
-    this.step.value = options.step.toString();
-    this.maxValue.value = options.max.toString();
-    this.minValue.value = options.min.toString();
-    this.firstValue.value = options.value.toString();
-    this.verticalMode.checked = options.isVertical ?? false;
-    if (options.range === 'true') {
-      this.secondValue.value = options.value2.toString();
+  setPanel({ range, max, min, value, value2, isVertical, step }: CompleteOptions) {
+    this.range.value = range;
+    this.step.value = String(step);
+    this.maxValue.value = String(max);
+    this.minValue.value = String(min);
+    this.firstValue.value = String(value);
+    this.verticalMode.checked = isVertical ?? false;
+    if (range === 'true') {
+      this.secondValue.value = String(value2);
     }
   }
 
@@ -135,18 +138,19 @@ class ConfigPanel {
     slider.getModel.addObserver(this.valueChangedInputListener.bind(this));
   }
 
-  valueChangedInputListener(options: ObserverOptions) {
-    const isRelatedToFirstValue = options.key === 'firstHandle' || options.key === 'firstLabels';
-    const isRelatedToSecondValue = options.key === 'secondHandle' || options.key === 'secondLabels';
+  valueChangedInputListener({ key, value, value2 }: ObserverOptions) {
+    const isRelatedToFirstValue = key === 'firstHandle' || key === 'firstLabels';
+    const isRelatedToSecondValue = key === 'secondHandle' || key === 'secondLabels';
     if (isRelatedToFirstValue) {
-      if (options.value) {
-        this.firstValue.value = options.value.toString();
+      if (value) {
+        this.firstValue.value = String(value);
       }
       return;
     }
+
     if (isRelatedToSecondValue) {
-      if (options.value2) {
-        this.secondValue.value = options.value2.toString();
+      if (value2) {
+        this.secondValue.value = String(value2);
       }
     }
   }

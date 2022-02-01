@@ -12,11 +12,11 @@ class Track {
     this.trackElement.classList.add('ng-slider__track');
   }
 
-  fillWithColor(options: CompleteOptions) {
+  fillWithColor({ value, min, max, isVertical, value2, range }: CompleteOptions) {
     const fill = {
       min: () => {
-        const percentToFill = ((options.value - options.min) / (options.max - options.min)) * 100;
-        if (options.isVertical) {
+        const percentToFill = ((value - min) / (max - min)) * 100;
+        if (isVertical) {
           this.trackElement.style.top = '0%';
           this.trackElement.style.height = `${percentToFill}%`;
         } else {
@@ -25,11 +25,11 @@ class Track {
         }
       },
       max: () => {
-        const percentToFill = ((options.max - options.value) / (options.max - options.min)) * 100;
+        const percentToFill = ((max - value) / (max - min)) * 100;
         const percentToMoveLeft = (
-          ((options.value - options.min) / (options.max - options.min)) * 100
+          ((value - min) / (max - min)) * 100
         );
-        if (options.isVertical) {
+        if (isVertical) {
           this.trackElement.style.top = `${percentToMoveLeft}%`;
           this.trackElement.style.height = `${percentToFill}%`;
         } else {
@@ -39,10 +39,10 @@ class Track {
       },
       true: () => {
         const percentToFill = (
-          ((options.value - options.value2) / (options.max - options.min)) * 100
+          ((value - value2) / (max - min)) * 100
         );
-        const percentToMove = ((options.value2 - options.min) / (options.max - options.min)) * 100;
-        if (options.isVertical) {
+        const percentToMove = ((value2 - min) / (max - min)) * 100;
+        if (isVertical) {
           this.trackElement.style.top = `${percentToMove}%`;
           this.trackElement.style.height = `${percentToFill}%`;
         } else {
@@ -51,22 +51,29 @@ class Track {
         }
       },
       default: () => {
-        if (options.isVertical) {
+        if (isVertical) {
           this.trackElement.style.height = '0%';
         } else {
           this.trackElement.style.width = '0%';
         }
       },
     };
-    switch (options.range) {
-      case rangeModule.MIN: fill.min();
+    switch (range) {
+      case rangeModule.MIN: {
+        fill.min();
         break;
-      case rangeModule.MAX: fill.max();
+      }
+      case rangeModule.MAX: {
+        fill.max();
         break;
-      case rangeModule.TRUE: fill.true();
+      }
+      case rangeModule.TRUE: {
+        fill.true();
         break;
-      default: fill.default();
-        break;
+      }
+      default: {
+        fill.default();
+      }
     }
   }
 
