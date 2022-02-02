@@ -40,14 +40,14 @@ class View extends Observer {
 
   displaySlider(options: CompleteOptions) {
     const { range, isValueVisible, value2 } = options;
-    this.slider.append(this.viewElements.labels.getLabels);
-    this.slider.append(this.viewElements.sliderTrack.getSliderTrack);
+    this.slider.append(this.viewElements.labels.getLabels());
+    this.slider.append(this.viewElements.sliderTrack.getSliderTrack());
     this.createHandleWithValue(this.viewElements.firstHandle, this.viewElements.firstValue);
     this.viewElements.labels.create(this.notifyObservers.bind(this), options);
     this.viewElements.sliderTrack.create();
     if (range === rangeModule.TRUE) {
       this.createHandleWithValue(this.viewElements.secondHandle, this.viewElements.secondValue);
-      this.viewElements.secondValue.getCurrentValue.textContent = String(value2);
+      this.viewElements.secondValue.getCurrentValue().textContent = String(value2);
       this.changeValue(options, true);
     }
 
@@ -63,13 +63,6 @@ class View extends Observer {
     this.viewElements.sliderTrack.fillWithColor(options);
   }
 
-  private createHandleWithValue(handle: Handle, value: CurrentValue) {
-    handle.getSliderHandle.append(value.getCurrentValue);
-    this.slider.append(handle.getSliderHandle);
-    value.getCurrentValue.classList.add('ng-slider__current-value');
-    handle.getSliderHandle.classList.add('ng-slider__handle');
-  }
-
   destroySlider() {
     this.viewElements.labels.destroy();
     while (this.slider.hasChildNodes()) {
@@ -82,16 +75,18 @@ class View extends Observer {
     this.viewElements.secondHandle.setHandle(this.notifyObservers.bind(this), options, true);
   }
 
-  get getViewElements() {
+  getViewElements() {
     return this.viewElements;
   }
 
-  get getSlider() {
+  getSlider() {
     return this.slider;
   }
 
   changeValue(options: CompleteOptions, isSecondHandle: boolean) {
-    const { range, isValueVisible, value2, value, isVertical } = options;
+    const {
+      range, isValueVisible, value2, value, isVertical,
+    } = options;
     if (isSecondHandle) {
       this.viewElements.secondValue.setTextOfCurrentValue(String(value2));
       this.viewElements.secondHandle.moveHandle(options, value2);
@@ -108,19 +103,46 @@ class View extends Observer {
     }
   }
 
+  makeVertical() {
+    this.slider.classList.add('ng-slider_vertical');
+    this.viewElements.labels.getLabels().classList.add('ng-slider__values_vertical');
+    this.viewElements.firstValue.getCurrentValue().classList.add('ng-slider__current-value_vertical');
+    this.viewElements.secondValue.getCurrentValue().classList.add('ng-slider__current-value_vertical');
+    this.viewElements.sliderTrack.makeVertical();
+    this.viewElements.firstHandle.makeVertical();
+    this.viewElements.secondHandle.makeVertical();
+  }
+
+  makeHorizontal() {
+    this.slider.classList.remove('ng-slider_vertical');
+    this.viewElements.labels.getLabels().classList.remove('ng-slider__values_vertical');
+    this.viewElements.firstValue.getCurrentValue().classList.remove('ng-slider__current-value_vertical');
+    this.viewElements.secondValue.getCurrentValue().classList.remove('ng-slider__current-value_vertical');
+    this.viewElements.sliderTrack.makeHorizontal();
+    this.viewElements.firstHandle.makeHorizontal();
+    this.viewElements.secondHandle.makeHorizontal();
+  }
+
+  private createHandleWithValue(handle: Handle, value: CurrentValue) {
+    handle.getSliderHandle().append(value.getCurrentValue());
+    this.slider.append(handle.getSliderHandle());
+    value.getCurrentValue().classList.add('ng-slider__current-value');
+    handle.getSliderHandle().classList.add('ng-slider__handle');
+  }
+
   private uniteCurrentValues(value: number, value2: number) {
     this.viewElements.secondValue.hide();
-    this.viewElements.firstValue.getCurrentValue.textContent = `${value2}-${value}`;
+    this.viewElements.firstValue.getCurrentValue().textContent = `${value2}-${value}`;
   }
 
   private detachCurrentValues(value: number) {
     this.viewElements.secondValue.show();
-    this.viewElements.firstValue.getCurrentValue.textContent = String(value);
+    this.viewElements.firstValue.getCurrentValue().textContent = String(value);
   }
 
   private checkIfCurrentValuesIntersect(isVertical: boolean): boolean {
-    const firstElement = this.viewElements.firstValue.getCurrentValue.getBoundingClientRect();
-    const secondElement = this.viewElements.secondValue.getCurrentValue.getBoundingClientRect();
+    const firstElement = this.viewElements.firstValue.getCurrentValue().getBoundingClientRect();
+    const secondElement = this.viewElements.secondValue.getCurrentValue().getBoundingClientRect();
     const isFirstLowerThanSecond = isVertical && firstElement.top < secondElement.bottom;
     const isFirstMoreToTheLeftThanSecond = (
       isVertical === false && firstElement.left < secondElement.right
@@ -130,26 +152,6 @@ class View extends Observer {
     }
 
     return false;
-  }
-
-  makeVertical() {
-    this.slider.classList.add('ng-slider_vertical');
-    this.viewElements.labels.getLabels.classList.add('ng-slider__values_vertical');
-    this.viewElements.firstValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
-    this.viewElements.secondValue.getCurrentValue.classList.add('ng-slider__current-value_vertical');
-    this.viewElements.sliderTrack.makeVertical();
-    this.viewElements.firstHandle.makeVertical();
-    this.viewElements.secondHandle.makeVertical();
-  }
-
-  makeHorizontal() {
-    this.slider.classList.remove('ng-slider_vertical');
-    this.viewElements.labels.getLabels.classList.remove('ng-slider__values_vertical');
-    this.viewElements.firstValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
-    this.viewElements.secondValue.getCurrentValue.classList.remove('ng-slider__current-value_vertical');
-    this.viewElements.sliderTrack.makeHorizontal();
-    this.viewElements.firstHandle.makeHorizontal();
-    this.viewElements.secondHandle.makeHorizontal();
   }
 }
 

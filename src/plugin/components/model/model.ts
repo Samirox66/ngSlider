@@ -92,7 +92,7 @@ class Model extends Observer {
       value -= (valueMinIntegerDifference % integerStep) / 10 ** decimals;
     }
 
-    value = parseFloat(value.toFixed(decimals));
+    value = Number(value.toFixed(decimals));
     const valueIsInsideMaxMin = value >= this.options.min && value <= this.options.max;
     if (valueIsInsideMaxMin) {
       if (this.options.key === actionModule.SECOND_HANDLE) {
@@ -142,7 +142,7 @@ class Model extends Observer {
       this.options.value = value - remainderOfValue;
     }
 
-    this.options.value = parseFloat(this.options.value.toFixed(decimals));
+    this.options.value = Number(this.options.value.toFixed(decimals));
   }
 
   changeSecondValue(value: number) {
@@ -243,16 +243,16 @@ class Model extends Observer {
     this.options.isVertical = isVertical;
   }
 
-  private static countDecimals = (value: number): number => {
+  getOptions() {
+    return this.options;
+  }
+
+  private static countDecimals(value: number): number {
     if (String(value).includes('.')) {
       return String(value).split('.')[1].length;
     }
 
     return 0;
-  };
-
-  get getOptions() {
-    return this.options;
   }
 }
 

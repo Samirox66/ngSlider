@@ -37,11 +37,11 @@ describe('Labels tests', () => {
     labels.create(view.notifyObservers.bind(view), options);
     labels.destroy();
     expect(labels.getValues.length).toBe(0);
-    expect(labels.getLabels.hasChildNodes()).toBeFalsy();
+    expect(labels.getLabels().hasChildNodes()).toBeFalsy();
   });
   test('create should add labels in DOM', () => {
     labels.create(view.notifyObservers.bind(view), options);
     expect(labels.getValues.length).toBe(3);
-    expect(labels.getValues[0].textContent).toBe(options.min.toString());
+    expect(labels.getValues()[0].textContent).toBe(options.min.toString());
   });
 });

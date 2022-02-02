@@ -67,7 +67,7 @@ const sliderApp = {
   },
   set(slider: Presenter, configPanel: ConfigPanel) {
     configPanel.addEventListeners(slider);
-    configPanel.setPanel(slider.getModel.getOptions);
+    configPanel.setPanelValues(slider.getModel().getOptions());
     configPanel.addObservers(slider);
   },
 };

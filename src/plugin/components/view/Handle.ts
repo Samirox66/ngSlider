@@ -18,11 +18,11 @@ class Handle {
     document.body.onselectstart = () => false;
     this.handleElement.addEventListener(
       'pointerdown',
-      this.handleHandleMouseDown.bind(this, options, isSecondHandle, notifyObservers
-    ));
+      this.handleHandleMouseDown.bind(this, options, isSecondHandle, notifyObservers),
+    );
   }
-  
-  handleHandleMouseDown({ isVertical }: CompleteOptions, isSecondHandle: boolean, notifyObservers: (options: ObserverOptions) => void,) {
+
+  handleHandleMouseDown({ isVertical }: CompleteOptions, isSecondHandle: boolean, notifyObservers: (options: ObserverOptions) => void) {
     const handleHandleMouseMove = (event: PointerEvent) => {
       const handleOptions: ObserverOptions = { key: actionModule.FIRST_HANDLE };
       if (isSecondHandle) {
@@ -37,7 +37,7 @@ class Handle {
 
       notifyObservers(handleOptions);
     };
-    
+
     const handleHandleMouseUp = () => {
       document.removeEventListener('pointermove', handleHandleMouseMove);
       this.handleElement.removeEventListener('pointerup', handleHandleMouseUp);
@@ -47,7 +47,7 @@ class Handle {
     document.addEventListener('pointerup', handleHandleMouseUp);
   }
 
-  get getSliderHandle() {
+  getSliderHandle() {
     return this.handleElement;
   }
 

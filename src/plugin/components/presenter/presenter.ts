@@ -4,20 +4,13 @@ import Model from '../Model/Model';
 import { actionModule, rangeModule } from '../Model/consonants';
 
 class Presenter {
-  private view: View;
+  constructor(private view: View, private model: Model) {}
 
-  private model: Model;
-
-  constructor(view: View, model: Model) {
-    this.view = view;
-    this.model = model;
-  }
-
-  get getModel() {
+  getModel() {
     return this.model;
   }
 
-  get getView() {
+  getView() {
     return this.view;
   }
 
@@ -25,13 +18,13 @@ class Presenter {
     this.model.validateOptions();
     this.view.addObserver(this.handleInputListener.bind(this));
     this.view.addObserver(this.progressBarClickListener.bind(this));
-    if (this.model.getOptions.isVertical) {
+    if (this.model.getOptions().isVertical) {
       this.view.makeVertical();
     }
 
     this.setCords();
-    this.view.displaySlider(this.model.getOptions);
-    this.view.setHandles(this.model.getOptions);
+    this.view.displaySlider(this.model.getOptions());
+    this.view.setHandles(this.model.getOptions());
     window.addEventListener('resize', this.handleResizeWindow.bind(this));
   }
 
@@ -40,7 +33,7 @@ class Presenter {
     this.rewriteSlider();
   }
 
-  handleInputListener({ key, currentCord}: ObserverOptions): void {
+  handleInputListener({ key, currentCord }: ObserverOptions): void {
     const keyIsNotRelatedToHandle = key !== actionModule.FIRST_HANDLE && key !== actionModule.SECOND_HANDLE;
     if (keyIsNotRelatedToHandle) {
       return;
@@ -48,15 +41,15 @@ class Presenter {
 
     if (currentCord) {
       this
-      .model.setCurrentCord(currentCord);
+        .model.setCurrentCord(currentCord);
     }
     this.model.setKey(key);
     this.model.calcValue();
-    this.model.notifyObservers(this.model.getOptions);
+    this.model.notifyObservers(this.model.getOptions());
     this.updateSlider(key === actionModule.SECOND_HANDLE);
   }
 
-  progressBarClickListener({key, value, value2 }: ObserverOptions): void {
+  progressBarClickListener({ key, value, value2 }: ObserverOptions): void {
     const keyIsNotRelatedToLabels = key !== actionModule.FIRST_LABELS && key !== actionModule.SECOND_LABELS;
     if (keyIsNotRelatedToLabels) {
       return;
@@ -69,38 +62,38 @@ class Presenter {
       this.model.setSecondValue(value2);
     }
 
-    this.model.notifyObservers(this.model.getOptions);
+    this.model.notifyObservers(this.model.getOptions());
     this.updateSlider(key === actionModule.SECOND_LABELS);
   }
 
   changeFirstValue(value: number | string) {
     if (typeof value === 'string') {
-      this.model.changeFirstValue(parseFloat(value));
+      this.model.changeFirstValue(Number(value));
     } else if (typeof value === 'number') {
       this.model.changeFirstValue(value);
     }
 
-    this.model.getOptions.key = actionModule.FIRST_HANDLE;
+    this.model.getOptions().key = actionModule.FIRST_HANDLE;
     this.updateSlider(false);
   }
 
   changeSecondValue(value: number | string) {
     if (typeof (value) === 'string') {
-      this.getModel.changeSecondValue(parseFloat(value));
+      this.model.changeSecondValue(Number(value));
     } else if (typeof (value) === 'number') {
-      this.getModel.changeSecondValue(value);
+      this.model.changeSecondValue(value);
     }
 
-    this.model.getOptions.key = actionModule.SECOND_HANDLE;
+    this.model.getOptions().key = actionModule.SECOND_HANDLE;
     this.updateSlider(true);
   }
 
   changeMaxValue(value: number | string): string {
     let error = '';
     if (typeof (value) === 'string') {
-      error = this.getModel.setMaxValue(parseFloat(value));
+      error = this.model.setMaxValue(Number(value));
     } else if (typeof (value) === 'number') {
-      error = this.getModel.setMaxValue(value);
+      error = this.model.setMaxValue(value);
     }
 
     this.rewriteSlider();
@@ -110,9 +103,9 @@ class Presenter {
   changeMinValue(value: number | string): string {
     let error = '';
     if (typeof (value) === 'string') {
-      error = this.getModel.setMinValue(parseFloat(value));
+      error = this.model.setMinValue(Number(value));
     } else if (typeof (value) === 'number') {
-      error = this.getModel.setMinValue(value);
+      error = this.model.setMinValue(value);
     }
 
     this.rewriteSlider();
@@ -122,9 +115,9 @@ class Presenter {
   changeStep(step: number | string): string {
     let error = '';
     if (typeof (step) === 'string') {
-      error = this.getModel.setStep(parseFloat(step));
+      error = this.model.setStep(Number(step));
     } else if (typeof (step) === 'number') {
-      error = this.getModel.setStep(step);
+      error = this.model.setStep(step);
     }
 
     this.rewriteSlider();
@@ -135,9 +128,9 @@ class Presenter {
     this.model.setRange(range);
     const rangeIsDefined = range === rangeModule.TRUE || range === rangeModule.MAX || range === rangeModule.MIN;
     if (!rangeIsDefined) {
-      this.view.getViewElements.sliderTrack.hide();
+      this.view.getViewElements().sliderTrack.hide();
     }
-    
+
     this.rewriteSlider();
   }
 
@@ -160,17 +153,17 @@ class Presenter {
 
   private rewriteSlider() {
     this.view.destroySlider();
-    this.view.displaySlider(this.model.getOptions);
+    this.view.displaySlider(this.model.getOptions());
   }
 
   private updateSlider(isSecond: boolean) {
-    this.view.changeValue(this.model.getOptions, isSecond);
-    this.view.getViewElements.sliderTrack.fillWithColor(this.model.getOptions);
+    this.view.changeValue(this.model.getOptions(), isSecond);
+    this.view.getViewElements().sliderTrack.fillWithColor(this.model.getOptions());
   }
 
   private setCords() {
-    const sliderRect = this.view.getSlider.getBoundingClientRect();
-    if (this.model.getOptions.isVertical) {
+    const sliderRect = this.view.getSlider().getBoundingClientRect();
+    if (this.model.getOptions().isVertical) {
       this.model.setCords(sliderRect.top + window.scrollY, sliderRect.bottom + window.scrollY);
     } else {
       this.model.setCords(sliderRect.left + window.scrollX, sliderRect.right + window.scrollX);

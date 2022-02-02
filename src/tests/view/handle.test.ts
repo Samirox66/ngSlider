@@ -24,12 +24,12 @@ describe('Handle tests', () => {
 
   test('hide should change display property to none', () => {
     sliderHandle.hide();
-    expect(sliderHandle.getSliderHandle.style.display).toBe('none');
+    expect(sliderHandle.getSliderHandle().style.display).toBe('none');
   });
 
   test('show should change display property to block', () => {
     sliderHandle.show();
-    expect(sliderHandle.getSliderHandle.style.display).toBe('block');
+    expect(sliderHandle.getSliderHandle().style.display).toBe('block');
   });
 
   test('getSliderHandle should return sliderHandle', () => {
@@ -38,12 +38,12 @@ describe('Handle tests', () => {
 
   test('moveHandle should change top or left property of sliderHandle', () => {
     sliderHandle.moveHandle(options, 4);
-    expect(sliderHandle.getSliderHandle.style.left).toBe('75%');
+    expect(sliderHandle.getSliderHandle().style.left).toBe('75%');
   });
 
   test('setHandle should set event listener of pointerdown to handle', () => {
-    const eventListenerMock = jest.fn(sliderHandle.getSliderHandle.addEventListener);
-    sliderHandle.getSliderHandle.addEventListener = eventListenerMock;
+    const eventListenerMock = jest.fn(sliderHandle.getSliderHandle().addEventListener);
+    sliderHandle.getSliderHandle().addEventListener = eventListenerMock;
     document.body.innerHTML = '<div id=\'slider-test\'></div>';
     const view = new View(options.id);
     sliderHandle.setHandle(view.notifyObservers, options, false);

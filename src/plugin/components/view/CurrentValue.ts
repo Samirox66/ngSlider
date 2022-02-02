@@ -5,7 +5,7 @@ class CurrentValue {
     this.currentValue = document.createElement('div');
   }
 
-  get getCurrentValue() {
+  getCurrentValue() {
     return this.currentValue;
   }
 

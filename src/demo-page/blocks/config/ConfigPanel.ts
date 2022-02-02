@@ -43,15 +43,15 @@ class ConfigPanel {
 
   changeFirstValue(slider: Presenter) {
     slider.changeFirstValue(this.firstValue.value);
-    if (this.firstValue.value !== String(slider.getModel.getOptions.value)) {
-      this.firstValue.value = String(slider.getModel.getOptions.value);
+    if (this.firstValue.value !== String(slider.getModel().getOptions().value)) {
+      this.firstValue.value = String(slider.getModel().getOptions().value);
     }
   }
 
   changeSecondValue(slider: Presenter) {
     slider.changeSecondValue(this.secondValue.value);
-    if (this.secondValue.value !== String(slider.getModel.getOptions.value2)) {
-      this.secondValue.value = String(slider.getModel.getOptions.value2);
+    if (this.secondValue.value !== String(slider.getModel().getOptions().value2)) {
+      this.secondValue.value = String(slider.getModel().getOptions().value2);
     }
   }
 
@@ -61,13 +61,13 @@ class ConfigPanel {
       ConfigPanel.manageError(error, this.minValue);
     }
 
-    this.minValue.value = String(slider.getModel.getOptions.min);
-    if (slider.getModel.getOptions.range === 'true') {
-      if (slider.getModel.getOptions.min > parseFloat(this.secondValue.value)) {
-        this.secondValue.value = String(slider.getModel.getOptions.min);
+    this.minValue.value = String(slider.getModel().getOptions().min);
+    if (slider.getModel().getOptions().range === 'true') {
+      if (slider.getModel().getOptions().min > Number(this.secondValue.value)) {
+        this.secondValue.value = String(slider.getModel().getOptions().min);
       }
-    } else if (slider.getModel.getOptions.min > parseFloat(this.firstValue.value)) {
-      this.firstValue.value = String(slider.getModel.getOptions.min);
+    } else if (slider.getModel().getOptions().min > Number(this.firstValue.value)) {
+      this.firstValue.value = String(slider.getModel().getOptions().min);
     }
   }
 
@@ -77,7 +77,7 @@ class ConfigPanel {
       ConfigPanel.manageError(error, this.step);
     }
 
-    this.step.value = String(slider.getModel.getOptions.step);
+    this.step.value = String(slider.getModel().getOptions().step);
   }
 
   changeMaxValue(slider: Presenter) {
@@ -86,29 +86,10 @@ class ConfigPanel {
       ConfigPanel.manageError(error, this.maxValue);
     }
 
-    this.maxValue.value = String(slider.getModel.getOptions.max);
-    if (slider.getModel.getOptions.max < parseFloat(this.firstValue.value)) {
-      this.firstValue.value = String(slider.getModel.getOptions.max);
+    this.maxValue.value = String(slider.getModel().getOptions().max);
+    if (slider.getModel().getOptions().max < Number(this.firstValue.value)) {
+      this.firstValue.value = String(slider.getModel().getOptions().max);
     }
-  }
-
-  static manageError(error: string, inputWithError: HTMLInputElement) {
-    const errorElement = ConfigPanel.showError(error, inputWithError);
-    setTimeout((): void => {
-      errorElement.style.opacity = '0.7';
-    }, 1000);
-    setTimeout((): void => {
-      errorElement.style.opacity = '0.4';
-    }, 2000);
-    setTimeout(() => errorElement.remove(), 3000);
-  }
-
-  static showError(error: string, inputWithError: HTMLInputElement): HTMLParagraphElement {
-    const errorElement = document.createElement('p');
-    errorElement.textContent = error;
-    errorElement.classList.add('config__error');
-    inputWithError.parentElement?.append(errorElement);
-    return errorElement;
   }
 
   addEventListeners(slider: Presenter) {
@@ -122,7 +103,9 @@ class ConfigPanel {
     this.isValueVisible.addEventListener('change', () => slider.changeVisibilityOfValues(this.isValueVisible.checked));
   }
 
-  setPanel({ range, max, min, value, value2, isVertical, step }: CompleteOptions) {
+  setPanelValues({
+    range, max, min, value, value2, isVertical, step,
+  }: CompleteOptions) {
     this.range.value = range;
     this.step.value = String(step);
     this.maxValue.value = String(max);
@@ -135,7 +118,7 @@ class ConfigPanel {
   }
 
   addObservers(slider: Presenter) {
-    slider.getModel.addObserver(this.valueChangedInputListener.bind(this));
+    slider.getModel().addObserver(this.valueChangedInputListener.bind(this));
   }
 
   valueChangedInputListener({ key, value, value2 }: ObserverOptions) {
@@ -155,36 +138,55 @@ class ConfigPanel {
     }
   }
 
-  get getFirstValue() {
+  getFirstValue() {
     return this.firstValue;
   }
 
-  get getSecondValue() {
+  getSecondValue() {
     return this.secondValue;
   }
 
-  get getMaxValue() {
+  getMaxValue() {
     return this.maxValue;
   }
 
-  get getMinValue() {
+  getMinValue() {
     return this.minValue;
   }
 
-  get getRange() {
+  getRange() {
     return this.range;
   }
 
-  get getStep() {
+  getStep() {
     return this.step;
   }
 
-  get getVerticalMode() {
+  getVerticalMode() {
     return this.verticalMode;
   }
 
-  get getCurrentValueVisible() {
+  getCurrentValueVisible() {
     return this.isValueVisible;
+  }
+
+  static manageError(error: string, inputWithError: HTMLInputElement) {
+    const errorElement = ConfigPanel.showError(error, inputWithError);
+    setTimeout((): void => {
+      errorElement.style.opacity = '0.7';
+    }, 1000);
+    setTimeout((): void => {
+      errorElement.style.opacity = '0.4';
+    }, 2000);
+    setTimeout(() => errorElement.remove(), 3000);
+  }
+
+  static showError(error: string, inputWithError: HTMLInputElement): HTMLParagraphElement {
+    const errorElement = document.createElement('p');
+    errorElement.textContent = error;
+    errorElement.classList.add('config__error');
+    inputWithError.parentElement?.append(errorElement);
+    return errorElement;
   }
 }
 

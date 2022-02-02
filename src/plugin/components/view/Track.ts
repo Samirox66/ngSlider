@@ -12,7 +12,9 @@ class Track {
     this.trackElement.classList.add('ng-slider__track');
   }
 
-  fillWithColor({ value, min, max, isVertical, value2, range }: CompleteOptions) {
+  fillWithColor({
+    value, min, max, isVertical, value2, range,
+  }: CompleteOptions) {
     const fill = {
       min: () => {
         const percentToFill = ((value - min) / (max - min)) * 100;
@@ -93,7 +95,7 @@ class Track {
     this.trackElement.classList.remove('ng-slider__slider-track_vertical');
   }
 
-  get getSliderTrack() {
+  getSliderTrack() {
     return this.trackElement;
   }
 }
