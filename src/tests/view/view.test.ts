@@ -16,6 +16,7 @@ describe('View tests', () => {
     range: 'true',
     key: '',
     currentCord: 0,
+    isValueVisible: false
   };
 
   beforeEach(() => {
@@ -123,7 +124,7 @@ describe('View tests', () => {
     expect(view.getSlider().classList.contains('ng-slider_vertical')).toBeTruthy();
     expect(view.getViewElements().firstHandle.getSliderHandle().classList.contains('ng-slider__handle_vertical')).toBeTruthy();
     expect(view.getViewElements().secondHandle.getSliderHandle().classList.contains('ng-slider__handle_vertical')).toBeTruthy();
-    expect(view.getViewElements().sliderTrack.getSliderTrack().classList.contains('ng-slider__slider-track_vertical')).toBeTruthy();
+    expect(view.getViewElements().sliderTrack.getSliderTrack().classList.contains('ng-slider__track_vertical')).toBeTruthy();
     expect(view.getViewElements().labels.getLabels().classList.contains('ng-slider__values_vertical')).toBeTruthy();
     expect(view.getViewElements().firstValue.getCurrentValue().classList.contains('ng-slider__current-value_vertical')).toBeTruthy();
     expect(view.getViewElements().secondValue.getCurrentValue().classList.contains('ng-slider__current-value_vertical')).toBeTruthy();

@@ -5,11 +5,8 @@ import { ObserverOptions } from '../Observer/Observer';
 class Labels {
   private labels: HTMLDivElement;
 
-  private values: HTMLDivElement[];
-
   constructor() {
     this.labels = document.createElement('div');
-    this.values = [];
   }
 
   create(notifyObservers: (options: ObserverOptions) => void, options: CompleteOptions) {
@@ -61,16 +58,11 @@ class Labels {
   destroy() {
     while (this.labels.hasChildNodes()) {
       this.labels.firstChild?.remove();
-      this.values.pop();
     }
   }
 
   getLabels() {
     return this.labels;
-  }
-
-  getValues() {
-    return this.values;
   }
 
   private createLabel(
@@ -99,7 +91,6 @@ class Labels {
     }
 
     label.addEventListener('click', Labels.handleLabelsClick.bind(this, options, label, notifyObservers));
-    this.values?.push(label);
   }
 }
 

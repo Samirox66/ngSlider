@@ -1,6 +1,7 @@
 import Presenter from './components/Presenter/Presenter';
 import Model, { Options } from './components/Model/Model';
 import View from './components/View/View';
+import './slider.scss';
 
 declare global {
   interface Slider extends JQuery {

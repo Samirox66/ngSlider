@@ -56,10 +56,20 @@ describe('Model tests', () => {
     expect(model.getOptions().value).toBe(10);
   });
 
+  test('setKey should set key in options', () => {
+    model.setKey('firstHandle');
+    expect(model.getOptions().key).toBe('firstHandle');
+  });
+
   test('setCords should set start and end coords in options', () => {
     model.setCords(300, 500);
     expect(model.getOptions().startCord).toBe(300);
     expect(model.getOptions().endCord).toBe(500);
+  });
+
+  test('setCurrentCord should set current cord in options', () => {
+    model.setCurrentCord(240);
+    expect(model.getOptions().currentCord).toBe(240);
   });
 
   test('calcValue should calculate values based on current coordinate', () => {
@@ -87,6 +97,16 @@ describe('Model tests', () => {
     model.calcValue();
     expect(model.getOptions().value2).toBe(3);
   });
+
+  test('setFirstValue should set first value in options', () => {
+    model.setFirstValue(3);
+    expect(model.getOptions().value).toBe(3);
+  });
+
+  test('setSecondValue should set second value on options', () => {
+    model.setSecondValue(5);
+    expect(model.getOptions().value2).toBe(5);
+  })
 
   test('changeFirstValue should change first value to the closest appropriate value', () => {
     model.changeFirstValue(8.6);
@@ -183,6 +203,6 @@ describe('Model tests', () => {
   });
 
   test('getOptions should return options', () => {
-    expect(model.getOptions).toEqual(options);
+    expect(model.getOptions()).toEqual(options);
   });
 });

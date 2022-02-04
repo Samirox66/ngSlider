@@ -21,7 +21,7 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({
             filename: '[name].css'
-        })
+        }),
     ],
     module: {
             rules: [

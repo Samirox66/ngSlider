@@ -28,7 +28,7 @@ describe('SliderTrack tests', () => {
 
   test('create should add class to element', () => {
     sliderTrack.create();
-    expect(sliderTrack.getSliderTrack().classList.contains('ng-slider__slider-track')).toBeTruthy();
+    expect(sliderTrack.getSliderTrack().classList.contains('ng-slider__track')).toBeTruthy();
   });
 
   test('fillWithColor should change width or height of sliderTrack and move it', () => {

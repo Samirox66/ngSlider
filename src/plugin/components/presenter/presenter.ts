@@ -40,9 +40,9 @@ class Presenter {
     }
 
     if (currentCord) {
-      this
-        .model.setCurrentCord(currentCord);
+      this.model.setCurrentCord(currentCord);
     }
+    
     this.model.setKey(key);
     this.model.calcValue();
     this.model.notifyObservers(this.model.getOptions());
