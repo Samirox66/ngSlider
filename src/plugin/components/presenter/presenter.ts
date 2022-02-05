@@ -14,6 +14,92 @@ class Presenter {
     return this.view;
   }
 
+  getAttr(prop: string): string | undefined{
+    if (this.model.getOptions().hasOwnProperty(prop)) {
+      switch (prop) {
+        case 'min': {
+          return String(this.model.getOptions().min);
+        }
+
+        case 'max': {
+          return String(this.model.getOptions().max);
+        }
+
+        case 'value': {
+          return String(this.model.getOptions().value);
+        }
+
+        case 'value2': {
+          return String(this.model.getOptions().value2);
+        }
+
+        case 'range': {
+          return this.model.getOptions().range;
+        }
+
+        case 'isValueVisible': {
+          return String(this.model.getOptions().isValueVisible);
+        }
+
+        case 'step': {
+          return String(this.model.getOptions().step);
+        }
+
+        case 'isVertical': {
+          return String(this.model.getOptions().isVertical);
+        }
+      }
+    } else {
+      throw new Error('Wrong property of options');
+    }
+  }
+
+  setAttr(prop: string, value: string) {
+    if (this.model.getOptions().hasOwnProperty(prop)) {
+      switch (prop) {
+        case 'min': {
+         this.model.getOptions().min = Number(value);
+         break;
+        }
+
+        case 'max': {
+          this.model.getOptions().max = Number(value);
+          break;
+        }
+
+        case 'value': {
+          this.model.getOptions().value = Number(value);
+          break;
+        }
+
+        case 'value2': {
+          this.model.getOptions().value2 = Number(value);
+          break;
+        }
+
+        case 'range': {
+          this.model.getOptions().range = value;
+          break;
+        }
+
+        case 'isValueVisible': {
+          this.model.getOptions().isValueVisible = Boolean(value);
+          break;
+        }
+
+        case 'step': {
+          this.model.getOptions().step = Number(value);
+          break;
+        }
+
+        case 'isVertical': {
+          this.model.getOptions().isVertical = Boolean(value);
+          break;
+        }
+      }
+    }
+  }
+
   onInit() {
     this.model.validateOptions();
     this.view.addObserver(this.handleInputListener.bind(this));

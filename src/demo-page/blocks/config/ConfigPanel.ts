@@ -43,14 +43,14 @@ class ConfigPanel {
 
   changeFirstValue(slider: Presenter) {
     slider.changeFirstValue(this.firstValue.value);
-    if (this.firstValue.value !== String(slider.getModel().getOptions().value)) {
+    if (this.firstValue.value !== slider.getAttr('value')) {
       this.firstValue.value = String(slider.getModel().getOptions().value);
     }
   }
 
   changeSecondValue(slider: Presenter) {
     slider.changeSecondValue(this.secondValue.value);
-    if (this.secondValue.value !== String(slider.getModel().getOptions().value2)) {
+    if (this.secondValue.value !== slider.getAttr('value2')) {
       this.secondValue.value = String(slider.getModel().getOptions().value2);
     }
   }
@@ -62,11 +62,11 @@ class ConfigPanel {
     }
 
     this.minValue.value = String(slider.getModel().getOptions().min);
-    if (slider.getModel().getOptions().range === 'true') {
-      if (slider.getModel().getOptions().min > Number(this.secondValue.value)) {
+    if (slider.getAttr('range') === 'true') {
+      if (Number(slider.getAttr('min')) > Number(this.secondValue.value)) {
         this.secondValue.value = String(slider.getModel().getOptions().min);
       }
-    } else if (slider.getModel().getOptions().min > Number(this.firstValue.value)) {
+    } else if (Number(slider.getAttr('min')) > Number(this.firstValue.value)) {
       this.firstValue.value = String(slider.getModel().getOptions().min);
     }
   }
@@ -87,7 +87,7 @@ class ConfigPanel {
     }
 
     this.maxValue.value = String(slider.getModel().getOptions().max);
-    if (slider.getModel().getOptions().max < Number(this.firstValue.value)) {
+    if (Number(slider.getAttr('max')) < Number(this.firstValue.value)) {
       this.firstValue.value = String(slider.getModel().getOptions().max);
     }
   }

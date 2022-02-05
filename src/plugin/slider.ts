@@ -4,7 +4,7 @@ import View from './components/View/View';
 import './slider.scss';
 
 declare global {
-  interface Slider extends JQuery {
+  interface JQuery {
     ngSlider:(options: Options) => Presenter
   }
 }
@@ -12,7 +12,7 @@ declare global {
 // eslint-disable-next-line no-param-reassign,func-names
 (function ($) {
   // eslint-disable-next-line no-param-reassign,func-names
-  ($.fn as Slider).ngSlider = function (options: Options) {
+  ($.fn).ngSlider = function (options: Options) {
     const model = new Model(options);
     const view = new View(options.id);
     const slider = new Presenter(view, model);
