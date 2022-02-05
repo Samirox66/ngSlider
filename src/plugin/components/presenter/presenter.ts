@@ -14,41 +14,9 @@ class Presenter {
     return this.view;
   }
 
-  getAttr(prop: string): string | undefined{
+  getAttr(prop: string): string {
     if (this.model.getOptions().hasOwnProperty(prop)) {
-      switch (prop) {
-        case 'min': {
-          return String(this.model.getOptions().min);
-        }
-
-        case 'max': {
-          return String(this.model.getOptions().max);
-        }
-
-        case 'value': {
-          return String(this.model.getOptions().value);
-        }
-
-        case 'value2': {
-          return String(this.model.getOptions().value2);
-        }
-
-        case 'range': {
-          return this.model.getOptions().range;
-        }
-
-        case 'isValueVisible': {
-          return String(this.model.getOptions().isValueVisible);
-        }
-
-        case 'step': {
-          return String(this.model.getOptions().step);
-        }
-
-        case 'isVertical': {
-          return String(this.model.getOptions().isVertical);
-        }
-      }
+      return String(this.model.getOptions()[prop]);
     } else {
       throw new Error('Wrong property of options');
     }
@@ -56,47 +24,11 @@ class Presenter {
 
   setAttr(prop: string, value: string) {
     if (this.model.getOptions().hasOwnProperty(prop)) {
-      switch (prop) {
-        case 'min': {
-         this.model.getOptions().min = Number(value);
-         break;
-        }
-
-        case 'max': {
-          this.model.getOptions().max = Number(value);
-          break;
-        }
-
-        case 'value': {
-          this.model.getOptions().value = Number(value);
-          break;
-        }
-
-        case 'value2': {
-          this.model.getOptions().value2 = Number(value);
-          break;
-        }
-
-        case 'range': {
-          this.model.getOptions().range = value;
-          break;
-        }
-
-        case 'isValueVisible': {
-          this.model.getOptions().isValueVisible = Boolean(value);
-          break;
-        }
-
-        case 'step': {
-          this.model.getOptions().step = Number(value);
-          break;
-        }
-
-        case 'isVertical': {
-          this.model.getOptions().isVertical = Boolean(value);
-          break;
-        }
+      if (typeof this.model.getOptions()[prop] === 'number') {
+        this.model.getOptions()[prop] = Number(value);
       }
+      
+      this.model.getOptions()[prop] = value;
     }
   }
 

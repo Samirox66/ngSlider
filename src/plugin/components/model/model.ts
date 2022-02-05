@@ -10,7 +10,7 @@ interface CompleteOptions extends Options {
   range: string
 }
 
-interface Options {
+interface Options extends Record<string, any> {
   range?: string,
   id: string,
   min: number,

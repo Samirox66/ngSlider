@@ -44,14 +44,14 @@ class ConfigPanel {
   changeFirstValue(slider: Presenter) {
     slider.changeFirstValue(this.firstValue.value);
     if (this.firstValue.value !== slider.getAttr('value')) {
-      this.firstValue.value = String(slider.getModel().getOptions().value);
+      this.firstValue.value = slider.getAttr('value');
     }
   }
 
   changeSecondValue(slider: Presenter) {
     slider.changeSecondValue(this.secondValue.value);
     if (this.secondValue.value !== slider.getAttr('value2')) {
-      this.secondValue.value = String(slider.getModel().getOptions().value2);
+      this.secondValue.value = slider.getAttr('value2');
     }
   }
 
@@ -61,13 +61,13 @@ class ConfigPanel {
       ConfigPanel.manageError(error, this.minValue);
     }
 
-    this.minValue.value = String(slider.getModel().getOptions().min);
+    this.minValue.value = slider.getAttr('min');
     if (slider.getAttr('range') === 'true') {
       if (Number(slider.getAttr('min')) > Number(this.secondValue.value)) {
-        this.secondValue.value = String(slider.getModel().getOptions().min);
+        this.secondValue.value = slider.getAttr('min');
       }
     } else if (Number(slider.getAttr('min')) > Number(this.firstValue.value)) {
-      this.firstValue.value = String(slider.getModel().getOptions().min);
+      this.firstValue.value = slider.getAttr('min');
     }
   }
 
@@ -77,7 +77,7 @@ class ConfigPanel {
       ConfigPanel.manageError(error, this.step);
     }
 
-    this.step.value = String(slider.getModel().getOptions().step);
+    this.step.value = String(slider.getAttr('step'));
   }
 
   changeMaxValue(slider: Presenter) {
@@ -86,9 +86,9 @@ class ConfigPanel {
       ConfigPanel.manageError(error, this.maxValue);
     }
 
-    this.maxValue.value = String(slider.getModel().getOptions().max);
+    this.maxValue.value = slider.getAttr('max');
     if (Number(slider.getAttr('max')) < Number(this.firstValue.value)) {
-      this.firstValue.value = String(slider.getModel().getOptions().max);
+      this.firstValue.value = slider.getAttr('max');
     }
   }
 
