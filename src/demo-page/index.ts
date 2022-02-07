@@ -58,15 +58,18 @@ const sliderApp = {
       verticalMode: 'vertical-button4',
       isValueVisible: 'current-value-visible-button4',
     });
-    this.set(slider1, configPanel1);
-    this.set(slider2, configPanel2);
-    this.set(slider3, configPanel3);
-    this.set(slider4, configPanel4);
-  },
-  set(slider: any, configPanel: ConfigPanel) {
-    configPanel.addEventListeners(slider);
-    configPanel.setPanelValues(slider.getModel().getOptions());
-    configPanel.addObservers(slider);
+    configPanel1.addEventListeners(slider1);
+    configPanel1.setPanelValues(slider1.getModel().getOptions());
+    configPanel1.addObservers(slider1);
+    configPanel2.addEventListeners(slider2);
+    configPanel2.setPanelValues(slider2.getModel().getOptions());
+    configPanel2.addObservers(slider2);
+    configPanel3.addEventListeners(slider3);
+    configPanel3.setPanelValues(slider3.getModel().getOptions());
+    configPanel3.addObservers(slider3);
+    configPanel4.addEventListeners(slider4);
+    configPanel4.setPanelValues(slider4.getModel().getOptions());
+    configPanel4.addObservers(slider4);
   },
 };
 

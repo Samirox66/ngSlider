@@ -62,6 +62,31 @@ class Model extends Observer {
     }
   }
 
+  checkOptions(): boolean {
+    const decimals = Model.countDecimals(this.options.step);
+    const integerStep = this.options.step * 10 ** decimals;
+    const maxMinIntegerDifference = (this.options.max - this.options.min) * 10 ** decimals;
+    const isStepIncorrect = maxMinIntegerDifference % integerStep !== 0 || this.options.step <= 0;
+    if (isStepIncorrect) {
+      return false;
+    }
+    
+    const value2isOutsideMaxMin = (
+      this.options.value2 < this.options.min || this.options.value2 >= this.options.max
+    );
+    if (value2isOutsideMaxMin) {
+      this.options.value2 = this.options.min;
+    }
+
+    const isValueMoreThanMax = this.options.value > this.options.max;
+    const isValueLessThanMin = this.options.value < this.options.min;
+    const isValue2NotLessThanValue = this.options.value2 >= this.options.value;
+    if (isValueMoreThanMax || isValueLessThanMin || isValue2NotLessThanValue) {
+      this.options.value = this.options.max;
+    }
+    return true;
+  }
+
   setKey(key: string) {
     this.options.key = key;
   }
@@ -214,6 +239,10 @@ class Model extends Observer {
   }
 
   setStep(step: number):string {
+    if (step <= 0) {
+      return 'Step should be positive';
+    }
+
     const decimals = Model.countDecimals(step);
     const isStepMultiplier = (
       ((this.options.max - this.options.min) * 10 ** decimals) % (step * 10 ** decimals) === 0
@@ -223,7 +252,7 @@ class Model extends Observer {
       return '';
     }
 
-    return 'The step should be a multiplier of the difference between max and min values';
+    return 'Step should be a multiplier of the difference between max and min values';
   }
 
   setRange(range: string) {

@@ -15,19 +15,22 @@ class Presenter {
   }
 
   getAttr(prop: string): string {
-    if (this.model.getOptions().hasOwnProperty(prop)) {
+    if (Object.prototype.hasOwnProperty.call(this.model.getOptions(), prop)) {
       return String(this.model.getOptions()[prop]);
-    } else {
-      throw new Error('Wrong property of options');
     }
+    throw new Error('Wrong property of options');
   }
 
   setAttr(prop: string, value: string) {
-    if (this.model.getOptions().hasOwnProperty(prop)) {
+    if (Object.prototype.hasOwnProperty.call(this.model.getOptions(), prop)) {
       if (typeof this.model.getOptions()[prop] === 'number') {
+        const oldValue = this.model.getOptions()[prop];
         this.model.getOptions()[prop] = Number(value);
+        if (!this.model.checkOptions()) {
+          this.model.getOptions()[prop] = oldValue;
+        }
       }
-      
+
       this.model.getOptions()[prop] = value;
     }
   }
@@ -60,7 +63,7 @@ class Presenter {
     if (currentCord) {
       this.model.setCurrentCord(currentCord);
     }
-    
+
     this.model.setKey(key);
     this.model.calcValue();
     this.model.notifyObservers(this.model.getOptions());

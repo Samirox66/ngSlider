@@ -106,7 +106,7 @@ describe('Model tests', () => {
   test('setSecondValue should set second value on options', () => {
     model.setSecondValue(5);
     expect(model.getOptions().value2).toBe(5);
-  })
+  });
 
   test('changeFirstValue should change first value to the closest appropriate value', () => {
     model.changeFirstValue(8.6);

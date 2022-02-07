@@ -72,7 +72,7 @@ describe('Presenter tests', () => {
   test('handleResizeWindow should set cords of the slider in options', () => {
     slider.handleResizeWindow();
     expect(slider.getModel().getOptions().startCord).toBe(slider.getView().getSlider().getBoundingClientRect().left);
-  })
+  });
 
   test('handleInputListener should call calculateValue in model', () => {
     const calcValueMock = jest.fn(slider.getModel().calcValue);

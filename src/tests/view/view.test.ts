@@ -16,7 +16,7 @@ describe('View tests', () => {
     range: 'true',
     key: '',
     currentCord: 0,
-    isValueVisible: false
+    isValueVisible: false,
   };
 
   beforeEach(() => {
