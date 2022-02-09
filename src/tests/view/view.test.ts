@@ -76,10 +76,10 @@ describe('View tests', () => {
     );
     view.getViewElements().secondValue.setTextOfCurrentValue = setCurrentValueMock;
     options.key = 'firstHandle';
-    view.changeValue(options, false);
+    view.changeValue(options);
     expect(setCurrentValueMock.mock.calls.length).toBe(0);
     options.key = 'secondHandle';
-    view.changeValue(options, true);
+    view.changeValue(options);
     expect(setCurrentValueMock.mock.calls.length).toBe(1);
   });
   test('changeValue should call setCurrentValue in firstValue if we change first value', () => {
@@ -88,10 +88,10 @@ describe('View tests', () => {
     );
     view.getViewElements().firstValue.setTextOfCurrentValue = setCurrentValueMock;
     options.key = 'secondHandle';
-    view.changeValue(options, true);
+    view.changeValue(options);
     expect(setCurrentValueMock.mock.calls.length).toBe(0);
     options.key = 'firstHandle';
-    view.changeValue(options, false);
+    view.changeValue(options);
     expect(setCurrentValueMock.mock.calls.length).toBe(1);
   });
   test('changeValue should call moveHandle in secondHandle if we change second value', () => {
@@ -100,10 +100,10 @@ describe('View tests', () => {
     );
     view.getViewElements().secondHandle.moveHandle = moveHandleMock;
     options.key = 'firstHandle';
-    view.changeValue(options, false);
+    view.changeValue(options);
     expect(moveHandleMock.mock.calls.length).toBe(0);
     options.key = 'secondHandle';
-    view.changeValue(options, true);
+    view.changeValue(options);
     expect(moveHandleMock.mock.calls.length).toBe(1);
   });
   test('changeValue should call setCurrentValue in firstValue if we change first value', () => {
@@ -112,10 +112,10 @@ describe('View tests', () => {
     );
     view.getViewElements().firstHandle.moveHandle = moveHandleMock;
     options.key = 'secondHandle';
-    view.changeValue(options, true);
+    view.changeValue(options);
     expect(moveHandleMock.mock.calls.length).toBe(0);
     options.key = 'firstHandle';
-    view.changeValue(options, false);
+    view.changeValue(options);
     expect(moveHandleMock.mock.calls.length).toBe(1);
   });
 

@@ -48,7 +48,7 @@ class View extends Observer {
     if (range === rangeModule.TRUE) {
       this.createHandleWithValue(this.viewElements.secondHandle, this.viewElements.secondValue);
       this.viewElements.secondValue.getCurrentValue().textContent = String(value2);
-      this.changeValue(options, true);
+      this.changeValue(options);
     }
 
     if (isValueVisible === false) {
@@ -59,7 +59,7 @@ class View extends Observer {
       this.viewElements.secondValue.show();
     }
 
-    this.changeValue(options, false);
+    this.changeValue(options);
     this.viewElements.sliderTrack.fillWithColor(options);
   }
 
@@ -83,17 +83,14 @@ class View extends Observer {
     return this.slider;
   }
 
-  changeValue(options: CompleteOptions, isSecondHandle: boolean) {
+  changeValue(options: CompleteOptions) {
     const {
       range, isValueVisible, value2, value, isVertical,
     } = options;
-    if (isSecondHandle) {
-      this.viewElements.secondValue.setTextOfCurrentValue(String(value2));
-      this.viewElements.secondHandle.moveHandle(options, value2);
-    } else {
-      this.viewElements.firstValue.setTextOfCurrentValue(String(value));
-      this.viewElements.firstHandle.moveHandle(options, value);
-    }
+    this.viewElements.secondValue.setTextOfCurrentValue(String(value2));
+    this.viewElements.secondHandle.moveHandle(options, value2);
+    this.viewElements.firstValue.setTextOfCurrentValue(String(value));
+    this.viewElements.firstHandle.moveHandle(options, value);
 
     if (isValueVisible) {
       this.detachCurrentValues(value);

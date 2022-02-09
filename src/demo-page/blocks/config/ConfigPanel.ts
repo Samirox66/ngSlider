@@ -42,7 +42,7 @@ class ConfigPanel {
   }
 
   changeFirstValue(slider: Presenter) {
-    slider.changeFirstValue(this.firstValue.value);
+    slider.setAttr('value', this.firstValue.value);
     if (this.firstValue.value !== slider.getAttr('value')) {
       this.firstValue.value = slider.getAttr('value');
     }

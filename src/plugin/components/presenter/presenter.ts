@@ -21,18 +21,23 @@ class Presenter {
     throw new Error('Wrong property of options');
   }
 
-  setAttr(prop: string, value: string) {
+  setAttr(prop: string, value: string): string {
     if (Object.prototype.hasOwnProperty.call(this.model.getOptions(), prop)) {
       if (typeof this.model.getOptions()[prop] === 'number') {
         const oldValue = this.model.getOptions()[prop];
         this.model.getOptions()[prop] = Number(value);
         if (!this.model.checkOptions()) {
           this.model.getOptions()[prop] = oldValue;
+          return 'Incorrect step';
         }
+      } else {
+        this.model.getOptions()[prop] = value;
       }
-
-      this.model.getOptions()[prop] = value;
+      this.rewriteSlider();
+      return '';
     }
+
+    return 'Incorrect property';
   }
 
   onInit() {
@@ -67,7 +72,7 @@ class Presenter {
     this.model.setKey(key);
     this.model.calcValue();
     this.model.notifyObservers(this.model.getOptions());
-    this.updateSlider(key === actionModule.SECOND_HANDLE);
+    this.updateSlider();
   }
 
   progressBarClickListener({ key, value, value2 }: ObserverOptions): void {
@@ -84,7 +89,7 @@ class Presenter {
     }
 
     this.model.notifyObservers(this.model.getOptions());
-    this.updateSlider(key === actionModule.SECOND_LABELS);
+    this.updateSlider();
   }
 
   changeFirstValue(value: number | string) {
@@ -95,7 +100,7 @@ class Presenter {
     }
 
     this.model.getOptions().key = actionModule.FIRST_HANDLE;
-    this.updateSlider(false);
+    this.updateSlider();
   }
 
   changeSecondValue(value: number | string) {
@@ -106,7 +111,7 @@ class Presenter {
     }
 
     this.model.getOptions().key = actionModule.SECOND_HANDLE;
-    this.updateSlider(true);
+    this.updateSlider();
   }
 
   changeMaxValue(value: number | string): string {
@@ -177,8 +182,8 @@ class Presenter {
     this.view.displaySlider(this.model.getOptions());
   }
 
-  private updateSlider(isSecond: boolean) {
-    this.view.changeValue(this.model.getOptions(), isSecond);
+  private updateSlider() {
+    this.view.changeValue(this.model.getOptions());
     this.view.getViewElements().sliderTrack.fillWithColor(this.model.getOptions());
   }
 
