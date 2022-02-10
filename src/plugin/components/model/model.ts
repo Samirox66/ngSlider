@@ -10,7 +10,7 @@ interface CompleteOptions extends Options {
   range: string
 }
 
-interface Options extends Record<string, any> {
+interface Options extends Record<string, string | number | undefined | boolean> {
   range?: string,
   id: string,
   min: number,
@@ -60,31 +60,6 @@ class Model extends Observer {
     if (isValueMoreThanMax || isValueLessThanMin || isValue2NotLessThanValue) {
       this.options.value = this.options.max;
     }
-  }
-
-  checkOptions(): boolean {
-    const decimals = Model.countDecimals(this.options.step);
-    const integerStep = this.options.step * 10 ** decimals;
-    const maxMinIntegerDifference = (this.options.max - this.options.min) * 10 ** decimals;
-    const isStepIncorrect = maxMinIntegerDifference % integerStep !== 0 || this.options.step <= 0;
-    if (isStepIncorrect) {
-      return false;
-    }
-    
-    const value2isOutsideMaxMin = (
-      this.options.value2 < this.options.min || this.options.value2 >= this.options.max
-    );
-    if (value2isOutsideMaxMin) {
-      this.options.value2 = this.options.min;
-    }
-
-    const isValueMoreThanMax = this.options.value > this.options.max;
-    const isValueLessThanMin = this.options.value < this.options.min;
-    const isValue2NotLessThanValue = this.options.value2 >= this.options.value;
-    if (isValueMoreThanMax || isValueLessThanMin || isValue2NotLessThanValue) {
-      this.options.value = this.options.max;
-    }
-    return true;
   }
 
   setKey(key: string) {
@@ -189,7 +164,7 @@ class Model extends Observer {
     }
   }
 
-  setMaxValue(max: number): string {
+  changeMaxValue(max: number): string {
     if (max > this.options.min) {
       const decimals = Model.countDecimals(this.options.step);
       const isStepMultiplier = (
@@ -214,7 +189,7 @@ class Model extends Observer {
     return 'Max value should be more than min one';
   }
 
-  setMinValue(min: number):string {
+  changeMinValue(min: number): string {
     if (min < this.options.max) {
       const decimals = Model.countDecimals(this.options.step);
       const isStepMultiplier = (
@@ -238,7 +213,7 @@ class Model extends Observer {
     return 'Min value should be less than max one';
   }
 
-  setStep(step: number):string {
+  changeStep(step: number): string {
     if (step <= 0) {
       return 'Step should be positive';
     }
@@ -264,11 +239,21 @@ class Model extends Observer {
     }
   }
 
-  setVisibility(isVisible: boolean) {
+  setVisibility(isVisible: string | boolean) {
+    if (typeof isVisible === 'string') {
+      this.options.isValueVisible = isVisible === 'true';
+      return;
+    }
+
     this.options.isValueVisible = isVisible;
   }
 
-  setMode(isVertical: boolean) {
+  setMode(isVertical: string | boolean) {
+    if (typeof isVertical === 'string') {
+      this.options.isVertical = isVertical === 'true';
+      return;
+    }
+
     this.options.isVertical = isVertical;
   }
 

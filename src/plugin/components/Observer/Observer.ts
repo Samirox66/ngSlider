@@ -34,4 +34,4 @@ class Observer {
 }
 
 export default Observer;
-export { ObserverOptions };
+export { ObserverOptions, ObserverFunction };

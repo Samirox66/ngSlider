@@ -49,14 +49,14 @@ class ConfigPanel {
   }
 
   changeSecondValue(slider: Presenter) {
-    slider.changeSecondValue(this.secondValue.value);
+    slider.setAttr('value2', this.secondValue.value);
     if (this.secondValue.value !== slider.getAttr('value2')) {
       this.secondValue.value = slider.getAttr('value2');
     }
   }
 
   changeMinValue(slider: Presenter) {
-    const error = slider.changeMinValue(this.minValue.value);
+    const error = slider.setAttr('min', this.minValue.value);
     if (error !== '') {
       ConfigPanel.manageError(error, this.minValue);
     }
@@ -72,7 +72,7 @@ class ConfigPanel {
   }
 
   changeStep(slider: Presenter) {
-    const error = slider.changeStep(this.step.value);
+    const error = slider.setAttr('step', this.step.value);
     if (error !== '') {
       ConfigPanel.manageError(error, this.step);
     }
@@ -81,7 +81,7 @@ class ConfigPanel {
   }
 
   changeMaxValue(slider: Presenter) {
-    const error = slider.changeMaxValue(this.maxValue.value);
+    const error = slider.setAttr('max', this.maxValue.value);
     if (error !== '') {
       ConfigPanel.manageError(error, this.maxValue);
     }
@@ -97,10 +97,10 @@ class ConfigPanel {
     this.secondValue.addEventListener('change', () => this.changeSecondValue(slider));
     this.maxValue.addEventListener('change', () => this.changeMaxValue(slider));
     this.minValue.addEventListener('change', () => this.changeMinValue(slider));
-    this.range.addEventListener('change', () => slider.changeRange(this.range.value));
+    this.range.addEventListener('change', () => slider.setAttr('range', this.range.value));
     this.step.addEventListener('change', () => this.changeStep(slider));
-    this.verticalMode.addEventListener('change', () => slider.changeMode(this.verticalMode.checked));
-    this.isValueVisible.addEventListener('change', () => slider.changeVisibilityOfValues(this.isValueVisible.checked));
+    this.verticalMode.addEventListener('change', () => slider.setAttr('isVertical', String(this.verticalMode.checked)));
+    this.isValueVisible.addEventListener('change', () => slider.setAttr('isValueVisible', String(this.isValueVisible.checked)));
   }
 
   setPanelValues({
@@ -118,7 +118,7 @@ class ConfigPanel {
   }
 
   addObservers(slider: Presenter) {
-    slider.getModel().addObserver(this.valueChangedInputListener.bind(this));
+    slider.addModelObserver(this.valueChangedInputListener.bind(this));
   }
 
   valueChangedInputListener({ key, value, value2 }: ObserverOptions) {

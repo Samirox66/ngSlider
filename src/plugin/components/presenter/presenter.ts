@@ -1,7 +1,7 @@
 import View from '../View/View';
-import { ObserverOptions } from '../Observer/Observer';
+import { ObserverFunction, ObserverOptions } from '../Observer/Observer';
 import Model from '../Model/Model';
-import { actionModule, rangeModule } from '../Model/consonants';
+import { actionModule } from '../Model/consonants';
 
 class Presenter {
   constructor(private view: View, private model: Model) {}
@@ -22,22 +22,38 @@ class Presenter {
   }
 
   setAttr(prop: string, value: string): string {
-    if (Object.prototype.hasOwnProperty.call(this.model.getOptions(), prop)) {
-      if (typeof this.model.getOptions()[prop] === 'number') {
-        const oldValue = this.model.getOptions()[prop];
-        this.model.getOptions()[prop] = Number(value);
-        if (!this.model.checkOptions()) {
-          this.model.getOptions()[prop] = oldValue;
-          return 'Incorrect step';
-        }
+    let err = '';
+    if (prop === 'value') {
+      this.model.changeFirstValue(Number(value));
+    } else if (prop === 'value2') {
+      this.model.changeSecondValue(Number(value));
+    } else if (prop === 'max') {
+      err = this.model.changeMaxValue(Number(value));
+    } else if (prop === 'min') {
+      err = this.model.changeMinValue(Number(value));
+    } else if (prop === 'step') {
+      err = this.model.changeStep(Number(value));
+    } else if (prop === 'isValueVisible') {
+      this.model.setVisibility(value);
+    } else if (prop === 'isVertical') {
+      if (value === 'true') {
+        this.view.makeVertical();
       } else {
-        this.model.getOptions()[prop] = value;
+        this.view.makeHorizontal();
       }
-      this.rewriteSlider();
-      return '';
+
+      this.model.setMode(value);
+      this.setCords();
+    } else if (prop === 'range') {
+      this.model.setRange(value);
     }
 
-    return 'Incorrect property';
+    this.rewriteSlider();
+    return err;
+  }
+
+  addModelObserver(observerFunction: ObserverFunction) {
+    this.model.addObserver(observerFunction);
   }
 
   onInit() {
@@ -90,91 +106,6 @@ class Presenter {
 
     this.model.notifyObservers(this.model.getOptions());
     this.updateSlider();
-  }
-
-  changeFirstValue(value: number | string) {
-    if (typeof value === 'string') {
-      this.model.changeFirstValue(Number(value));
-    } else if (typeof value === 'number') {
-      this.model.changeFirstValue(value);
-    }
-
-    this.model.getOptions().key = actionModule.FIRST_HANDLE;
-    this.updateSlider();
-  }
-
-  changeSecondValue(value: number | string) {
-    if (typeof (value) === 'string') {
-      this.model.changeSecondValue(Number(value));
-    } else if (typeof (value) === 'number') {
-      this.model.changeSecondValue(value);
-    }
-
-    this.model.getOptions().key = actionModule.SECOND_HANDLE;
-    this.updateSlider();
-  }
-
-  changeMaxValue(value: number | string): string {
-    let error = '';
-    if (typeof (value) === 'string') {
-      error = this.model.setMaxValue(Number(value));
-    } else if (typeof (value) === 'number') {
-      error = this.model.setMaxValue(value);
-    }
-
-    this.rewriteSlider();
-    return error;
-  }
-
-  changeMinValue(value: number | string): string {
-    let error = '';
-    if (typeof (value) === 'string') {
-      error = this.model.setMinValue(Number(value));
-    } else if (typeof (value) === 'number') {
-      error = this.model.setMinValue(value);
-    }
-
-    this.rewriteSlider();
-    return error;
-  }
-
-  changeStep(step: number | string): string {
-    let error = '';
-    if (typeof (step) === 'string') {
-      error = this.model.setStep(Number(step));
-    } else if (typeof (step) === 'number') {
-      error = this.model.setStep(step);
-    }
-
-    this.rewriteSlider();
-    return error;
-  }
-
-  changeRange(range: string) {
-    this.model.setRange(range);
-    const rangeIsDefined = range === rangeModule.TRUE || range === rangeModule.MAX || range === rangeModule.MIN;
-    if (!rangeIsDefined) {
-      this.view.getViewElements().sliderTrack.hide();
-    }
-
-    this.rewriteSlider();
-  }
-
-  changeMode(isVertical: boolean) {
-    if (isVertical) {
-      this.view.makeVertical();
-    } else {
-      this.view.makeHorizontal();
-    }
-
-    this.model.setMode(isVertical);
-    this.setCords();
-    this.rewriteSlider();
-  }
-
-  changeVisibilityOfValues(isVisible: boolean) {
-    this.model.setVisibility(isVisible);
-    this.rewriteSlider();
   }
 
   private rewriteSlider() {

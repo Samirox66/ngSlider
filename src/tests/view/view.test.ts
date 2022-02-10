@@ -49,7 +49,7 @@ describe('View tests', () => {
 
   test('destroySlider should call destroy labels', () => {
     const destroyMock = (
-      jest.fn(view.getViewElements().labels.destroy.bind(view.getViewElements().labels))
+      jest.fn(view.getViewElements().labels.destroy)
     );
     view.getViewElements().labels.destroy = destroyMock;
     view.destroySlider();
@@ -62,7 +62,7 @@ describe('View tests', () => {
 
   test('setHandles should call setHandle for each handle', () => {
     const setHandleMock = (
-      jest.fn(view.getViewElements().firstHandle.setHandle.bind(view.getViewElements().firstHandle))
+      jest.fn(view.getViewElements().firstHandle.setHandle)
     );
     view.getViewElements().firstHandle.setHandle = setHandleMock;
     view.getViewElements().secondHandle.setHandle = setHandleMock;
@@ -70,55 +70,32 @@ describe('View tests', () => {
     expect(setHandleMock.mock.calls.length).toBe(2);
   });
 
-  test('changeValue should call setCurrentValue in secondValue if we change second value', () => {
-    const setCurrentValueMock = (
-      jest.fn(view.getViewElements().secondValue.setTextOfCurrentValue.bind(view.getViewElements().secondValue))
+  test('changeValue should call setCurrentValue in firstValue and secondValue', () => {
+    const setCurrentFirstValueMock = (
+      jest.fn(view.getViewElements().firstValue.setTextOfCurrentValue)
     );
-    view.getViewElements().secondValue.setTextOfCurrentValue = setCurrentValueMock;
-    options.key = 'firstHandle';
-    view.changeValue(options);
-    expect(setCurrentValueMock.mock.calls.length).toBe(0);
-    options.key = 'secondHandle';
-    view.changeValue(options);
-    expect(setCurrentValueMock.mock.calls.length).toBe(1);
-  });
-  test('changeValue should call setCurrentValue in firstValue if we change first value', () => {
-    const setCurrentValueMock = (
-      jest.fn(view.getViewElements().firstValue.setTextOfCurrentValue.bind(view.getViewElements().firstValue))
+    const setCurrentSecondValueMock = (
+      jest.fn(view.getViewElements().secondValue.setTextOfCurrentValue)
     );
-    view.getViewElements().firstValue.setTextOfCurrentValue = setCurrentValueMock;
-    options.key = 'secondHandle';
+    view.getViewElements().secondValue.setTextOfCurrentValue = setCurrentSecondValueMock;
+    view.getViewElements().firstValue.setTextOfCurrentValue = setCurrentFirstValueMock;
     view.changeValue(options);
-    expect(setCurrentValueMock.mock.calls.length).toBe(0);
-    options.key = 'firstHandle';
-    view.changeValue(options);
-    expect(setCurrentValueMock.mock.calls.length).toBe(1);
+    expect(setCurrentFirstValueMock.mock.calls.length).toBe(1);
+    expect(setCurrentSecondValueMock.mock.calls.length).toBe(1);
   });
-  test('changeValue should call moveHandle in secondHandle if we change second value', () => {
-    const moveHandleMock = (
-      jest.fn(view.getViewElements().secondHandle.moveHandle.bind(view.getViewElements().secondHandle))
+  test('changeValue should call moveHandle in firstHandle and secondHandle', () => {
+    const moveFirstHandleMock = (
+      jest.fn(view.getViewElements().firstHandle.moveHandle)
     );
-    view.getViewElements().secondHandle.moveHandle = moveHandleMock;
-    options.key = 'firstHandle';
-    view.changeValue(options);
-    expect(moveHandleMock.mock.calls.length).toBe(0);
-    options.key = 'secondHandle';
-    view.changeValue(options);
-    expect(moveHandleMock.mock.calls.length).toBe(1);
-  });
-  test('changeValue should call setCurrentValue in firstValue if we change first value', () => {
-    const moveHandleMock = (
-      jest.fn(view.getViewElements().firstHandle.moveHandle.bind(view.getViewElements().firstHandle))
+    const moveSecondHandleMock = (
+      jest.fn(view.getViewElements().secondHandle.moveHandle)
     );
-    view.getViewElements().firstHandle.moveHandle = moveHandleMock;
-    options.key = 'secondHandle';
+    view.getViewElements().firstHandle.moveHandle = moveFirstHandleMock;
+    view.getViewElements().secondHandle.moveHandle = moveSecondHandleMock;
     view.changeValue(options);
-    expect(moveHandleMock.mock.calls.length).toBe(0);
-    options.key = 'firstHandle';
-    view.changeValue(options);
-    expect(moveHandleMock.mock.calls.length).toBe(1);
+    expect(moveFirstHandleMock.mock.calls.length).toBe(1);
+    expect(moveSecondHandleMock.mock.calls.length).toBe(1);
   });
-
   test('makeVertical should add css classes with vertical postfix of elements of slider', () => {
     view.makeVertical();
     expect(view.getSlider().classList.contains('ng-slider_vertical')).toBeTruthy();

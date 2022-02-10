@@ -125,6 +125,10 @@ describe('Model tests', () => {
     model.changeFirstValue(11);
     expect(model.getOptions().value).toBe(10);
   });
+  test('changeFirstValue should change fist value to min one if first value less than min one and there is no range mode', () => {
+    model.changeFirstValue(1.3);
+    expect(model.getOptions().value).toBe(2);
+  })
 
   test('changeSecondValue should change second value to the closest appropriate value in range mode', () => {
     model.changeSecondValue(2);
@@ -141,14 +145,14 @@ describe('Model tests', () => {
   });
 
   test('setMaxValue should change max value if new max value is bigger than min one', () => {
-    model.setMaxValue(12);
+    model.changeMaxValue(12);
     expect(model.getOptions().max).toBe(12);
-    model.setMaxValue(1);
+    model.changeMaxValue(1);
     expect(model.getOptions().max).toBe(12);
   });
   test('setMaxValue should set value to new max value if max value is less than value', () => {
     model.getOptions().value = 8;
-    model.setMaxValue(6);
+    model.changeMaxValue(6);
     expect(model.getOptions().max).toBe(6);
     expect(model.getOptions().value).toBe(6);
   });
@@ -156,32 +160,32 @@ describe('Model tests', () => {
     model.getOptions().range = 'true';
     model.getOptions().value = 8;
     model.getOptions().value2 = 7;
-    model.setMaxValue(6);
+    model.changeMaxValue(6);
     expect(model.getOptions().value2).toBe(2);
   });
   test('setMaxValue should return an error string if the step is not a multiplier of the difference between new max value and min one', () => {
-    expect(model.setMaxValue(7.7)).toBe('The step should be a multiplier of the difference between max and min values');
+    expect(model.changeMaxValue(7.7)).toBe('The step should be a multiplier of the difference between max and min values');
   });
 
   test('setMinValue should change min value if new min value is less than max one', () => {
-    model.setMinValue(12);
+    model.changeMinValue(12);
     expect(model.getOptions().min).toBe(2);
-    model.setMinValue(1);
+    model.changeMinValue(1);
     expect(model.getOptions().min).toBe(1);
   });
   test('setMinValue should set value2 to min value if new min value is more than value2', () => {
     model.getOptions().range = 'true';
-    model.setMinValue(4);
+    model.changeMinValue(4);
     expect(model.getOptions().value2).toBe(4);
   });
   test('setMinValue should return an error string if the step is not a multiplier of the difference between new max value and min one', () => {
-    expect(model.setMinValue(1.2)).toBe('The step should be a multiplier of the difference between max and min values');
+    expect(model.changeMinValue(1.2)).toBe('The step should be a multiplier of the difference between max and min values');
   });
 
   test('setStep should change step if it is a multiplier of the difference between max and min values', () => {
-    model.setStep(3);
+    model.changeStep(3);
     expect(model.getOptions().step).toBe(1);
-    model.setStep(0.1);
+    model.changeStep(0.1);
     expect(model.getOptions().step).toBe(0.1);
   });
 
