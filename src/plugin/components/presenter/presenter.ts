@@ -18,6 +18,7 @@ class Presenter {
     if (Object.prototype.hasOwnProperty.call(this.model.getOptions(), prop)) {
       return String(this.model.getOptions()[prop]);
     }
+    
     throw new Error('Wrong property of options');
   }
 
@@ -46,6 +47,8 @@ class Presenter {
       this.setCords();
     } else if (prop === 'range') {
       this.model.setRange(value);
+    } else {
+      throw new Error('Wrong property');
     }
 
     this.rewriteSlider();

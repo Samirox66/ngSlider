@@ -144,50 +144,57 @@ describe('Model tests', () => {
     expect(model.getOptions().value2).toBe(4);
   });
 
-  test('setMaxValue should change max value if new max value is bigger than min one', () => {
+  test('changeMaxValue should change max value if new max value is bigger than min one', () => {
     model.changeMaxValue(12);
     expect(model.getOptions().max).toBe(12);
     model.changeMaxValue(1);
     expect(model.getOptions().max).toBe(12);
   });
-  test('setMaxValue should set value to new max value if max value is less than value', () => {
+  test('changeMaxValue should set value to new max value if max value is less than value', () => {
     model.getOptions().value = 8;
     model.changeMaxValue(6);
     expect(model.getOptions().max).toBe(6);
     expect(model.getOptions().value).toBe(6);
   });
-  test('setMaxValue should set value2 to min value if new max value is less than value2', () => {
+  test('changeMaxValue should set value2 to min value if new max value is less than value2', () => {
     model.getOptions().range = 'true';
     model.getOptions().value = 8;
     model.getOptions().value2 = 7;
     model.changeMaxValue(6);
     expect(model.getOptions().value2).toBe(2);
   });
-  test('setMaxValue should return an error string if the step is not a multiplier of the difference between new max value and min one', () => {
+  test('changeMaxValue should return an error string if the step is not a multiplier of the difference between new max value and min one', () => {
     expect(model.changeMaxValue(7.7)).toBe('The step should be a multiplier of the difference between max and min values');
   });
 
-  test('setMinValue should change min value if new min value is less than max one', () => {
+  test('changeMinValue should change min value if new min value is less than max one', () => {
     model.changeMinValue(12);
     expect(model.getOptions().min).toBe(2);
     model.changeMinValue(1);
     expect(model.getOptions().min).toBe(1);
   });
-  test('setMinValue should set value2 to min value if new min value is more than value2', () => {
+  test('changeMinValue should set value2 to min value if new min value is more than value2', () => {
     model.getOptions().range = 'true';
     model.changeMinValue(4);
     expect(model.getOptions().value2).toBe(4);
   });
-  test('setMinValue should return an error string if the step is not a multiplier of the difference between new max value and min one', () => {
+  test('changeMinValue should set value to min value if new min value is more than value', () => {
+    model.changeMinValue(6);
+    expect(model.getOptions().value).toBe(6);
+  });
+  test('changeMinValue should return an error string if the step is not a multiplier of the difference between new max value and min one', () => {
     expect(model.changeMinValue(1.2)).toBe('The step should be a multiplier of the difference between max and min values');
   });
 
-  test('setStep should change step if it is a multiplier of the difference between max and min values', () => {
+  test('changeStep should change step if it is a multiplier of the difference between max and min values', () => {
     model.changeStep(3);
     expect(model.getOptions().step).toBe(1);
     model.changeStep(0.1);
     expect(model.getOptions().step).toBe(0.1);
   });
+  test('changeStep should return error string if step is equal or less than zero', () => {
+    expect(model.changeStep(-2)).toBe('Step should be positive');
+  })
 
   test('setRange should change range option', () => {
     model.setRange('max');
@@ -198,12 +205,16 @@ describe('Model tests', () => {
 
   test('setVisibility should change boolean value displaying if current value is visible', () => {
     model.setVisibility(false);
-    expect(model.getOptions().isValueVisible).toBe(false);
+    expect(model.getOptions().isValueVisible).toBeFalsy();
+    model.setVisibility('true');
+    expect(model.getOptions().isValueVisible).toBeTruthy();
   });
 
-  test('setVerticalMode should change boolean value displaying if slider is in vertical mode', () => {
+  test('setMode should change boolean value displaying if slider is in vertical mode', () => {
     model.setMode(true);
     expect(model.getOptions().isVertical).toBe(true);
+    model.setMode('false');
+    expect(model.getOptions().isVertical).toBeFalsy();
   });
 
   test('getOptions should return options', () => {

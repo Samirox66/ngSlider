@@ -30,6 +30,79 @@ describe('Presenter tests', () => {
     root.remove();
   });
 
+  test('getAttr should return the value of the existing property', () => {
+    expect(slider.getAttr('value')).toBe('0');
+    expect(slider.getAttr('max')).toBe('4');
+    expect(slider.getAttr('min')).toBe('2');
+    expect(slider.getAttr('value2')).toBe('0');
+    expect(slider.getAttr('step')).toBe('1');
+    expect(() => slider.getAttr('shingeki')).toThrowError();
+  });
+
+  test('setAttr should throw an error if got wrong property', () => {
+    expect(() => slider.setAttr('wakanda', '43')).toThrowError();
+  });
+  test('setAttr should call changeFirstValue if prop is equal to value', () => {
+    const changeFirstValueMock = jest.fn(slider.getModel().changeFirstValue);
+    slider.getModel().changeFirstValue = changeFirstValueMock;
+    slider.setAttr('value', '2');
+    expect(changeFirstValueMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call changeSecondValue if prop is equal to value2', () => {
+    const changeSecondValueMock = jest.fn(slider.getModel().changeSecondValue);
+    slider.getModel().changeSecondValue = changeSecondValueMock;
+    slider.setAttr('value2', '2');
+    expect(changeSecondValueMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call changeMaxValue if prop is equal to max', () => {
+    const changeMaxValueMock = jest.fn(slider.getModel().changeMaxValue);
+    slider.getModel().changeMaxValue = changeMaxValueMock;
+    slider.setAttr('max', '2');
+    expect(changeMaxValueMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call changeMinValue if prop is equal to min', () => {
+    const changeMinValueMock = jest.fn(slider.getModel().changeMinValue);
+    slider.getModel().changeMinValue = changeMinValueMock;
+    slider.setAttr('min', '2');
+    expect(changeMinValueMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call changeStep if prop is equal to step', () => {
+    const changeStepMock = jest.fn(slider.getModel().changeStep);
+    slider.getModel().changeStep = changeStepMock;
+    slider.setAttr('step', '2');
+    expect(changeStepMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call setVisibility if prop is equal to isValueVisible', () => {
+    const setVisibilityMock = jest.fn(slider.getModel().setVisibility);
+    slider.getModel().setVisibility = setVisibilityMock;
+    slider.setAttr('isValueVisible', 'true');
+    expect(setVisibilityMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call makeVertical if prop is equal to isVertical and value is equal to true', () => {
+    const makeVerticalMock = jest.fn(slider.getView().makeVertical);
+    slider.getView().makeVertical = makeVerticalMock;
+    slider.setAttr('isVertical', 'true');
+    expect(makeVerticalMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call makeHorizontal if prop is equal to isVertical and value is not equal to true', () => {
+    const makeHorizontalMock = jest.fn(slider.getView().makeHorizontal);
+    slider.getView().makeHorizontal = makeHorizontalMock;
+    slider.setAttr('isVertical', 'false');
+    expect(makeHorizontalMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call setMode', () => {
+    const setModeMock = jest.fn(slider.getModel().setMode);
+    slider.getModel().setMode = setModeMock;
+    slider.setAttr('isVertical', 'true');
+    expect(setModeMock.mock.calls.length).toBe(1);
+  });
+  test('setAttr should call setRange if prop is equal to range', () => {
+    const setRangeMock = jest.fn(slider.getModel().setRange);
+    slider.getModel().setRange = setRangeMock;
+    slider.setAttr('range', 'min');
+    expect(setRangeMock.mock.calls.length).toBe(1);
+  });
+
   test('onInit should call validateOptions', () => {
     const validateOptionsMock = jest.fn(slider.getModel().validateOptions);
     slider.getModel().validateOptions = validateOptionsMock;
