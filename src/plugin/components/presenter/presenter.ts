@@ -62,7 +62,7 @@ class Presenter {
   onInit() {
     this.model.validateOptions();
     this.view.addObserver(this.handleInputListener.bind(this));
-    this.view.addObserver(this.progressBarClickListener.bind(this));
+    this.view.addObserver(this.labelsClickListener.bind(this));
     if (this.model.getOptions().isVertical) {
       this.view.makeVertical();
     }
@@ -79,12 +79,12 @@ class Presenter {
   }
 
   handleInputListener({ key, currentCord }: ObserverOptions): void {
-    const keyIsNotRelatedToHandle = key !== actionModule.FIRST_HANDLE && key !== actionModule.SECOND_HANDLE;
-    if (keyIsNotRelatedToHandle) {
+    const keyIsRelatedToHandle = key === actionModule.FIRST_HANDLE || key === actionModule.SECOND_HANDLE;
+    if (!keyIsRelatedToHandle) {
       return;
     }
 
-    if (currentCord) {
+    if (currentCord !== undefined) {
       this.model.setCurrentCord(currentCord);
     }
 
@@ -94,16 +94,16 @@ class Presenter {
     this.updateSlider();
   }
 
-  progressBarClickListener({ key, value, value2 }: ObserverOptions): void {
-    const keyIsNotRelatedToLabels = key !== actionModule.FIRST_LABELS && key !== actionModule.SECOND_LABELS;
-    if (keyIsNotRelatedToLabels) {
+  labelsClickListener({ key, value, value2 }: ObserverOptions): void {
+    const keyIsRelatedToLabels = key === actionModule.FIRST_LABELS || key === actionModule.SECOND_LABELS;
+    if (!keyIsRelatedToLabels) {
       return;
     }
-
+    console.log(key);
     this.model.setKey(key);
-    if (value) {
+    if (value !== undefined) {
       this.model.setFirstValue(value);
-    } else if (value2) {
+    } else if (value2 !== undefined) {
       this.model.setSecondValue(value2);
     }
 

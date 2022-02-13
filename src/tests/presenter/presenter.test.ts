@@ -1,6 +1,7 @@
 import Presenter from '../../plugin/components/Presenter/Presenter';
 import View from '../../plugin/components/View/View';
 import Model, { CompleteOptions } from '../../plugin/components/Model/Model';
+import { ObserverOptions } from '../../plugin/components/Observer/Observer';
 
 describe('Presenter tests', () => {
   let slider: Presenter;
@@ -149,11 +150,46 @@ describe('Presenter tests', () => {
 
   test('handleInputListener should call calculateValue in model', () => {
     const calcValueMock = jest.fn(slider.getModel().calcValue);
+    const observerOptions: ObserverOptions = {
+      key: 'min',
+      value: 3,
+    };
     slider.getModel().calcValue = calcValueMock;
-    slider.handleInputListener(options);
+    slider.handleInputListener(observerOptions);
     expect(calcValueMock.mock.calls.length).toBe(0);
-    options.key = 'secondHandle';
-    slider.handleInputListener(options);
+    observerOptions.key = 'secondHandle';
+    slider.handleInputListener(observerOptions);
     expect(calcValueMock.mock.calls.length).toBe(1);
+  });
+  test('handleInputListener should set currentCord in model', () => {
+    const observerOptions: ObserverOptions = {
+      key: 'firstHandle',
+      value: 3,
+      currentCord: 300,
+    };
+    slider.handleInputListener(observerOptions);
+    expect(slider.getModel().getOptions().currentCord).toBe(300);
+  });
+
+  test('labelsClickListener should set key property in model', () => {
+    const observerOptions: ObserverOptions = {
+      key: 'firstLabels',
+      value: 3,
+    };
+    slider.labelsClickListener(observerOptions);
+    expect(slider.getModel().getOptions().key).toBe('firstLabels');
+  });
+  test('labelsClickListener should set first or second value', () => {
+    const observerOptions: ObserverOptions = {
+      key: 'firstLabels',
+      value: 3,
+    };
+    slider.labelsClickListener(observerOptions);
+    expect(slider.getModel().getOptions().value).toBe(3);
+    observerOptions.value2 = 4;
+    observerOptions.value = undefined;
+    slider.labelsClickListener(observerOptions);
+    expect(slider.getModel().getOptions().value2).toBe(4);
+    expect(slider.getModel().getOptions().value).toBe(3);
   });
 });

@@ -34,6 +34,14 @@ describe('View tests', () => {
     expect(() => new View('wrong id')).toThrowError();
   });
 
+  test('displaySlider should create secondHandle and secondValue if range is true', () => {
+    view.displaySlider(options);
+    expect(view.getViewElements().secondHandle.getSliderHandle().classList.contains('ng-slider__handle')).toBeTruthy();
+    expect(view.getViewElements().secondValue.getCurrentValue().classList.contains('ng-slider__current-value')).toBeTruthy();
+    expect(view.getSlider().contains(view.getViewElements().secondHandle.getSliderHandle())).toBeTruthy();
+    expect(view.getViewElements().secondHandle.getSliderHandle().contains(view.getViewElements().secondValue.getCurrentValue())).toBeTruthy();
+  });
+
   test('displaySlider should hide first and second values if it says so in options', () => {
     options.range = '';
     view.displaySlider(options);
