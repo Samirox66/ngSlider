@@ -140,9 +140,9 @@ class View extends Observer {
   private checkIfCurrentValuesIntersect(isVertical: boolean): boolean {
     const firstElement = this.viewElements.firstValue.getCurrentValue().getBoundingClientRect();
     const secondElement = this.viewElements.secondValue.getCurrentValue().getBoundingClientRect();
-    const isFirstLowerThanSecond = isVertical && firstElement.top < secondElement.bottom;
+    const isFirstLowerThanSecond = isVertical && firstElement.top <= secondElement.bottom;
     const isFirstMoreToTheLeftThanSecond = (
-      isVertical === false && firstElement.left < secondElement.right
+      isVertical === false && firstElement.left <= secondElement.right
     );
     if (isFirstLowerThanSecond || isFirstMoreToTheLeftThanSecond) {
       return true;

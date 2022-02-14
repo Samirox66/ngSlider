@@ -4,22 +4,23 @@ import View from '../../plugin/components/View/View';
 describe('View tests', () => {
   let view: View;
   let root: HTMLDivElement;
-  const options: CompleteOptions = {
-    value: 3,
-    value2: 2,
-    step: 0.1,
-    max: 4,
-    min: 2,
-    id: 'slider-test',
-    startCord: 0,
-    endCord: 0,
-    range: 'true',
-    key: '',
-    currentCord: 0,
-    isValueVisible: false,
-  };
+  let options: CompleteOptions;
 
   beforeEach(() => {
+    options = {
+      value: 3,
+      value2: 2,
+      step: 0.1,
+      max: 4,
+      min: 2,
+      id: 'slider-test',
+      startCord: 100,
+      endCord: 200,
+      range: 'true',
+      key: '',
+      currentCord: 0,
+      isValueVisible: false,
+    };
     root = document.createElement('div');
     root.setAttribute('id', 'slider-test');
     document.body.append(root);
@@ -48,11 +49,10 @@ describe('View tests', () => {
     expect(view.getViewElements().firstValue.getCurrentValue().style.display).toBe('none');
     expect(view.getViewElements().secondValue.getCurrentValue().style.display).toBe('none');
   });
-  test('displaySlider should show first and second values if it says so in options', () => {
+  test('displaySlider should value if it says so in options', () => {
     options.isValueVisible = true;
     view.displaySlider(options);
     expect(view.getViewElements().firstValue.getCurrentValue().style.display).toBe('block');
-    expect(view.getViewElements().secondValue.getCurrentValue().style.display).toBe('block');
   });
 
   test('destroySlider should call destroy labels', () => {
@@ -104,6 +104,13 @@ describe('View tests', () => {
     expect(moveFirstHandleMock.mock.calls.length).toBe(1);
     expect(moveSecondHandleMock.mock.calls.length).toBe(1);
   });
+  test('changeValue should unite current values if they intersect', () => {
+    options.value = 2.1;
+    view.displaySlider(options);
+    view.changeValue(options);
+    expect(view.getViewElements().secondValue.getCurrentValue().style.display).toBe('none');
+  });
+
   test('makeVertical should add css classes with vertical postfix of elements of slider', () => {
     view.makeVertical();
     expect(view.getSlider().classList.contains('ng-slider_vertical')).toBeTruthy();

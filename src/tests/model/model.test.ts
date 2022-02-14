@@ -128,7 +128,7 @@ describe('Model tests', () => {
   test('changeFirstValue should change fist value to min one if first value less than min one and there is no range mode', () => {
     model.changeFirstValue(1.3);
     expect(model.getOptions().value).toBe(2);
-  })
+  });
 
   test('changeSecondValue should change second value to the closest appropriate value in range mode', () => {
     model.changeSecondValue(2);
@@ -194,7 +194,7 @@ describe('Model tests', () => {
   });
   test('changeStep should return error string if step is equal or less than zero', () => {
     expect(model.changeStep(-2)).toBe('Step should be positive');
-  })
+  });
 
   test('setRange should change range option', () => {
     model.setRange('max');

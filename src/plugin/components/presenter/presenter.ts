@@ -18,7 +18,7 @@ class Presenter {
     if (Object.prototype.hasOwnProperty.call(this.model.getOptions(), prop)) {
       return String(this.model.getOptions()[prop]);
     }
-    
+
     throw new Error('Wrong property of options');
   }
 
@@ -99,7 +99,7 @@ class Presenter {
     if (!keyIsRelatedToLabels) {
       return;
     }
-    console.log(key);
+
     this.model.setKey(key);
     if (value !== undefined) {
       this.model.setFirstValue(value);

@@ -22,7 +22,7 @@ class Handle {
     );
   }
 
-  handleHandleMouseDown({ isVertical }: CompleteOptions, isSecondHandle: boolean, notifyObservers: (options: ObserverOptions) => void) {
+  private handleHandleMouseDown({ isVertical }: CompleteOptions, isSecondHandle: boolean, notifyObservers: (options: ObserverOptions) => void) {
     const handleHandleMouseMove = (event: PointerEvent) => {
       const handleOptions: ObserverOptions = { key: actionModule.FIRST_HANDLE };
       if (isSecondHandle) {
