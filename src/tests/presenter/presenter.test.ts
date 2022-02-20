@@ -24,7 +24,8 @@ describe('Presenter tests', () => {
     root = document.createElement('div');
     root.setAttribute('id', 'slider-test');
     document.body.append(root);
-    slider = new Presenter(new View(options.id), new Model(options));
+    slider = new Presenter(new View(), new Model(options));
+    slider.getView().findSlider(options.id);
   });
 
   afterEach(() => {
@@ -141,11 +142,6 @@ describe('Presenter tests', () => {
     options.isVertical = true;
     slider.onInit();
     expect(makeVerticalMock.mock.calls.length).toBe(1);
-  });
-
-  test('handleResizeWindow should set cords of the slider in options', () => {
-    slider.handleResizeWindow();
-    expect(slider.getModel().getOptions().startCord).toBe(slider.getView().getSlider().getBoundingClientRect().left);
   });
 
   test('handleInputListener should call calculateValue in model', () => {

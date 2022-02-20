@@ -45,7 +45,8 @@ describe('Handle tests', () => {
     const eventListenerMock = jest.fn(sliderHandle.getSliderHandle().addEventListener);
     sliderHandle.getSliderHandle().addEventListener = eventListenerMock;
     document.body.innerHTML = '<div id=\'slider-test\'></div>';
-    const view = new View(options.id);
+    const view = new View();
+    view.findSlider(options.id);
     sliderHandle.setHandle(view.notifyObservers, options, false);
     expect(eventListenerMock.mock.calls.length).toBe(1);
   });

@@ -22,31 +22,6 @@ class Handle {
     );
   }
 
-  private handleHandleMouseDown({ isVertical }: CompleteOptions, isSecondHandle: boolean, notifyObservers: (options: ObserverOptions) => void) {
-    const handleHandleMouseMove = (event: PointerEvent) => {
-      const handleOptions: ObserverOptions = { key: actionModule.FIRST_HANDLE };
-      if (isSecondHandle) {
-        handleOptions.key = actionModule.SECOND_HANDLE;
-      }
-
-      if (isVertical) {
-        handleOptions.currentCord = event.pageY;
-      } else {
-        handleOptions.currentCord = event.pageX;
-      }
-
-      notifyObservers(handleOptions);
-    };
-
-    const handleHandleMouseUp = () => {
-      document.removeEventListener('pointermove', handleHandleMouseMove);
-      this.handleElement.removeEventListener('pointerup', handleHandleMouseUp);
-    };
-
-    document.addEventListener('pointermove', handleHandleMouseMove);
-    document.addEventListener('pointerup', handleHandleMouseUp);
-  }
-
   getSliderHandle() {
     return this.handleElement;
   }
@@ -78,6 +53,31 @@ class Handle {
 
   show() {
     this.handleElement.style.display = 'block';
+  }
+
+  private handleHandleMouseDown({ isVertical }: CompleteOptions, isSecondHandle: boolean, notifyObservers: (options: ObserverOptions) => void) {
+    const handleHandleMouseMove = (event: PointerEvent) => {
+      const handleOptions: ObserverOptions = { key: actionModule.FIRST_HANDLE };
+      if (isSecondHandle) {
+        handleOptions.key = actionModule.SECOND_HANDLE;
+      }
+
+      if (isVertical) {
+        handleOptions.currentCord = event.pageY;
+      } else {
+        handleOptions.currentCord = event.pageX;
+      }
+
+      notifyObservers(handleOptions);
+    };
+
+    const handleHandleMouseUp = () => {
+      document.removeEventListener('pointermove', handleHandleMouseMove);
+      this.handleElement.removeEventListener('pointerup', handleHandleMouseUp);
+    };
+
+    document.addEventListener('pointermove', handleHandleMouseMove);
+    document.addEventListener('pointerup', handleHandleMouseUp);
   }
 }
 

@@ -73,11 +73,6 @@ class Presenter {
     window.addEventListener('resize', this.handleResizeWindow.bind(this));
   }
 
-  handleResizeWindow() {
-    this.setCords();
-    this.rewriteSlider();
-  }
-
   handleInputListener({ key, currentCord }: ObserverOptions): void {
     const keyIsRelatedToHandle = key === actionModule.FIRST_HANDLE || key === actionModule.SECOND_HANDLE;
     if (!keyIsRelatedToHandle) {
@@ -111,6 +106,11 @@ class Presenter {
     this.updateSlider();
   }
 
+  private handleResizeWindow() {
+    this.setCords();
+    this.rewriteSlider();
+  }
+
   private rewriteSlider() {
     this.view.destroySlider();
     this.view.displaySlider(this.model.getOptions());
@@ -122,10 +122,10 @@ class Presenter {
   }
 
   private setCords() {
-    const sliderRect = this.view.getSlider().getBoundingClientRect();
-    if (this.model.getOptions().isVertical) {
+    const sliderRect = this.view.getSlider()?.getBoundingClientRect();
+    if (sliderRect && this.model.getOptions().isVertical) {
       this.model.setCords(sliderRect.top + window.scrollY, sliderRect.bottom + window.scrollY);
-    } else {
+    } else if (sliderRect) {
       this.model.setCords(sliderRect.left + window.scrollX, sliderRect.right + window.scrollX);
     }
   }

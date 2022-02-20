@@ -24,22 +24,19 @@ describe('View tests', () => {
     root = document.createElement('div');
     root.setAttribute('id', 'slider-test');
     document.body.append(root);
-    view = new View(options.id);
+    view = new View();
+    view.findSlider(options.id);
   });
 
   afterEach(() => {
     root.remove();
   });
 
-  test('constructor of view should throw an error if it gets a wrong id', () => {
-    expect(() => new View('wrong id')).toThrowError();
-  });
-
   test('displaySlider should create secondHandle and secondValue if range is true', () => {
     view.displaySlider(options);
     expect(view.getViewElements().secondHandle.getSliderHandle().classList.contains('ng-slider__handle')).toBeTruthy();
     expect(view.getViewElements().secondValue.getCurrentValue().classList.contains('ng-slider__current-value')).toBeTruthy();
-    expect(view.getSlider().contains(view.getViewElements().secondHandle.getSliderHandle())).toBeTruthy();
+    expect(view.getSlider()?.contains(view.getViewElements().secondHandle.getSliderHandle())).toBeTruthy();
     expect(view.getViewElements().secondHandle.getSliderHandle().contains(view.getViewElements().secondValue.getCurrentValue())).toBeTruthy();
   });
 
@@ -65,7 +62,7 @@ describe('View tests', () => {
   });
   test('destroySlider should remove all child nodes of slider', () => {
     view.destroySlider();
-    expect(view.getSlider().hasChildNodes()).toBeFalsy();
+    expect(view.getSlider()?.hasChildNodes()).toBeFalsy();
   });
 
   test('setHandles should call setHandle for each handle', () => {
@@ -113,7 +110,7 @@ describe('View tests', () => {
 
   test('makeVertical should add css classes with vertical postfix of elements of slider', () => {
     view.makeVertical();
-    expect(view.getSlider().classList.contains('ng-slider_vertical')).toBeTruthy();
+    expect(view.getSlider()?.classList.contains('ng-slider_vertical')).toBeTruthy();
     expect(view.getViewElements().firstHandle.getSliderHandle().classList.contains('ng-slider__handle_vertical')).toBeTruthy();
     expect(view.getViewElements().secondHandle.getSliderHandle().classList.contains('ng-slider__handle_vertical')).toBeTruthy();
     expect(view.getViewElements().sliderTrack.getSliderTrack().classList.contains('ng-slider__track_vertical')).toBeTruthy();
@@ -131,7 +128,7 @@ describe('View tests', () => {
 
   test('makeHorizontal should remove css classes with vertical postfix of elements of slider', () => {
     view.makeHorizontal();
-    expect(view.getSlider().classList.contains('ng-slider_vertical')).toBeFalsy();
+    expect(view.getSlider()?.classList.contains('ng-slider_vertical')).toBeFalsy();
     expect(view.getViewElements().firstHandle.getSliderHandle().classList.contains('ng-slider__handle_vertical')).toBeFalsy();
     expect(view.getViewElements().secondHandle.getSliderHandle().classList.contains('ng-slider__handle_vertical')).toBeFalsy();
     expect(view.getViewElements().sliderTrack.getSliderTrack().classList.contains('ng-slider__slider-track_vertical')).toBeFalsy();

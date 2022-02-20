@@ -24,7 +24,8 @@ describe('Labels tests', () => {
     root.setAttribute('id', 'slider-test');
     document.body.append(root);
     labels = new Labels();
-    view = new View(options.id);
+    view = new View();
+    view.findSlider(options.id);
   });
 
   afterEach(() => {

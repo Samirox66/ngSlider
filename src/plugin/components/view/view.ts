@@ -18,9 +18,9 @@ export interface ViewElements {
 class View extends Observer {
   private viewElements: ViewElements;
 
-  private slider: HTMLElement;
+  private slider: HTMLElement | undefined;
 
-  constructor(id: string) {
+  constructor() {
     super();
     this.viewElements = {
       labels: new Labels(),
@@ -30,6 +30,9 @@ class View extends Observer {
       secondHandle: new Handle(),
       secondValue: new CurrentValue(),
     };
+  }
+
+  findSlider(id: string) {
     const slider = document.getElementById(id);
     if (!slider) {
       throw new Error('Wrong Id');
@@ -40,8 +43,10 @@ class View extends Observer {
 
   displaySlider(options: CompleteOptions) {
     const { range, isValueVisible, value2 } = options;
-    this.slider.append(this.viewElements.labels.getLabels());
-    this.slider.append(this.viewElements.sliderTrack.getSliderTrack());
+    if (this.slider) {
+      this.slider.append(this.viewElements.labels.getLabels());
+      this.slider.append(this.viewElements.sliderTrack.getSliderTrack());
+    }
     this.createHandleWithValue(this.viewElements.firstHandle, this.viewElements.firstValue);
     this.viewElements.labels.create(this.notifyObservers.bind(this), options);
     this.viewElements.sliderTrack.create();
@@ -64,9 +69,11 @@ class View extends Observer {
   }
 
   destroySlider() {
-    this.viewElements.labels.destroy();
-    while (this.slider.hasChildNodes()) {
-      this.slider.firstChild?.remove();
+    if (this.slider) {
+      this.viewElements.labels.destroy();
+      while (this.slider.hasChildNodes()) {
+        this.slider.firstChild?.remove();
+      }
     }
   }
 
@@ -101,30 +108,36 @@ class View extends Observer {
   }
 
   makeVertical() {
-    this.slider.classList.add('ng-slider_vertical');
-    this.viewElements.labels.getLabels().classList.add('ng-slider__values_vertical');
-    this.viewElements.firstValue.getCurrentValue().classList.add('ng-slider__current-value_vertical');
-    this.viewElements.secondValue.getCurrentValue().classList.add('ng-slider__current-value_vertical');
-    this.viewElements.sliderTrack.makeVertical();
-    this.viewElements.firstHandle.makeVertical();
-    this.viewElements.secondHandle.makeVertical();
+    if (this.slider) {
+      this.slider.classList.add('ng-slider_vertical');
+      this.viewElements.labels.getLabels().classList.add('ng-slider__values_vertical');
+      this.viewElements.firstValue.getCurrentValue().classList.add('ng-slider__current-value_vertical');
+      this.viewElements.secondValue.getCurrentValue().classList.add('ng-slider__current-value_vertical');
+      this.viewElements.sliderTrack.makeVertical();
+      this.viewElements.firstHandle.makeVertical();
+      this.viewElements.secondHandle.makeVertical();
+    }
   }
 
   makeHorizontal() {
-    this.slider.classList.remove('ng-slider_vertical');
-    this.viewElements.labels.getLabels().classList.remove('ng-slider__values_vertical');
-    this.viewElements.firstValue.getCurrentValue().classList.remove('ng-slider__current-value_vertical');
-    this.viewElements.secondValue.getCurrentValue().classList.remove('ng-slider__current-value_vertical');
-    this.viewElements.sliderTrack.makeHorizontal();
-    this.viewElements.firstHandle.makeHorizontal();
-    this.viewElements.secondHandle.makeHorizontal();
+    if (this.slider) {
+      this.slider.classList.remove('ng-slider_vertical');
+      this.viewElements.labels.getLabels().classList.remove('ng-slider__values_vertical');
+      this.viewElements.firstValue.getCurrentValue().classList.remove('ng-slider__current-value_vertical');
+      this.viewElements.secondValue.getCurrentValue().classList.remove('ng-slider__current-value_vertical');
+      this.viewElements.sliderTrack.makeHorizontal();
+      this.viewElements.firstHandle.makeHorizontal();
+      this.viewElements.secondHandle.makeHorizontal();
+    }
   }
 
   private createHandleWithValue(handle: Handle, value: CurrentValue) {
-    handle.getSliderHandle().append(value.getCurrentValue());
-    this.slider.append(handle.getSliderHandle());
-    value.getCurrentValue().classList.add('ng-slider__current-value');
-    handle.getSliderHandle().classList.add('ng-slider__handle');
+    if (this.slider) {
+      handle.getSliderHandle().append(value.getCurrentValue());
+      this.slider.append(handle.getSliderHandle());
+      value.getCurrentValue().classList.add('ng-slider__current-value');
+      handle.getSliderHandle().classList.add('ng-slider__handle');
+    }
   }
 
   private uniteCurrentValues(value: number, value2: number) {

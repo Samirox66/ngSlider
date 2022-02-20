@@ -2,15 +2,15 @@ import Presenter from '../../../plugin/components/Presenter/Presenter';
 import { CompleteOptions } from '../../../plugin/components/Model/Model';
 import { ObserverOptions } from '../../../plugin/components/Observer/Observer';
 
-interface PanelIds {
-  max: string,
-  min: string,
-  range: string,
-  step: string,
-  firstValue: string,
-  secondValue: string,
-  verticalMode: string,
-  isValueVisible: string
+interface PanelElements {
+  maxValue: HTMLInputElement,
+  minValue: HTMLInputElement,
+  range: HTMLInputElement,
+  step: HTMLInputElement,
+  firstValue: HTMLInputElement,
+  secondValue: HTMLInputElement,
+  verticalMode: HTMLInputElement,
+  isValueVisible: HTMLInputElement,
 }
 
 class ConfigPanel {
@@ -30,15 +30,15 @@ class ConfigPanel {
 
   private isValueVisible: HTMLInputElement;
 
-  constructor(panelIds: PanelIds) {
-    this.firstValue = <HTMLInputElement>document.getElementById(panelIds.firstValue);
-    this.secondValue = <HTMLInputElement>document.getElementById(panelIds.secondValue);
-    this.maxValue = <HTMLInputElement>document.getElementById(panelIds.max);
-    this.minValue = <HTMLInputElement>document.getElementById(panelIds.min);
-    this.step = <HTMLInputElement>document.getElementById(panelIds.step);
-    this.range = <HTMLInputElement>document.getElementById(panelIds.range);
-    this.verticalMode = <HTMLInputElement>document.getElementById(panelIds.verticalMode);
-    this.isValueVisible = <HTMLInputElement>document.getElementById(panelIds.isValueVisible);
+  constructor(panelElements: PanelElements) {
+    this.firstValue = panelElements.firstValue;
+    this.secondValue = panelElements.secondValue;
+    this.maxValue = panelElements.maxValue;
+    this.minValue = panelElements.minValue;
+    this.step = panelElements.step;
+    this.range = panelElements.range;
+    this.verticalMode = panelElements.verticalMode;
+    this.isValueVisible = panelElements.isValueVisible;
   }
 
   changeFirstValue(slider: Presenter) {
@@ -92,15 +92,27 @@ class ConfigPanel {
     }
   }
 
+  changeVerticalMode(slider: Presenter) {
+    slider.setAttr('isVertical', String(this.verticalMode.checked));
+  }
+
+  changeRange(slider: Presenter) {
+    slider.setAttr('range', this.range.value);
+  }
+
+  changeIsValueVisible(slider: Presenter) {
+    slider.setAttr('isValueVisible', String(this.isValueVisible.checked));
+  }
+
   addEventListeners(slider: Presenter) {
-    this.firstValue.addEventListener('change', () => this.changeFirstValue(slider));
-    this.secondValue.addEventListener('change', () => this.changeSecondValue(slider));
-    this.maxValue.addEventListener('change', () => this.changeMaxValue(slider));
-    this.minValue.addEventListener('change', () => this.changeMinValue(slider));
-    this.range.addEventListener('change', () => slider.setAttr('range', this.range.value));
-    this.step.addEventListener('change', () => this.changeStep(slider));
-    this.verticalMode.addEventListener('change', () => slider.setAttr('isVertical', String(this.verticalMode.checked)));
-    this.isValueVisible.addEventListener('change', () => slider.setAttr('isValueVisible', String(this.isValueVisible.checked)));
+    this.firstValue.addEventListener('change', this.changeFirstValue.bind(this, slider));
+    this.secondValue.addEventListener('change', this.changeSecondValue.bind(this, slider));
+    this.maxValue.addEventListener('change', this.changeMaxValue.bind(this, slider));
+    this.minValue.addEventListener('change', this.changeMinValue.bind(this, slider));
+    this.range.addEventListener('change', this.changeRange.bind(this, slider));
+    this.step.addEventListener('change', this.changeStep.bind(this, slider));
+    this.verticalMode.addEventListener('change', this.changeVerticalMode.bind(this, slider));
+    this.isValueVisible.addEventListener('change', this.changeIsValueVisible.bind(this, slider));
   }
 
   setPanelValues({
@@ -191,3 +203,4 @@ class ConfigPanel {
 }
 
 export default ConfigPanel;
+export { PanelElements };
