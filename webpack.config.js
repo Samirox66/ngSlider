@@ -5,7 +5,10 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: './demo-page/index.ts',
+    entry: {
+        demo: './demo-page/index.ts',
+        plugin: './plugin/slider/ts'
+    },
     devtool: 'inline-source-map',
     context: path.resolve(__dirname, 'src'),
     plugins: [
