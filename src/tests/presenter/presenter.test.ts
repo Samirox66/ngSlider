@@ -14,7 +14,6 @@ describe('Presenter tests', () => {
       step: 1,
       max: 4,
       min: 2,
-      id: 'slider-test',
       startCord: 0,
       endCord: 0,
       range: '',
@@ -25,7 +24,7 @@ describe('Presenter tests', () => {
     root.setAttribute('id', 'slider-test');
     document.body.append(root);
     slider = new Presenter(new View(), new Model(options));
-    slider.getView().findSlider(options.id);
+    slider.getView().findSlider('slider-test');
   });
 
   afterEach(() => {

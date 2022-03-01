@@ -13,7 +13,6 @@ describe('View tests', () => {
       step: 0.1,
       max: 4,
       min: 2,
-      id: 'slider-test',
       startCord: 100,
       endCord: 200,
       range: 'true',
@@ -25,7 +24,7 @@ describe('View tests', () => {
     root.setAttribute('id', 'slider-test');
     document.body.append(root);
     view = new View();
-    view.findSlider(options.id);
+    view.findSlider('slider-test');
   });
 
   afterEach(() => {

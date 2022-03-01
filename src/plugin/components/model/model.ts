@@ -12,7 +12,6 @@ interface CompleteOptions extends Options {
 
 interface Options extends Record<string, string | number | undefined | boolean> {
   range?: string,
-  id: string,
   min: number,
   max: number,
   step: number,

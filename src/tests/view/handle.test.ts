@@ -10,7 +10,6 @@ describe('Handle tests', () => {
     step: 0.1,
     max: 5,
     min: 1,
-    id: 'slider-test',
     startCord: 0,
     endCord: 200,
     range: 'true',
@@ -46,7 +45,7 @@ describe('Handle tests', () => {
     sliderHandle.getSliderHandle().addEventListener = eventListenerMock;
     document.body.innerHTML = '<div id=\'slider-test\'></div>';
     const view = new View();
-    view.findSlider(options.id);
+    view.findSlider('slider-test');
     sliderHandle.setHandle(view.notifyObservers, options, false);
     expect(eventListenerMock.mock.calls.length).toBe(1);
   });

@@ -10,7 +10,6 @@ describe('Labels tests', () => {
     step: 1,
     max: 4,
     min: 2,
-    id: 'slider-test',
     startCord: 0,
     endCord: 0,
     range: '',
@@ -25,7 +24,7 @@ describe('Labels tests', () => {
     document.body.append(root);
     labels = new Labels();
     view = new View();
-    view.findSlider(options.id);
+    view.findSlider('slider-test');
   });
 
   afterEach(() => {
