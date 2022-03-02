@@ -10,7 +10,6 @@ describe('Model tests', () => {
       step: 1,
       max: 10,
       min: 2,
-      id: '',
       startCord: 200,
       endCord: 400,
       range: 'min',

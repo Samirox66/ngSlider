@@ -7,6 +7,7 @@
         "dev": "webpack --mode development",
         "build": "webpack --mode production",
         "start": "webpack-dev-server --mode development --open",
+        "plugin": "webpack --mode production --config webpack-plugin.config.js",
         "deploy": "gh-pages -d dist",
         "test": "jest",
         "coverage": "jest --coverage",

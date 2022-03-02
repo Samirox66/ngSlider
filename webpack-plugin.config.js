@@ -1,12 +1,11 @@
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
-        demo: './demo-page/index.ts',
+        plugin: './plugin/slider.ts',
     },
     devtool: 'inline-source-map',
     context: path.resolve(__dirname, 'src'),
@@ -17,10 +16,6 @@ module.exports = {
             'favicon': './demo-page/favicon.ico'
         }),
         new CleanWebpackPlugin,
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-        }),
         new MiniCssExtractPlugin({
             filename: '[name].css'
         }),

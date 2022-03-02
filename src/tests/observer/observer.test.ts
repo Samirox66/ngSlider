@@ -18,7 +18,6 @@ describe('Observer tests', () => {
       step: 0,
       max: 4,
       min: 2,
-      id: '',
       startCord: 0,
       endCord: 0,
       range: '',

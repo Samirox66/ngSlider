@@ -9,7 +9,6 @@ describe('SliderTrack tests', () => {
     step: 0.1,
     max: 5,
     min: 1,
-    id: '',
     startCord: 0,
     endCord: 200,
     range: 'true',
