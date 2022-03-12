@@ -24,7 +24,7 @@ interface Options extends Record<string, string | number | undefined | boolean> 
 class Model extends Observer {
   private options: CompleteOptions;
 
-  constructor(op: Options) {
+  constructor(op: Options = {min: 1, max: 10, value: 6, step: 1}) {
     super();
     this.options = <CompleteOptions>op;
   }
