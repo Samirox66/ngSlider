@@ -1,6 +1,3 @@
-@import url('./slider-panel__panel.scss');
-@import url('./slider-panel_margin-top_10per.scss');
-
 .slider-panel {
   display: flex;
   flex-direction: column;
@@ -8,4 +5,13 @@
   border-radius: 5px;
   width: 70%;
   height: 90%;
+
+  &_margin-top_10per {
+    margin-top: 10%;
+  }
+
+  &__panel {
+    width: 100%;
+    height: 10rem;
+  }
 }
