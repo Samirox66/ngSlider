@@ -74,7 +74,8 @@ class Presenter {
   }
 
   handleInputListener({ key, currentCord }: ObserverOptions): void {
-    const keyIsRelatedToHandle = key === actionModule.FIRST_HANDLE || key === actionModule.SECOND_HANDLE;
+    const keyIsRelatedToHandle =
+      key === actionModule.FIRST_HANDLE || key === actionModule.SECOND_HANDLE;
     if (!keyIsRelatedToHandle) {
       return;
     }
@@ -90,7 +91,8 @@ class Presenter {
   }
 
   labelsClickListener({ key, value, value2 }: ObserverOptions): void {
-    const keyIsRelatedToLabels = key === actionModule.FIRST_LABELS || key === actionModule.SECOND_LABELS;
+    const keyIsRelatedToLabels =
+      key === actionModule.FIRST_LABELS || key === actionModule.SECOND_LABELS;
     if (!keyIsRelatedToLabels) {
       return;
     }
@@ -118,15 +120,23 @@ class Presenter {
 
   private updateSlider() {
     this.view.changeValue(this.model.getOptions());
-    this.view.getViewElements().sliderTrack.fillWithColor(this.model.getOptions());
+    this.view
+      .getViewElements()
+      .sliderTrack.fillWithColor(this.model.getOptions());
   }
 
   private setCords() {
     const sliderRect = this.view.getSlider()?.getBoundingClientRect();
     if (sliderRect && this.model.getOptions().isVertical) {
-      this.model.setCords(sliderRect.top + window.scrollY, sliderRect.bottom + window.scrollY);
+      this.model.setCords(
+        sliderRect.top + window.scrollY,
+        sliderRect.bottom + window.scrollY
+      );
     } else if (sliderRect) {
-      this.model.setCords(sliderRect.left + window.scrollX, sliderRect.right + window.scrollX);
+      this.model.setCords(
+        sliderRect.left + window.scrollX,
+        sliderRect.right + window.scrollX
+      );
     }
   }
 }

@@ -13,7 +13,12 @@ class Track {
   }
 
   fillWithColor({
-    value, min, max, isVertical, value2, range,
+    value,
+    min,
+    max,
+    isVertical,
+    value2,
+    range,
   }: CompleteOptions) {
     const fill = {
       min: () => {
@@ -28,9 +33,7 @@ class Track {
       },
       max: () => {
         const percentToFill = ((max - value) / (max - min)) * 100;
-        const percentToMoveLeft = (
-          ((value - min) / (max - min)) * 100
-        );
+        const percentToMoveLeft = ((value - min) / (max - min)) * 100;
         if (isVertical) {
           this.trackElement.style.top = `${percentToMoveLeft}%`;
           this.trackElement.style.height = `${percentToFill}%`;
@@ -40,9 +43,7 @@ class Track {
         }
       },
       true: () => {
-        const percentToFill = (
-          ((value - value2) / (max - min)) * 100
-        );
+        const percentToFill = ((value - value2) / (max - min)) * 100;
         const percentToMove = ((value2 - min) / (max - min)) * 100;
         if (isVertical) {
           this.trackElement.style.top = `${percentToMove}%`;

@@ -37,6 +37,8 @@ describe('Labels tests', () => {
   });
   test('create should add labels in DOM', () => {
     labels.create(view.notifyObservers.bind(view), options);
-    expect(labels.getLabels().firstChild?.textContent).toBe(options.min.toString());
+    expect(labels.getLabels().firstChild?.textContent).toBe(
+      options.min.toString()
+    );
   });
 });

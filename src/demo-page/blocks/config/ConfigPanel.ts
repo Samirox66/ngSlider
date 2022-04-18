@@ -3,14 +3,14 @@ import { CompleteOptions } from '../../../plugin/components/Model/Model';
 import { ObserverOptions } from '../../../plugin/components/Observer/Observer';
 
 interface PanelElements {
-  maxValue: HTMLInputElement,
-  minValue: HTMLInputElement,
-  range: HTMLInputElement,
-  step: HTMLInputElement,
-  firstValue: HTMLInputElement,
-  secondValue: HTMLInputElement,
-  verticalMode: HTMLInputElement,
-  isValueVisible: HTMLInputElement,
+  maxValue: HTMLInputElement;
+  minValue: HTMLInputElement;
+  range: HTMLInputElement;
+  step: HTMLInputElement;
+  firstValue: HTMLInputElement;
+  secondValue: HTMLInputElement;
+  verticalMode: HTMLInputElement;
+  isValueVisible: HTMLInputElement;
 }
 
 class ConfigPanel {
@@ -105,18 +105,42 @@ class ConfigPanel {
   }
 
   addEventListeners(slider: Presenter) {
-    this.firstValue.addEventListener('change', this.changeFirstValue.bind(this, slider));
-    this.secondValue.addEventListener('change', this.changeSecondValue.bind(this, slider));
-    this.maxValue.addEventListener('change', this.changeMaxValue.bind(this, slider));
-    this.minValue.addEventListener('change', this.changeMinValue.bind(this, slider));
+    this.firstValue.addEventListener(
+      'change',
+      this.changeFirstValue.bind(this, slider)
+    );
+    this.secondValue.addEventListener(
+      'change',
+      this.changeSecondValue.bind(this, slider)
+    );
+    this.maxValue.addEventListener(
+      'change',
+      this.changeMaxValue.bind(this, slider)
+    );
+    this.minValue.addEventListener(
+      'change',
+      this.changeMinValue.bind(this, slider)
+    );
     this.range.addEventListener('change', this.changeRange.bind(this, slider));
     this.step.addEventListener('change', this.changeStep.bind(this, slider));
-    this.verticalMode.addEventListener('change', this.changeVerticalMode.bind(this, slider));
-    this.isValueVisible.addEventListener('change', this.changeIsValueVisible.bind(this, slider));
+    this.verticalMode.addEventListener(
+      'change',
+      this.changeVerticalMode.bind(this, slider)
+    );
+    this.isValueVisible.addEventListener(
+      'change',
+      this.changeIsValueVisible.bind(this, slider)
+    );
   }
 
   setPanelValues({
-    range, max, min, value, value2, isVertical, step,
+    range,
+    max,
+    min,
+    value,
+    value2,
+    isVertical,
+    step,
   }: CompleteOptions) {
     this.range.value = range;
     this.step.value = String(step);
@@ -134,8 +158,10 @@ class ConfigPanel {
   }
 
   valueChangedInputListener({ key, value, value2 }: ObserverOptions) {
-    const isRelatedToFirstValue = key === 'firstHandle' || key === 'firstLabels';
-    const isRelatedToSecondValue = key === 'secondHandle' || key === 'secondLabels';
+    const isRelatedToFirstValue =
+      key === 'firstHandle' || key === 'firstLabels';
+    const isRelatedToSecondValue =
+      key === 'secondHandle' || key === 'secondLabels';
     if (isRelatedToFirstValue) {
       if (value) {
         this.firstValue.value = String(value);
@@ -193,7 +219,10 @@ class ConfigPanel {
     setTimeout(() => errorElement.remove(), 3000);
   }
 
-  static showError(error: string, inputWithError: HTMLInputElement): HTMLParagraphElement {
+  static showError(
+    error: string,
+    inputWithError: HTMLInputElement
+  ): HTMLParagraphElement {
     const errorElement = document.createElement('p');
     errorElement.textContent = error;
     errorElement.classList.add('config__error');

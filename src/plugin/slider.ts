@@ -5,7 +5,7 @@ import './slider.scss';
 
 declare global {
   interface JQuery {
-    ngSlider:(options: Options) => Presenter
+    ngSlider: (options: Options) => Presenter;
   }
 }
 
@@ -20,4 +20,4 @@ declare global {
     slider.onInit();
     return slider;
   };
-}(jQuery));
+})(jQuery);

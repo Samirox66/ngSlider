@@ -1,8 +1,8 @@
 interface ObserverOptions {
-  key: string,
-  currentCord?: number,
-  value?: number,
-  value2?: number
+  key: string;
+  currentCord?: number;
+  value?: number;
+  value2?: number;
 }
 
 type ObserverFunction = (options: ObserverOptions) => void;

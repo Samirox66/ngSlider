@@ -12,13 +12,18 @@ class Handle {
   setHandle(
     notifyObservers: (options: ObserverOptions) => void,
     options: CompleteOptions,
-    isSecondHandle: boolean,
+    isSecondHandle: boolean
   ) {
     document.ondragstart = () => false;
     document.body.onselectstart = () => false;
     this.handleElement.addEventListener(
       'pointerdown',
-      this.handleHandleMouseDown.bind(this, options, isSecondHandle, notifyObservers),
+      this.handleHandleMouseDown.bind(
+        this,
+        options,
+        isSecondHandle,
+        notifyObservers
+      )
     );
   }
 
@@ -27,9 +32,12 @@ class Handle {
   }
 
   moveHandle(options: CompleteOptions, value: number) {
-    const moveHandle = (
-      ((value - options.min) / (options.max - options.min) - this.handleElement.offsetWidth / 2 / (options.endCord - options.startCord)) * 100
-    );
+    const moveHandle =
+      ((value - options.min) / (options.max - options.min) -
+        this.handleElement.offsetWidth /
+          2 /
+          (options.endCord - options.startCord)) *
+      100;
     if (options.isVertical) {
       this.handleElement.style.top = `${moveHandle}%`;
     } else {
@@ -55,7 +63,11 @@ class Handle {
     this.handleElement.style.display = 'block';
   }
 
-  private handleHandleMouseDown({ isVertical }: CompleteOptions, isSecondHandle: boolean, notifyObservers: (options: ObserverOptions) => void) {
+  private handleHandleMouseDown(
+    { isVertical }: CompleteOptions,
+    isSecondHandle: boolean,
+    notifyObservers: (options: ObserverOptions) => void
+  ) {
     const handleHandleMouseMove = (event: PointerEvent) => {
       const handleOptions: ObserverOptions = { key: actionModule.FIRST_HANDLE };
       if (isSecondHandle) {

@@ -7,12 +7,12 @@ import { CompleteOptions } from '../Model/Model';
 import { rangeModule } from '../Model/consonants';
 
 export interface ViewElements {
-  sliderTrack: Track,
-  labels: Labels,
-  firstHandle: Handle,
-  firstValue: CurrentValue,
-  secondValue: CurrentValue,
-  secondHandle: Handle
+  sliderTrack: Track;
+  labels: Labels;
+  firstHandle: Handle;
+  firstValue: CurrentValue;
+  secondValue: CurrentValue;
+  secondHandle: Handle;
 }
 
 class View extends Observer {
@@ -47,12 +47,19 @@ class View extends Observer {
       this.slider.append(this.viewElements.labels.getLabels());
       this.slider.append(this.viewElements.sliderTrack.getSliderTrack());
     }
-    this.createHandleWithValue(this.viewElements.firstHandle, this.viewElements.firstValue);
+    this.createHandleWithValue(
+      this.viewElements.firstHandle,
+      this.viewElements.firstValue
+    );
     this.viewElements.labels.create(this.notifyObservers.bind(this), options);
     this.viewElements.sliderTrack.create();
     if (range === rangeModule.TRUE) {
-      this.createHandleWithValue(this.viewElements.secondHandle, this.viewElements.secondValue);
-      this.viewElements.secondValue.getCurrentValue().textContent = String(value2);
+      this.createHandleWithValue(
+        this.viewElements.secondHandle,
+        this.viewElements.secondValue
+      );
+      this.viewElements.secondValue.getCurrentValue().textContent =
+        String(value2);
       this.changeValue(options);
     }
 
@@ -78,8 +85,16 @@ class View extends Observer {
   }
 
   setHandles(options: CompleteOptions) {
-    this.viewElements.firstHandle.setHandle(this.notifyObservers.bind(this), options, false);
-    this.viewElements.secondHandle.setHandle(this.notifyObservers.bind(this), options, true);
+    this.viewElements.firstHandle.setHandle(
+      this.notifyObservers.bind(this),
+      options,
+      false
+    );
+    this.viewElements.secondHandle.setHandle(
+      this.notifyObservers.bind(this),
+      options,
+      true
+    );
   }
 
   getViewElements() {
@@ -91,9 +106,7 @@ class View extends Observer {
   }
 
   changeValue(options: CompleteOptions) {
-    const {
-      range, isValueVisible, value2, value, isVertical,
-    } = options;
+    const { range, isValueVisible, value2, value, isVertical } = options;
     this.viewElements.secondValue.setTextOfCurrentValue(String(value2));
     this.viewElements.secondHandle.moveHandle(options, value2);
     this.viewElements.firstValue.setTextOfCurrentValue(String(value));
@@ -101,7 +114,10 @@ class View extends Observer {
 
     if (isValueVisible) {
       this.detachCurrentValues(value);
-      if (range === rangeModule.TRUE && this.checkIfCurrentValuesIntersect(isVertical ?? false)) {
+      if (
+        range === rangeModule.TRUE &&
+        this.checkIfCurrentValuesIntersect(isVertical ?? false)
+      ) {
         this.uniteCurrentValues(value, value2);
       }
     }
@@ -110,9 +126,15 @@ class View extends Observer {
   makeVertical() {
     if (this.slider) {
       this.slider.classList.add('ng-slider_vertical');
-      this.viewElements.labels.getLabels().classList.add('ng-slider__values_vertical');
-      this.viewElements.firstValue.getCurrentValue().classList.add('ng-slider__current-value_vertical');
-      this.viewElements.secondValue.getCurrentValue().classList.add('ng-slider__current-value_vertical');
+      this.viewElements.labels
+        .getLabels()
+        .classList.add('ng-slider__values_vertical');
+      this.viewElements.firstValue
+        .getCurrentValue()
+        .classList.add('ng-slider__current-value_vertical');
+      this.viewElements.secondValue
+        .getCurrentValue()
+        .classList.add('ng-slider__current-value_vertical');
       this.viewElements.sliderTrack.makeVertical();
       this.viewElements.firstHandle.makeVertical();
       this.viewElements.secondHandle.makeVertical();
@@ -122,9 +144,15 @@ class View extends Observer {
   makeHorizontal() {
     if (this.slider) {
       this.slider.classList.remove('ng-slider_vertical');
-      this.viewElements.labels.getLabels().classList.remove('ng-slider__values_vertical');
-      this.viewElements.firstValue.getCurrentValue().classList.remove('ng-slider__current-value_vertical');
-      this.viewElements.secondValue.getCurrentValue().classList.remove('ng-slider__current-value_vertical');
+      this.viewElements.labels
+        .getLabels()
+        .classList.remove('ng-slider__values_vertical');
+      this.viewElements.firstValue
+        .getCurrentValue()
+        .classList.remove('ng-slider__current-value_vertical');
+      this.viewElements.secondValue
+        .getCurrentValue()
+        .classList.remove('ng-slider__current-value_vertical');
       this.viewElements.sliderTrack.makeHorizontal();
       this.viewElements.firstHandle.makeHorizontal();
       this.viewElements.secondHandle.makeHorizontal();
@@ -151,12 +179,16 @@ class View extends Observer {
   }
 
   private checkIfCurrentValuesIntersect(isVertical: boolean): boolean {
-    const firstElement = this.viewElements.firstValue.getCurrentValue().getBoundingClientRect();
-    const secondElement = this.viewElements.secondValue.getCurrentValue().getBoundingClientRect();
-    const isFirstLowerThanSecond = isVertical && firstElement.top <= secondElement.bottom;
-    const isFirstMoreToTheLeftThanSecond = (
-      isVertical === false && firstElement.left <= secondElement.right
-    );
+    const firstElement = this.viewElements.firstValue
+      .getCurrentValue()
+      .getBoundingClientRect();
+    const secondElement = this.viewElements.secondValue
+      .getCurrentValue()
+      .getBoundingClientRect();
+    const isFirstLowerThanSecond =
+      isVertical && firstElement.top <= secondElement.bottom;
+    const isFirstMoreToTheLeftThanSecond =
+      isVertical === false && firstElement.left <= secondElement.right;
     if (isFirstLowerThanSecond || isFirstMoreToTheLeftThanSecond) {
       return true;
     }

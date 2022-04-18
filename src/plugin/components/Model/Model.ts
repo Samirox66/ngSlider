@@ -2,29 +2,30 @@ import { actionModule, rangeModule } from './consonants';
 import Observer from '../Observer/Observer';
 
 interface CompleteOptions extends Options {
-  key: string,
-  value2: number,
-  startCord: number,
-  endCord: number,
-  currentCord: number,
-  range: string
+  key: string;
+  value2: number;
+  startCord: number;
+  endCord: number;
+  currentCord: number;
+  range: string;
 }
 
-interface Options extends Record<string, string | number | undefined | boolean> {
-  range?: string,
-  min: number,
-  max: number,
-  step: number,
-  value: number,
-  value2?: number,
-  isValueVisible?: boolean,
-  isVertical?: boolean,
+interface Options
+  extends Record<string, string | number | undefined | boolean> {
+  range?: string;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  value2?: number;
+  isValueVisible?: boolean;
+  isVertical?: boolean;
 }
 
 class Model extends Observer {
   private options: CompleteOptions;
 
-  constructor(op: Options = {min: 1, max: 10, value: 6, step: 1}) {
+  constructor(op: Options = { min: 1, max: 10, value: 6, step: 1 }) {
     super();
     this.options = <CompleteOptions>op;
   }
@@ -32,8 +33,10 @@ class Model extends Observer {
   validateOptions() {
     const decimals = Model.countDecimals(this.options.step);
     const integerStep = this.options.step * 10 ** decimals;
-    const maxMinIntegerDifference = (this.options.max - this.options.min) * 10 ** decimals;
-    const isStepIncorrect = maxMinIntegerDifference % integerStep !== 0 || this.options.step <= 0;
+    const maxMinIntegerDifference =
+      (this.options.max - this.options.min) * 10 ** decimals;
+    const isStepIncorrect =
+      maxMinIntegerDifference % integerStep !== 0 || this.options.step <= 0;
     if (!this.options.value2) {
       this.options.value2 = this.options.min;
     }
@@ -43,20 +46,23 @@ class Model extends Observer {
     }
 
     if (isStepIncorrect) {
-      throw new Error(`${this.options.step} is incorrect step for ${this.options.id}`);
+      throw new Error(
+        `${this.options.step} is incorrect step for ${this.options.id}`
+      );
     }
 
-    const value2isOutsideMaxMin = (
-      this.options.value2 < this.options.min || this.options.value2 >= this.options.max
-    );
+    const value2isOutsideMaxMin =
+      this.options.value2 < this.options.min ||
+      this.options.value2 >= this.options.max;
     if (value2isOutsideMaxMin) {
       this.options.value2 = this.options.min;
     }
 
     const isValueMoreThanMax = this.options.value > this.options.max;
     const isValueLessThanMin = this.options.value < this.options.min;
-    const isValue2NotLessThanValue = this.options.value2 >= this.options.value;
-    if (isValueMoreThanMax || isValueLessThanMin || isValue2NotLessThanValue) {
+    const isValueGreaterThanValue2 = this.options.value2 < this.options.value;
+    const isValueOutsideMaxAndMin = isValueMoreThanMax || isValueLessThanMin;
+    if (isValueOutsideMaxAndMin || !isValueGreaterThanValue2) {
       this.options.value = this.options.max;
     }
   }
@@ -75,24 +81,30 @@ class Model extends Observer {
   }
 
   calcValue() {
-    const ratioForValuesAndCords = (
-      (this.options.max - this.options.min) / (this.options.endCord - this.options.startCord)
-    );
-    let value = (
-      (this.options.currentCord - this.options.startCord) * ratioForValuesAndCords + this.options.min
-    );
+    const ratioForValuesAndCords =
+      (this.options.max - this.options.min) /
+      (this.options.endCord - this.options.startCord);
+    let value =
+      (this.options.currentCord - this.options.startCord) *
+        ratioForValuesAndCords +
+      this.options.min;
     const decimals = Model.countDecimals(this.options.step);
     const integerStep = this.options.step * 10 ** decimals;
-    const valueMinIntegerDifference = (value - this.options.min) * 10 ** decimals;
-    const isValueCloserToBiggerOne = valueMinIntegerDifference % integerStep > integerStep / 2;
+    const valueMinIntegerDifference =
+      (value - this.options.min) * 10 ** decimals;
+    const isValueCloserToBiggerOne =
+      valueMinIntegerDifference % integerStep > integerStep / 2;
     if (isValueCloserToBiggerOne) {
-      value -= (valueMinIntegerDifference % integerStep) / 10 ** decimals - this.options.step;
+      value -=
+        (valueMinIntegerDifference % integerStep) / 10 ** decimals -
+        this.options.step;
     } else {
       value -= (valueMinIntegerDifference % integerStep) / 10 ** decimals;
     }
 
     value = Number(value.toFixed(decimals));
-    const valueIsInsideMaxMin = value >= this.options.min && value <= this.options.max;
+    const valueIsInsideMaxMin =
+      value >= this.options.min && value <= this.options.max;
     if (valueIsInsideMaxMin) {
       if (this.options.key === actionModule.SECOND_HANDLE) {
         if (value >= this.options.value) {
@@ -101,7 +113,9 @@ class Model extends Observer {
 
         this.options.value2 = value;
       } else {
-        const valueIsLessThanValue2 = this.options.range === rangeModule.TRUE && value <= this.options.value2;
+        const valueIsLessThanValue2 =
+          this.options.range === rangeModule.TRUE &&
+          value <= this.options.value2;
         if (valueIsLessThanValue2) {
           return;
         }
@@ -166,15 +180,18 @@ class Model extends Observer {
   changeMaxValue(max: number): string {
     if (max > this.options.min) {
       const decimals = Model.countDecimals(this.options.step);
-      const isStepMultiplier = (
-        ((max - this.options.min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0
-      );
+      const isStepMultiplier =
+        ((max - this.options.min) * 10 ** decimals) %
+          (this.options.step * 10 ** decimals) ===
+        0;
       if (isStepMultiplier) {
         this.options.max = max;
         if (this.options.value > this.options.max) {
           this.options.value = this.options.max;
         }
-        const value2isGreaterThanMax = this.options.range === rangeModule.TRUE && this.options.value2 > this.options.max;
+        const value2isGreaterThanMax =
+          this.options.range === rangeModule.TRUE &&
+          this.options.value2 > this.options.max;
         if (value2isGreaterThanMax) {
           this.options.value2 = this.options.min;
         }
@@ -191,12 +208,15 @@ class Model extends Observer {
   changeMinValue(min: number): string {
     if (min < this.options.max) {
       const decimals = Model.countDecimals(this.options.step);
-      const isStepMultiplier = (
-        ((this.options.max - min) * 10 ** decimals) % (this.options.step * 10 ** decimals) === 0
-      );
+      const isStepMultiplier =
+        ((this.options.max - min) * 10 ** decimals) %
+          (this.options.step * 10 ** decimals) ===
+        0;
       if (isStepMultiplier) {
         this.options.min = min;
-        const value2IsLessThanMin = this.options.range === rangeModule.TRUE && this.options.value2 < this.options.min;
+        const value2IsLessThanMin =
+          this.options.range === rangeModule.TRUE &&
+          this.options.value2 < this.options.min;
         if (value2IsLessThanMin) {
           this.options.value2 = this.options.min;
         } else if (this.options.value < this.options.min) {
@@ -218,9 +238,10 @@ class Model extends Observer {
     }
 
     const decimals = Model.countDecimals(step);
-    const isStepMultiplier = (
-      ((this.options.max - this.options.min) * 10 ** decimals) % (step * 10 ** decimals) === 0
-    );
+    const isStepMultiplier =
+      ((this.options.max - this.options.min) * 10 ** decimals) %
+        (step * 10 ** decimals) ===
+      0;
     if (isStepMultiplier) {
       this.options.step = step;
       return '';
@@ -230,7 +251,10 @@ class Model extends Observer {
   }
 
   setRange(range: string) {
-    const rangeIsDefined = range === rangeModule.MIN || range === rangeModule.MAX || range === rangeModule.TRUE;
+    const rangeIsDefined =
+      range === rangeModule.MIN ||
+      range === rangeModule.MAX ||
+      range === rangeModule.TRUE;
     if (rangeIsDefined) {
       this.options.range = range;
     } else {

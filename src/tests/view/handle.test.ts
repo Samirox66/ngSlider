@@ -41,9 +41,11 @@ describe('Handle tests', () => {
   });
 
   test('setHandle should set event listener of pointerdown to handle', () => {
-    const eventListenerMock = jest.fn(sliderHandle.getSliderHandle().addEventListener);
+    const eventListenerMock = jest.fn(
+      sliderHandle.getSliderHandle().addEventListener
+    );
     sliderHandle.getSliderHandle().addEventListener = eventListenerMock;
-    document.body.innerHTML = '<div id=\'slider-test\'></div>';
+    document.body.innerHTML = "<div id='slider-test'></div>";
     const view = new View();
     view.findSlider('slider-test');
     sliderHandle.setHandle(view.notifyObservers, options, false);
